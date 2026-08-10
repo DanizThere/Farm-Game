@@ -1,11 +1,13 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class TimeService
 {
     private readonly TimeSettings _settings;
     private DateTime _currentTime;
     private readonly TimeSpan _sunriseTime;
+    private readonly TimeSpan _nightTime;
     private readonly TimeSpan _sunsetTime;
 
     public DateTime CurrentTime => _currentTime;
@@ -13,27 +15,43 @@ public class TimeService
     public event Action OnSunrise = delegate { };
     public event Action OnSunset = delegate { };
     public event Action OnHourChange = delegate { };
+    public event Action OnDayChange = delegate { };
 
     private readonly Observable<bool> _isDayTime;
     private readonly Observable<int> _currentHour;
+    private readonly Observable<int> _currentDay;
 
     public TimeService(TimeSettings settings)
     {
         _settings = settings;
         _currentTime = DateTime.Now.Date + TimeSpan.FromHours(_settings.StartHour);
+        _nightTime = TimeSpan.FromHours(_settings.NightHour);
         _sunriseTime = TimeSpan.FromHours(_settings.SunriseHour);
         _sunsetTime = TimeSpan.FromHours(_settings.SunsetHour);
 
         _isDayTime = new Observable<bool>(IsDayTime());
         _currentHour = new Observable<int>(_currentTime.Hour);
+        _currentDay = new Observable<int>(_currentTime.Day);
 
         _isDayTime.ValueChanged += day => (day ? OnSunrise : OnSunset)?.Invoke();
         _currentHour.ValueChanged += _ => OnHourChange?.Invoke();
+        _currentDay.ValueChanged += _ => OnDayChange?.Invoke();
     }
 
     public void UpdateTime(float deltaTime)
     {
+        if (IsNightTime()) return;
         _currentTime = _currentTime.AddSeconds(deltaTime * _settings.TimeMultiplier);
+        _isDayTime.Value = IsDayTime();
+        _currentHour.Value = _currentTime.Hour;
+        _currentDay.Value = _currentTime.Day;
+    }
+
+    public void SkipHours(float hours)
+    {
+        var randomMinutes = Random.Range(0, 45);
+        _currentTime = _currentTime.AddHours(hours);
+        _currentTime = _currentTime.AddMinutes(randomMinutes);
     }
 
     public float CalculateSunAngle()
@@ -48,6 +66,11 @@ public class TimeService
 
         var percentage = elapsedTime.TotalMinutes / totalTime.TotalMinutes;
         return Mathf.Lerp(startDegree, startDegree + 180, (float)percentage);
+    }
+
+    private bool IsNightTime()
+    {
+        return _currentTime.TimeOfDay > _nightTime && _currentTime.TimeOfDay < _sunriseTime;
     }
 
     private bool IsDayTime()

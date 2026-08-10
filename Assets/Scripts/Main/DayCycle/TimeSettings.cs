@@ -7,4 +7,5 @@ public class TimeSettings : ScriptableObject
     public float StartHour = 12f;
     public float SunriseHour = 6f;
     public float SunsetHour = 18f;
+    public float NightHour = 22f;
 }

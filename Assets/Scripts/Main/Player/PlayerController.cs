@@ -4,24 +4,34 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour, IService
 {
-    public Vector3 Direction => Vector3.Lerp(Direction, _rawDirection, Time.deltaTime * _playerSettings.Speed);
-    public Vector3 LookDirection => Vector3.Lerp(LookDirection, _rawLookDirection, Time.deltaTime * _playerSettings.LookSensevity);
+    public Vector3 Direction => _direction; 
+    public Vector3 LookDirection => _lookDirection; 
 
+    public event Action OnJumpEvent = delegate { };
     public event Action OnClickEvent = delegate { };
     public event Action<float> OnClickHoldedEvent = delegate { };
     public event Action OnClickReleased = delegate { };
 
     private PlayerSettings _playerSettings;
 
+    private Vector3 _direction;
+    private Vector3 _lookDirection;
+
     private Vector3 _rawDirection;
     private Vector3 _rawLookDirection;
 
     private float _clickPressTime;
 
+    private void Update()
+    {
+        _direction = Vector3.Lerp(_direction, _rawDirection, Time.deltaTime * _playerSettings.Speed);
+        _lookDirection = Vector3.Lerp(_lookDirection, _rawLookDirection, Time.deltaTime * _playerSettings.LookSensevity);
+    }
+
     public void OnMove(InputAction.CallbackContext context)
     {
         var direction = context.ReadValue<Vector2>();
-        _rawDirection = new Vector3(direction.y, 0, direction.x);
+        _rawDirection = new Vector3(direction.x, 0, direction.y);
     }
 
     public void OnLook(InputAction.CallbackContext context)
@@ -45,6 +55,14 @@ public class PlayerController : MonoBehaviour, IService
                 OnClickReleased?.Invoke();
             }
             OnClickHoldedEvent?.Invoke(holdDuration);
+        }
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        if(context.started)
+        {
+            OnJumpEvent?.Invoke();
         }
     }
 

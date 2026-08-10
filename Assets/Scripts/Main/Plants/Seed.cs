@@ -27,6 +27,7 @@ public class Seed : MonoBehaviour
     private void Grow()
     {
         _growProgress++;
+        print("its growing");
 
         if(_growProgress >= _attributeSettings.TimeToGrow)
         {

@@ -60,11 +60,21 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
         _volume.profile.TryGet(out _colorAdjustments);
     }
 
+    public void SkipHours(float hours)
+    {
+        _timeService.SkipHours(hours);
+    }
+
+    public DateTime GetDate()
+    {
+        return _timeService.CurrentTime;
+    }
+
     private void UpdateLightSettings()
     {
         var dotProduct = Vector3.Dot(_sun.transform.forward, Vector3.down);
         _sun.intensity = Mathf.Lerp(0, _maxSunIntensity, _lightIntensityCurve.Evaluate(dotProduct));
-        _moon.intensity = Mathf.Lerp(0, _maxMoonIntensity, _lightIntensityCurve.Evaluate(dotProduct));
+        _moon.intensity = Mathf.Lerp(_maxMoonIntensity, 0, _lightIntensityCurve.Evaluate(dotProduct));
 
         if (_colorAdjustments == null) return;
 

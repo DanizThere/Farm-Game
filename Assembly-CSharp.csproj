@@ -55,18 +55,34 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Main\Observable.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\Attribute.cs" />
+    <Compile Include="Assets\Scripts\Main\Player\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\Main\Inventory\ItemObject.cs" />
+    <Compile Include="Assets\Scripts\Main\Inventory\Item.cs" />
+    <Compile Include="Assets\Scripts\AnimationEventS\AnimationEventReceiver.cs" />
+    <Compile Include="Assets\Scripts\Main\Inventory\Inventory.cs" />
+    <Compile Include="Assets\Scripts\Main\Player\Bobbing.cs" />
     <Compile Include="Assets\Scripts\Main\DayCycle\TimeManager.cs" />
     <Compile Include="Assets\Scripts\Main\Services\IFreezeable.cs" />
     <Compile Include="Assets\Scripts\Main\Services\ServiceLocator.cs" />
+    <Compile Include="Assets\Scripts\Main\Player\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Main\DayCycle\TimeSettings.cs" />
+    <Compile Include="Assets\Scripts\Extenisions\ListExtension.cs" />
+    <Compile Include="Assets\Scripts\AnimationEventS\AnimationEvent.cs" />
+    <Compile Include="Assets\Scripts\Main\Player\CameraMovement.cs" />
+    <Compile Include="Assets\Scripts\AnimationEventS\AnimationEventStateBehaviour.cs" />
     <Compile Include="Assets\Scripts\Main\Services\IService.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\AttributeSettings.cs" />
     <Compile Include="Assets\Scripts\Main\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\Seed.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\PlantsLifetime.cs" />
     <Compile Include="Assets\Scripts\Main\DayCycle\TimeService.cs" />
+    <Compile Include="Assets\Scripts\Main\Entities\IMovement.cs" />
+    <Compile Include="Assets\Scripts\Main\InUpdateFollower.cs" />
     <Compile Include="Assets\Scripts\Main\Player\PlayerSettings.cs" />
     <Compile Include="Assets\Scripts\Main\LevelBootstrap.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\ScriptTemplates\InterfaceTemplate.cs.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
