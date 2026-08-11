@@ -7,11 +7,14 @@ public class PlayerController : MonoBehaviour, IService
     public Vector3 Direction => _direction; 
     public Vector3 LookDirection => _lookDirection; 
 
+    public event Action<int> OnDigitClickEvent = delegate { };
+    public event Action OnNextClickEvent = delegate { };
+    public event Action OnBackClickEvent = delegate { };
     public event Action OnInteractEvent = delegate { };
     public event Action OnInventoryClickEvent = delegate { };
     public event Action OnJumpEvent = delegate { };
     public event Action OnClickEvent = delegate { };
-    public event Action<float> OnClickHoldedEvent = delegate { };
+    public event Action OnClickHoldedEvent = delegate { };
     public event Action OnClickReleased = delegate { };
 
     private PlayerSettings _playerSettings;
@@ -28,6 +31,33 @@ public class PlayerController : MonoBehaviour, IService
     {
         _direction = Vector3.Lerp(_direction, _rawDirection, Time.deltaTime * _playerSettings.Speed);
         _lookDirection = Vector3.Lerp(_lookDirection, _rawLookDirection, Time.deltaTime * _playerSettings.LookSensevity);
+    }
+
+    public void OnNext(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            OnNextClickEvent?.Invoke();
+        }
+    }
+
+    public void OnBack(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            OnBackClickEvent?.Invoke();
+        }
+    }
+
+    public void OnDigit(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if(int.TryParse(context.control.name, out var result))
+            {
+                OnDigitClickEvent?.Invoke(result);
+            }
+        }
     }
 
     public void OnInteract(InputAction.CallbackContext context)
@@ -64,7 +94,7 @@ public class PlayerController : MonoBehaviour, IService
             {
                 OnClickReleased?.Invoke();
             }
-            OnClickHoldedEvent?.Invoke(holdDuration);
+            OnClickHoldedEvent?.Invoke();
         }
     }
 

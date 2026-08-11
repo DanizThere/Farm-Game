@@ -37,12 +37,6 @@ public class Bobbing : MonoBehaviour
             return;
         }
 
-        if (!_characterController.isGrounded)
-        {
-            _movePosition = _startPosition;
-            return;
-        }
-
         _movePosition = FootstepMotion();
     }
 
