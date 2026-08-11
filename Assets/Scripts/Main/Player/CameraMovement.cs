@@ -24,6 +24,11 @@ public class CameraMovement : MonoBehaviour, IService
     private void Start()
     {
         _playerController = ServiceLocator.Instance.GetService<PlayerController>();
+        _playerController.OnInventoryClickEvent += () => SetMove(!_canMove, () =>
+        {
+            Cursor.lockState = _canMove ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.visible = !_canMove;
+        });
 
         _camera = Camera.main;
         Cursor.lockState = CursorLockMode.Locked;
@@ -75,7 +80,7 @@ public class CameraMovement : MonoBehaviour, IService
         _rightBorder = 0f;
     }
 
-    public void SetMove(bool move, Action callback)
+    public void SetMove(bool move, Action callback = null)
     {
         _canMove = move;
 

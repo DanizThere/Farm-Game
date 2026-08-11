@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour, IService
     public Vector3 Direction => _direction; 
     public Vector3 LookDirection => _lookDirection; 
 
+    public event Action OnInteractEvent = delegate { };
+    public event Action OnInventoryClickEvent = delegate { };
     public event Action OnJumpEvent = delegate { };
     public event Action OnClickEvent = delegate { };
     public event Action<float> OnClickHoldedEvent = delegate { };
@@ -26,6 +28,14 @@ public class PlayerController : MonoBehaviour, IService
     {
         _direction = Vector3.Lerp(_direction, _rawDirection, Time.deltaTime * _playerSettings.Speed);
         _lookDirection = Vector3.Lerp(_lookDirection, _rawLookDirection, Time.deltaTime * _playerSettings.LookSensevity);
+    }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            OnInteractEvent?.Invoke();
+        }
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -63,6 +73,14 @@ public class PlayerController : MonoBehaviour, IService
         if(context.started)
         {
             OnJumpEvent?.Invoke();
+        }
+    }
+
+    public void OnInventory(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            OnInventoryClickEvent?.Invoke();
         }
     }
 
