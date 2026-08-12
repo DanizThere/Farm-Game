@@ -4,14 +4,24 @@ public class ToolController : MonoBehaviour, IService
 {
     private Tool _currentTool;
     private PlayerController _playerController;
+    private OuterWorldGameState _state;
 
     private void Start()
     {
         _playerController = ServiceLocator.Instance.GetService<PlayerController>();
 
-        _playerController.OnClickEvent += Use;
-        _playerController.OnClickReleased += StopUse;
-        _playerController.OnClickHoldedEvent += StopUse;
+        _state = ServiceLocator.Instance.GetService<GameStateMachine>().GetState<OuterWorldGameState>();
+
+        if (_state == null) return;
+        _state.OnStartEvent += Setup;
+        _state.OnExitEvent += Dispose;
+    }
+
+    private void OnDestroy()
+    {
+        if (_state == null) return;
+        _state.OnStartEvent -= Setup;
+        _state.OnExitEvent -= Dispose;
     }
 
     public void SetTool(Tool tool)
@@ -31,5 +41,19 @@ public class ToolController : MonoBehaviour, IService
     public void StopUse()
     {
         _currentTool?.StopUse();
+    }
+
+    private void Setup()
+    {
+        _playerController.OnClickEvent += Use;
+        _playerController.OnClickReleased += StopUse;
+        _playerController.OnClickHoldedEvent += StopUse;
+    }
+
+    private void Dispose()
+    {
+        _playerController.OnClickEvent -= Use;
+        _playerController.OnClickReleased -= StopUse;
+        _playerController.OnClickHoldedEvent -= StopUse;
     }
 }

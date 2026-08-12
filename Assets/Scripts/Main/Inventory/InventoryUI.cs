@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryUI : MonoBehaviour
+public class InventoryUI : MonoBehaviour, IView
 {
     [SerializeField] private GameObject _slotPrefab;
     [SerializeField] private Transform _slotsParent;
@@ -9,6 +9,9 @@ public class InventoryUI : MonoBehaviour
 
     private Inventory _inventory;
     private List<InventorySlotUI> _slotsUI = new();
+
+    public int Order { get; set; } = 10;
+    public bool IsActive { get; set; }
 
     public void Setup(Inventory inventory)
     {
@@ -23,16 +26,13 @@ public class InventoryUI : MonoBehaviour
         }
 
         _inventory.OnInventoryChanged += RefreshUI;
+
+        ServiceLocator.Instance.GetService<ViewController>().Add(this);
     }
 
     private void OnDestroy()
     {
         _inventory.OnInventoryChanged -= RefreshUI;
-    }
-
-    public void SetActive(bool active)
-    {
-        _panel.SetActive(active);
     }
 
     private void RefreshUI()
@@ -43,4 +43,15 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
+    public void Show()
+    {
+        IsActive = true;
+        _panel.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        IsActive = false;
+        _panel.SetActive(false);
+    }
 }

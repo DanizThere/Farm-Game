@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlantsLifetime : MonoBehaviour
 {
+    public PlantStatus PlantStatus;
     public AnimatorOverrideController AnimatorOverrideController;
     public System.Action OnGrown = delegate { };
     public float Progress => _growProgress / _attributeSettings.TimeToGrow;
@@ -38,11 +39,17 @@ public class PlantsLifetime : MonoBehaviour
     public void Grow()
     {
         _growProgress++;
-        print(Progress);
         if (Progress > .9f)
         {
             OnGrown?.Invoke();
             print("Is grown");
         }
     }
+}
+
+public enum PlantStatus
+{
+    Seed,
+    Plant,
+    Rot
 }

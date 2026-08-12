@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour, IService
     public Vector3 LookDirection => _lookDirection; 
 
     public event Action<int> OnDigitClickEvent = delegate { };
+    public event Action OnEscapeEvent = delegate { };
     public event Action OnNextClickEvent = delegate { };
     public event Action OnBackClickEvent = delegate { };
     public event Action OnInteractEvent = delegate { };
@@ -31,6 +32,14 @@ public class PlayerController : MonoBehaviour, IService
     {
         _direction = Vector3.Lerp(_direction, _rawDirection, Time.deltaTime * _playerSettings.Speed);
         _lookDirection = Vector3.Lerp(_lookDirection, _rawLookDirection, Time.deltaTime * _playerSettings.LookSensevity);
+    }
+
+    public void OnEscape(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            OnEscapeEvent?.Invoke();
+        }
     }
 
     public void OnNext(InputAction.CallbackContext context)

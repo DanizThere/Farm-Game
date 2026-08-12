@@ -6,6 +6,9 @@ public class Plant : MonoBehaviour
 {
     public System.Action OnDestroy = delegate { };
 
+    public float Progress => _currentLife.Progress;
+    public string Status => _currentLife.PlantStatus.ToString();
+
     [SerializeField] private Animator _animator;
 
     [SerializeField] private List<PlantRaiseMultiplier> _raiseMultiplier = new();

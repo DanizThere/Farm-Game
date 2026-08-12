@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Main\Observable.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
+    <Compile Include="Assets\Scripts\Main\UI\IView.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\InventoryController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\Attribute.cs" />
@@ -80,16 +81,20 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\Scripts\Main\ThirdDimensionSelectable.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
+    <Compile Include="Assets\Scripts\Main\GameState\GameState.cs" />
     <Compile Include="Assets\Scripts\Main\Services\IFreezeable.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
+    <Compile Include="Assets\Scripts\Main\Plants\DirtController.cs" />
     <Compile Include="Assets\Scripts\Main\Services\ServiceLocator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\Scripts\Main\Player\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Main\DayCycle\TimeSettings.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
+    <Compile Include="Assets\Scripts\Main\UI\ViewController.cs" />
     <Compile Include="Assets\Scripts\Extenisions\ListExtension.cs" />
+    <Compile Include="Assets\Scripts\Main\GameState\UIGameState.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
@@ -106,8 +111,10 @@
     <Compile Include="Assets\Scripts\Main\Services\IService.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
+    <Compile Include="Assets\Scripts\Main\GameState\OuterWorldGameState.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\AttributeSettings.cs" />
     <Compile Include="Assets\Scripts\Main\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Main\UI\SecondDimensionTipBox.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\Seed.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
@@ -115,11 +122,13 @@
     <Compile Include="Assets\Scripts\Main\DayCycle\TimeService.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\InventorySlot.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
+    <Compile Include="Assets\Scripts\Main\GameState\GameStateMachine.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
     <Compile Include="Assets\Scripts\Main\Entities\IMovement.cs" />
+    <Compile Include="Assets\Scripts\Main\UI\ThirdDimensionTipBox.cs" />
     <Compile Include="Assets\Scripts\Main\InUpdateFollower.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\Dirt.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />

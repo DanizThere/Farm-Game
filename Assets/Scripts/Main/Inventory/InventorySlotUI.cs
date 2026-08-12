@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class InventorySlotUI : MonoBehaviour, ISelectable
@@ -12,6 +13,8 @@ public class InventorySlotUI : MonoBehaviour, ISelectable
     private int _slotIndex;
 
     private Color _originalColor;
+
+    private SecondDimensionTipBox _secondDimensionTipBox;
 
     public void Initialize(Inventory inventory, int index)
     {
@@ -46,11 +49,25 @@ public class InventorySlotUI : MonoBehaviour, ISelectable
 
     public void Show()
     {
-        //create box with id
+        var slot = GetSlotByIndex();
+        if (slot.IsEmpty) return;
+
+        if (_secondDimensionTipBox == null)
+        {
+            _secondDimensionTipBox = ServiceLocator.Instance.GetService<ViewController>().Get<SecondDimensionTipBox>();
+        }
+
+        _secondDimensionTipBox.Show();
+        _secondDimensionTipBox.Move(Mouse.current.position.ReadValue());
+        _secondDimensionTipBox.SetInfo(slot.Item.Id, string.Empty);
     }
 
     public void Hide()
     {
-        //hide box with id
+        if (_secondDimensionTipBox == null)
+        {
+            _secondDimensionTipBox = ServiceLocator.Instance.GetService<ViewController>().Get<SecondDimensionTipBox>();
+        }
+        _secondDimensionTipBox.Hide();
     }
 }

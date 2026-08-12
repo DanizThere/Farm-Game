@@ -20,6 +20,12 @@ public class InventoryController : MonoBehaviour
     private CameraHandler _cameraHandler;
     private ToolController _toolController;
 
+    private GameStateMachine _gameStateMachine;
+    private UIGameState _uiState;
+    private OuterWorldGameState _outerState;
+
+    private Observable<ISelectable> _selectableObservable;
+
     private bool _isOpen = false;
 
     private bool _isSelectedSlot;
@@ -36,23 +42,47 @@ public class InventoryController : MonoBehaviour
         _playerController = ServiceLocator.Instance.GetService<PlayerController>();
         _cameraHandler = ServiceLocator.Instance.GetService<CameraHandler>();
         _toolController = ServiceLocator.Instance.GetService<ToolController>();
+        _gameStateMachine = ServiceLocator.Instance.GetService<GameStateMachine>();
 
-        _playerController.OnClickEvent += OnClick;
-        _playerController.OnInventoryClickEvent += ChangeVisibility;
-        _playerController.OnDigitClickEvent += TryGetTool;
-        _playerController.OnNextClickEvent += IncreaseIndex;
-        _playerController.OnBackClickEvent += DecreaseIndex;
+        _uiState = _gameStateMachine.GetState<UIGameState>();
+        _outerState = _gameStateMachine.GetState<OuterWorldGameState>();
 
-        _inventoryUI.SetActive(_isOpen);
+        if (_uiState)
+        {
+            _uiState.OnStartEvent += SetupUIState;
+            _uiState.OnExitEvent += DisposeUIState;
+        }
+        if (_outerState)
+        {
+            _outerState.OnStartEvent += SetupOuterState;
+            _outerState.OnExitEvent += DisposeOuterState;
+        }
+
+        _gameStateMachine.SetState<OuterWorldGameState>();
+
+        _selectableObservable = new(null);
+        _selectableObservable.ValueChanged += value => value.Show();
+
+        if (_isOpen)
+        {
+            _inventoryUI.Show();
+            return;
+        }
+        _inventoryUI.Hide();
     }
 
     private void OnDestroy()
     {
-        _playerController.OnClickEvent -= OnClick;
-        _playerController.OnInventoryClickEvent -= ChangeVisibility;
-        _playerController.OnDigitClickEvent -= TryGetTool;
-        _playerController.OnNextClickEvent -= IncreaseIndex;
-        _playerController.OnBackClickEvent -= DecreaseIndex;
+        if (_uiState)
+        {
+            _uiState.OnStartEvent -= SetupUIState;
+            _uiState.OnExitEvent -= DisposeUIState;
+        }
+        if (_outerState)
+        {
+            _outerState.OnStartEvent -= SetupOuterState;
+            _outerState.OnExitEvent -= DisposeOuterState;
+        }
     }
 
     private void Update()
@@ -61,13 +91,11 @@ public class InventoryController : MonoBehaviour
         {
             var dragRect = _dragObject.GetComponent<RectTransform>();
 
-            var localMousePosition = Vector2.zero;
-
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle
                 (_dragParent, 
                 Mouse.current.position.ReadValue(), 
                 _cameraHandler.Camera,
-                out localMousePosition))
+                out var localMousePosition))
             {
                 dragRect.anchoredPosition = localMousePosition;
             }
@@ -112,7 +140,11 @@ public class InventoryController : MonoBehaviour
     private void TryGetTool(int slot)
     {
         var inventorySlot = _inventory.GetSlot(slot - 1);
-        if (inventorySlot.IsEmpty) return;
+        if (inventorySlot.IsEmpty)
+        {
+            _toolController.SetTool(null);
+            return;
+        }
 
         var item = inventorySlot.Item;
 
@@ -129,8 +161,9 @@ public class InventoryController : MonoBehaviour
         {
             _currentIndex = _firstIndex;
         }
-        print(_inventory.GetSlot(_currentIndex).Item?.Id);
+        TryGetTool(_currentIndex);
     }
+
     private void DecreaseIndex()
     {
         _currentIndex--;
@@ -138,7 +171,7 @@ public class InventoryController : MonoBehaviour
         {
             _currentIndex = _lastIndex;
         }
-        print(_inventory.GetSlot(_currentIndex).Item?.Id);
+        TryGetTool(_currentIndex);
     }
 
     private void ChangeVisibility()
@@ -147,11 +180,51 @@ public class InventoryController : MonoBehaviour
 
         if (!_isOpen)
         {
-            _isSelectedSlot = false;
-            _dragIcon.sprite = null;
-            _dragAmount.text = string.Empty;
-            _dragObject.SetActive(false);
+            ServiceLocator.Instance.GetService<GameStateMachine>().SetState<OuterWorldGameState>();
+            ResetDrag();
+            _inventoryUI.Hide();
         }
-        _inventoryUI.SetActive(_isOpen);
+        else
+        {
+            ServiceLocator.Instance.GetService<GameStateMachine>().SetState<UIGameState>();
+            _inventoryUI.Show();
+        }
+    }
+
+    private void ResetDrag()
+    {
+        _isSelectedSlot = false;
+        _dragIcon.sprite = null;
+        _dragAmount.text = string.Empty;
+        _dragObject.SetActive(false);
+    }
+
+    private void SetupOuterState()
+    {
+        _playerController.OnInventoryClickEvent += ChangeVisibility;
+        _playerController.OnDigitClickEvent += TryGetTool;
+        _playerController.OnNextClickEvent += IncreaseIndex;
+        _playerController.OnBackClickEvent += DecreaseIndex;
+    }
+
+    private void SetupUIState()
+    {
+        _playerController.OnInventoryClickEvent += ChangeVisibility;
+        _playerController.OnClickEvent += OnClick;
+    }
+
+    private void DisposeOuterState()
+    {
+        _playerController.OnInventoryClickEvent -= ChangeVisibility;
+        _playerController.OnInventoryClickEvent -= ChangeVisibility;
+        _playerController.OnDigitClickEvent -= TryGetTool;
+        _playerController.OnNextClickEvent -= IncreaseIndex;
+        _playerController.OnBackClickEvent -= DecreaseIndex;
+    }
+
+    private void DisposeUIState()
+    {
+        _playerController.OnInventoryClickEvent -= ChangeVisibility;
+        _playerController.OnClickEvent -= OnClick;
     }
 }
