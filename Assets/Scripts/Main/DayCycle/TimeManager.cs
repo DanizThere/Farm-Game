@@ -23,6 +23,8 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
         remove => _timeService.OnHourChange -= value;
     }
 
+    [SerializeField] private TimeView _timeView;
+
     [SerializeField] private TimeSettings _timeSettings;
 
     [SerializeField] private Light _sun;
@@ -84,6 +86,9 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
     private void UpdateTimeOfDay()
     {
         _timeService.UpdateTime(Time.deltaTime * _timeScale);
+
+        _timeView?.SetTimeText(_timeService.CurrentTime.ToShortTimeString());
+        _timeView?.SetDateText(_timeService.CurrentTime.ToShortDateString());
     }
 
     private void RotateSun()

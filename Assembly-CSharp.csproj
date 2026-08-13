@@ -60,6 +60,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\Attribute.cs" />
     <Compile Include="Assets\Scripts\Main\Player\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\Main\BedUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\Main\Player\CameraHandler.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\Item.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Assets\Scripts\Main\DayCycle\TimeManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
+    <Compile Include="Assets\Scripts\Main\UI\PlayerInfo.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\Scripts\Main\ThirdDimensionSelectable.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\DirtController.cs" />
     <Compile Include="Assets\Scripts\Main\Services\ServiceLocator.cs" />
+    <Compile Include="Assets\Scripts\Main\DayCycle\TimeView.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\Scripts\Main\Player\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Main\DayCycle\TimeSettings.cs" />
@@ -130,6 +133,7 @@
     <Compile Include="Assets\Scripts\Main\Entities\IMovement.cs" />
     <Compile Include="Assets\Scripts\Main\UI\ThirdDimensionTipBox.cs" />
     <Compile Include="Assets\Scripts\Main\InUpdateFollower.cs" />
+    <Compile Include="Assets\Scripts\Main\Bed.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\Dirt.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\TestLoadItems.cs" />

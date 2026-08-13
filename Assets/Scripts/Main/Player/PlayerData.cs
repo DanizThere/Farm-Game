@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class PlayerData : MonoBehaviour
 {
-    public float Money = 0f;
-    public float CurrentDay = 0f;
+    public Observable<float> Money = new(0f);
+
+    private void Start()
+    {
+        Money.ValueChanged += value => ServiceLocator.Instance.GetService<ViewController>().Get<PlayerInfo>().SetMoneyText(value.ToString());
+    }
 }
