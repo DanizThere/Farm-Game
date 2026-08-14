@@ -216,7 +216,6 @@ public class InventoryController : MonoBehaviour
     private void DisposeOuterState()
     {
         _playerController.OnInventoryClickEvent -= ChangeVisibility;
-        _playerController.OnInventoryClickEvent -= ChangeVisibility;
         _playerController.OnDigitClickEvent -= TryGetTool;
         _playerController.OnNextClickEvent -= IncreaseIndex;
         _playerController.OnBackClickEvent -= DecreaseIndex;

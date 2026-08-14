@@ -21,13 +21,16 @@ public class BedUI : MonoBehaviour, IView
         _slider.onValueChanged.AddListener(SetText);
         ServiceLocator.Instance.GetService<ViewController>().Add(this);
         _gameStateMachine = ServiceLocator.Instance.GetService<GameStateMachine>();
+        Hide();
     }
 
     public void Hide()
     {
         IsActive = false;
         _panel.SetActive(IsActive);
+        _slider.value = 1;
         _text.text = string.Empty;
+        _bed.HideActions();
         _gameStateMachine.SetState<OuterWorldGameState>();
     }
 
@@ -43,8 +46,9 @@ public class BedUI : MonoBehaviour, IView
         if (_sleepHour == 0) return;
 
         var value = _slider.value;
-
+        _slider.value = 1;
         _bed.SkipHours(value);
+        _bed.HideActions();
         Hide();
     }
 

@@ -21,13 +21,20 @@ public class CameraMovement : MonoBehaviour, IService
 
     private PlayerController _playerController;
 
+
     private void Start()
     {
         _playerController = ServiceLocator.Instance.GetService<PlayerController>();
-        _playerController.OnInventoryClickEvent += () => SetMove(!_canMove, () =>
+
+        ServiceLocator.Instance.GetService<GameStateMachine>().GetState<UIGameState>().OnStartEvent += () => SetMove(false, () =>
         {
-            Cursor.lockState = _canMove ? CursorLockMode.Locked : CursorLockMode.None;
-            Cursor.visible = !_canMove;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        });
+        ServiceLocator.Instance.GetService<GameStateMachine>().GetState<UIGameState>().OnExitEvent += () => SetMove(true, () =>
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         });
 
         _camera = Camera.main;
