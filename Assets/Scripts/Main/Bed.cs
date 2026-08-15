@@ -27,6 +27,8 @@ public class Bed : MonoBehaviour, ISelectable, ISelectableActions
         _viewController = ServiceLocator.Instance.GetService<ViewController>();
         _thirdDimensionTipBox = _viewController.Get<ThirdDimensionTipBox>();
 
+        _bedUI.Setup(this);
+
         var sleepAction = _actions.FirstOrDefault(x => x.ActionName == _sleepAction);
 
         if(sleepAction != null)
@@ -77,7 +79,8 @@ public class Bed : MonoBehaviour, ISelectable, ISelectableActions
 
         if (_thirdDimensionTipBox == null)
         {
-            _thirdDimensionTipBox = _viewController.Get<ThirdDimensionTipBox>();
+            _thirdDimensionTipBox = ServiceLocator.Instance.GetService<ViewController>().Get<ThirdDimensionTipBox>();
+            return;
         }
 
         _thirdDimensionTipBox.ShowAction(_actions);
@@ -89,7 +92,8 @@ public class Bed : MonoBehaviour, ISelectable, ISelectableActions
 
         if (_thirdDimensionTipBox == null)
         {
-            _thirdDimensionTipBox = _viewController.Get<ThirdDimensionTipBox>();
+            _thirdDimensionTipBox = ServiceLocator.Instance.GetService<ViewController>().Get<ThirdDimensionTipBox>();
+            return;
         }
 
         _thirdDimensionTipBox.Deselect();

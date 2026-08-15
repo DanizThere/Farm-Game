@@ -43,11 +43,11 @@ public class PlayerInteract : MonoBehaviour
                 _selectableTransform = result.gameObject.transform;
                 break;
             }
-            //else
-            //{
-            //    if(_selectable != null)
-            //    Hide();
-            //}
+            else
+            {
+                if (_selectable != null)
+                    Hide();
+            }
         }
     }
 

@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class InUpdateFollower : MonoBehaviour
 {
+    public bool ShouldLookAsCamera = false;
+
     [SerializeField] private Transform _target;
-    [SerializeField] private bool _shouldLookAsCamera = false;
     [SerializeField] private float _followSpeed = 10;
 
     private CameraHandler _camera;
@@ -15,8 +16,9 @@ public class InUpdateFollower : MonoBehaviour
 
     private void Update()
     {
+        if (_target == null) return;
         transform.position = Vector3.Lerp(transform.position, _target.position, _followSpeed * Time.deltaTime);
-        if (_shouldLookAsCamera)
+        if (ShouldLookAsCamera)
         {
             var targetRotation = _camera.Camera.transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _followSpeed * Time.deltaTime);

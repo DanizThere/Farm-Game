@@ -1,5 +1,7 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SecondDimensionTipBox : MonoBehaviour, IView
 {
@@ -11,16 +13,23 @@ public class SecondDimensionTipBox : MonoBehaviour, IView
 
     [SerializeField] private TextMeshProUGUI _nameText, _descriptionText;
 
-    private CameraHandler _cameraHandler;
     private ViewController _viewController;
 
     private void Start()
     {
-        _cameraHandler = ServiceLocator.Instance.GetService<CameraHandler>();
         _viewController = ServiceLocator.Instance.GetService<ViewController>();
 
         _viewController.Add(this);
         Hide();
+    }
+
+    private void Update()
+    {
+        if (IsActive)
+        {
+            var position = Mouse.current.position.ReadValue();
+            Move(position);
+        }
     }
 
     public void Hide()
@@ -47,9 +56,10 @@ public class SecondDimensionTipBox : MonoBehaviour, IView
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle
                 (_dragParent,
                 position,
-                _cameraHandler.Camera,
+                null,
                 out var localMousePosition))
         {
+            print(localMousePosition);
             _dragTransform.anchoredPosition = localMousePosition;
         }
     }

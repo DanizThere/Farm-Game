@@ -21,6 +21,9 @@ public class ServiceLocator : MonoBehaviour
 
         DontDestroyOnLoad(Instance);
 
+        ISaveService saveService = new JsonSaveService();
+
+        Add(saveService);
         Add(_playerController);
 
         _playerController.Setup(_playerSettings);

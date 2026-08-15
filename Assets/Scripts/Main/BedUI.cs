@@ -10,14 +10,15 @@ public class BedUI : MonoBehaviour, IView
     [SerializeField] private GameObject _panel;
     [SerializeField] private Slider _slider;
     [SerializeField] private TextMeshProUGUI _text;
-    [SerializeField] private Bed _bed;
+    private Bed _bed;
 
     private GameStateMachine _gameStateMachine;
 
     private float _sleepHour;
 
-    private void Start()
+    public void Setup(Bed bed)
     {
+        _bed = bed;
         _slider.onValueChanged.AddListener(SetText);
         ServiceLocator.Instance.GetService<ViewController>().Add(this);
         _gameStateMachine = ServiceLocator.Instance.GetService<GameStateMachine>();

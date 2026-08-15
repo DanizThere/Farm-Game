@@ -62,10 +62,9 @@ public class PlayerController : MonoBehaviour, IService
     {
         if (context.started)
         {
-            if(int.TryParse(context.control.name, out var result))
-            {
-                OnDigitClickEvent?.Invoke(result);
-            }
+            var number = (int)context.ReadValue<float>();
+
+            OnDigitClickEvent?.Invoke(number);
         }
     }
 

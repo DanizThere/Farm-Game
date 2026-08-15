@@ -15,4 +15,4 @@ MonoBehaviour:
   TimeMultiplier: 1000
   StartHour: 12
   SunriseHour: 6
-  SunsetHour: 18
+  SunsetHour: 22

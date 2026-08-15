@@ -16,7 +16,7 @@ public class InventorySlotUI : MonoBehaviour, ISelectable
 
     private SecondDimensionTipBox _secondDimensionTipBox;
 
-    public void Initialize(Inventory inventory, int index)
+    public virtual void Initialize(Inventory inventory, int index)
     {
         _inventory = inventory;
         _slotIndex = index;
@@ -36,7 +36,7 @@ public class InventorySlotUI : MonoBehaviour, ISelectable
         }
         else
         {
-            iconImage.sprite = slot.Item.Icon;
+            iconImage.sprite = slot.Item.Value.Icon;
             iconImage.color = Color.white;
             amountText.text = slot.Amount > 1 ? slot.Amount.ToString() : "";
         }
@@ -52,14 +52,15 @@ public class InventorySlotUI : MonoBehaviour, ISelectable
         var slot = GetSlotByIndex();
         if (slot.IsEmpty) return;
 
+        Debug.Log(slot);
+
         if (_secondDimensionTipBox == null)
         {
             _secondDimensionTipBox = ServiceLocator.Instance.GetService<ViewController>().Get<SecondDimensionTipBox>();
         }
 
         _secondDimensionTipBox.Show();
-        _secondDimensionTipBox.Move(Mouse.current.position.ReadValue());
-        _secondDimensionTipBox.SetInfo(slot.Item.Id, string.Empty);
+        _secondDimensionTipBox.SetInfo(slot.Item.Value.Id, string.Empty);
     }
 
     public void Hide()

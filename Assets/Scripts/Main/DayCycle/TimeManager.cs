@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 public class TimeManager : MonoBehaviour, IService, IFreezeable
 {
+    private readonly WaitForSeconds _waitForSeconds = new(2f);
+
     public event Action OnSunrise
     {
         add => _timeService.OnSunrise += value;
@@ -43,6 +46,11 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
     private TimeService _timeService;
 
     private float _timeScale = 1f;
+
+    private void Start()
+    {
+        StartCoroutine(SetView());
+    }
 
     private void Update()
     {
@@ -86,14 +94,25 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
     private void UpdateTimeOfDay()
     {
         _timeService.UpdateTime(Time.deltaTime * _timeScale);
-
-        _timeView?.SetTimeText(_timeService.CurrentTime.ToShortTimeString());
-        _timeView?.SetDateText(_timeService.CurrentTime.ToShortDateString());
     }
 
     private void RotateSun()
     {
         var rotation = _timeService.CalculateSunAngle();
         _sun.transform.rotation = Quaternion.AngleAxis(rotation, Vector3.right);
+    }
+
+    private IEnumerator SetView()
+    {
+        _timeView?.SetTimeText(_timeService.CurrentTime.ToShortTimeString());
+        _timeView?.SetDateText(_timeService.CurrentTime.ToShortDateString());
+
+        while (true)
+        {
+            _timeView?.SetTimeText(_timeService.CurrentTime.ToShortTimeString());
+            _timeView?.SetDateText(_timeService.CurrentTime.ToShortDateString());
+
+            yield return _waitForSeconds;
+        }
     }
 }

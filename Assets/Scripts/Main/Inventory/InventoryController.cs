@@ -9,6 +9,9 @@ public class InventoryController : MonoBehaviour
 {
     [SerializeField] private Inventory _inventory;
     [SerializeField] private InventoryUI _inventoryUI;
+    [SerializeField] private InventoryUIQuickSlots _inventoryUIQuick;
+
+    [SerializeField] private Transform _3DUIParent;
 
     [SerializeField] private GameObject _dragObject;
     [SerializeField] private Image _dragIcon;
@@ -17,7 +20,6 @@ public class InventoryController : MonoBehaviour
     private int _iconIndex;
 
     private PlayerController _playerController;
-    private CameraHandler _cameraHandler;
     private ToolController _toolController;
 
     private GameStateMachine _gameStateMachine;
@@ -30,17 +32,17 @@ public class InventoryController : MonoBehaviour
 
     private bool _isSelectedSlot;
 
-    private int _currentIndex;
+    private Observable<int> _currentIndex = new(0);
     private int _lastIndex = 3;
     private int _firstIndex = 0;
 
     private void Start()
     {
         _inventory.InitializeSlots();
+        _inventoryUIQuick.Setup(_inventory);
         _inventoryUI.Setup(_inventory);
 
         _playerController = ServiceLocator.Instance.GetService<PlayerController>();
-        _cameraHandler = ServiceLocator.Instance.GetService<CameraHandler>();
         _toolController = ServiceLocator.Instance.GetService<ToolController>();
         _gameStateMachine = ServiceLocator.Instance.GetService<GameStateMachine>();
 
@@ -59,6 +61,8 @@ public class InventoryController : MonoBehaviour
         }
 
         _gameStateMachine.SetState<OuterWorldGameState>();
+
+        _currentIndex.ValueChanged += _inventoryUIQuick.TryGetSlot;
 
         _selectableObservable = new(null);
         _selectableObservable.ValueChanged += value => value.Show();
@@ -94,7 +98,7 @@ public class InventoryController : MonoBehaviour
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle
                 (_dragParent, 
                 Mouse.current.position.ReadValue(), 
-                _cameraHandler.Camera,
+                null,
                 out var localMousePosition))
             {
                 dragRect.anchoredPosition = localMousePosition;
@@ -123,15 +127,22 @@ public class InventoryController : MonoBehaviour
                     _inventory.MoveItem(_iconIndex, slot.SlotIndex);
                     _dragObject.SetActive(false);
                     _isSelectedSlot = false;
+
+                    if(slot.SlotIndex == _currentIndex.Value)
+                    {
+                        TryGetTool(slot.SlotIndex);
+                    }
                     return;
                 }
 
                 var item = slot.GetSlotByIndex();
                 if (item.IsEmpty) return;
+                print(item);
+
                 _isSelectedSlot = true;
                 _iconIndex = slot.SlotIndex;
                 _dragAmount.text = item.Amount.ToString();
-                _dragIcon.sprite = item.Item.Icon;
+                _dragIcon.sprite = item.Item.Value.Icon;
                 _dragObject.SetActive(true);
             }
         }
@@ -139,7 +150,7 @@ public class InventoryController : MonoBehaviour
 
     private void TryGetTool(int slot)
     {
-        var inventorySlot = _inventory.GetSlot(slot - 1);
+        var inventorySlot = _inventory.GetSlot(slot);
         if (inventorySlot.IsEmpty)
         {
             _toolController.SetTool(null);
@@ -148,29 +159,45 @@ public class InventoryController : MonoBehaviour
 
         var item = inventorySlot.Item;
 
-        var instantTool = Instantiate(item.Prefab, _toolController.transform);
+        if (item.Value.Prefab == null)
+        {
+            _toolController.SetTool(null);
+            return;
+        }
+
+        var instantTool = Instantiate(item.Value.Prefab, _toolController.transform);
         if(instantTool.TryGetComponent<Tool>(out var tool)){
+            var toolItem = item.Value as ToolItem;
+
+            var inst = Instantiate(toolItem);
+            inst.Durability = inventorySlot.Durability;
+
+            tool.Setup(_inventory, inst, _3DUIParent, slot);
             _toolController.SetTool(tool);
         }
     }
 
     private void IncreaseIndex()
     {
-        _currentIndex++;
-        if(_currentIndex > _lastIndex)
+        if (_currentIndex.Value + 1 > _lastIndex)
         {
-            _currentIndex = _firstIndex;
+            _currentIndex.Value = _firstIndex;
+            TryGetTool(_currentIndex);
+            return;
         }
+        _currentIndex.Value++;
         TryGetTool(_currentIndex);
     }
 
     private void DecreaseIndex()
     {
-        _currentIndex--;
-        if (_currentIndex < _firstIndex)
+        if (_currentIndex.Value - 1 < _firstIndex)
         {
-            _currentIndex = _lastIndex;
+            _currentIndex.Value = _lastIndex;
+            TryGetTool(_currentIndex);
+            return;
         }
+        _currentIndex.Value--;
         TryGetTool(_currentIndex);
     }
 
