@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\Main\BedUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\Main\Save\PlantSerialize.cs" />
+    <Compile Include="Assets\Scripts\Main\Save\InventorySerializable.cs" />
     <Compile Include="Assets\Scripts\Main\Player\CameraHandler.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\Item.cs" />
     <Compile Include="Assets\Scripts\Main\Player\PlayerInteract.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Assets\Scripts\Main\Inventory\InventoryUIQuickSlot.cs" />
     <Compile Include="Assets\Scripts\Main\Save\InventoryItemSerialize.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\Inventory.cs" />
+    <Compile Include="Assets\Scripts\Main\Inventory\ItemDatabase.cs" />
     <Compile Include="Assets\Scripts\Main\Tools\ToolController.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\InventoryUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
@@ -120,6 +122,7 @@
     <Compile Include="Assets\Scripts\Main\Tools\Bucket.cs" />
     <Compile Include="Assets\Scripts\Main\Save\ISaveService.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\Plant.cs" />
+    <Compile Include="Assets\Scripts\Main\Save\ISaveable.cs" />
     <Compile Include="Assets\Scripts\Main\Interactables\ISelectable.cs" />
     <Compile Include="Assets\Scripts\AnimationEventS\AnimationEventStateBehaviour.cs" />
     <Compile Include="Assets\Scripts\Main\Services\IService.cs" />

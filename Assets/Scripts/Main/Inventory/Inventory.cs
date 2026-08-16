@@ -21,6 +21,37 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public InventorySerializable SaveData()
+    {
+        ServiceLocator.Instance.GetService<ToolController>().CurrentTool?.Hide();
+
+        var saveData = new InventorySerializable
+        {
+            SlotsCount = _slotsCount
+        };
+
+        foreach (var slot in _slots)
+        {
+            var slotData = new InventoryItemSerialize();
+            if (slot.IsEmpty)
+            {
+                slotData.Id = string.Empty;
+                slotData.Count = 0;
+                slotData.Durability = 0f;
+            }
+            else
+            {
+                slotData.Id = slot.Item.Value.Id;
+                slotData.Count = slot.Amount;
+                slotData.Durability = slot.Durability;
+            }
+
+            saveData.Slots.Add(slotData);
+        }
+
+        return saveData;
+    }
+
     public void ChangeItemWithDurability(int slotIndex, float durability)
     {
         var slot = GetSlot(slotIndex);
@@ -162,5 +193,45 @@ public class Inventory : MonoBehaviour
     public InventorySlot GetSlot(int index)
     {
         return _slots[index];
+    }
+
+    public void Load(InventorySerializable data)
+    {
+        InitializeSlots();
+
+        var itemDatabase = ServiceLocator.Instance.GetService<ItemDatabase>();
+
+        while (_slots.Count < data.SlotsCount)
+        {
+            _slots.Add(new InventorySlot());
+        }
+        if(_slots.Count > data.SlotsCount)
+        {
+            _slots.RemoveRange(data.SlotsCount, _slots.Count - data.SlotsCount);
+        }
+
+        for(int i = 0; i < Mathf.Min(_slots.Count, data.Slots.Count); i++)
+        {
+            var slotData = data.Slots[i];
+            if (string.IsNullOrEmpty(slotData.Id))
+            {
+                _slots[i] = new InventorySlot();
+            }
+            else
+            {
+                var item = itemDatabase.GetById(slotData.Id);
+                if(item != null)
+                {
+                    _slots[i] = new InventorySlot(item, slotData.Count, slotData.Durability);
+                }
+                else
+                {
+                    Debug.Log($"Item with {slotData.Id} not found");
+                    _slots[i] = new InventorySlot();
+                }
+            }
+        }
+
+        OnInventoryChanged?.Invoke();
     }
 }

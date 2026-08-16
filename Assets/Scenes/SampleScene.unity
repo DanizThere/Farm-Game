@@ -943,7 +943,6 @@ GameObject:
   m_Component:
   - component: {fileID: 286538672}
   - component: {fileID: 286538675}
-  - component: {fileID: 286538674}
   - component: {fileID: 286538673}
   m_Layer: 0
   m_Name: CameraMap
@@ -1011,14 +1010,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!81 &286538674
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 286538671}
-  m_Enabled: 1
 --- !u!20 &286538675
 Camera:
   m_ObjectHideFlags: 0
@@ -2306,6 +2297,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 453996510}
   m_CullTransparentMesh: 1
+--- !u!1 &477086356
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 477086358}
+  - component: {fileID: 477086357}
+  m_Layer: 0
+  m_Name: ItemDatabase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &477086357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477086356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e21520c218e7b443a144d4f55d05971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemDatabase
+  _items:
+  - {fileID: 11400000, guid: 23dfeb5b24726ac40a538434133b2b8d, type: 2}
+  - {fileID: 11400000, guid: 164e3e5708510814cb3f0a3bd3fa5399, type: 2}
+  - {fileID: 11400000, guid: a3338a67d1c1e5947b68d6aa54ce0908, type: 2}
+--- !u!4 &477086358
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477086356}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1663914698}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &482099172
 GameObject:
   m_ObjectHideFlags: 0
@@ -6907,6 +6946,7 @@ MonoBehaviour:
   _toolController: {fileID: 618102655}
   _gameStateMachine: {fileID: 20179361}
   _viewController: {fileID: 851706926}
+  _itemDatabase: {fileID: 477086357}
 --- !u!4 &1663914698
 Transform:
   m_ObjectHideFlags: 0
@@ -6924,6 +6964,7 @@ Transform:
   - {fileID: 1314528728}
   - {fileID: 20179360}
   - {fileID: 851706927}
+  - {fileID: 477086358}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1679089334

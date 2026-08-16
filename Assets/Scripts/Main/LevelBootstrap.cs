@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class LevelBootstrap : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class LevelBootstrap : MonoBehaviour
     [SerializeField] private ToolController _toolController;
     [SerializeField] private GameStateMachine _gameStateMachine;
     [SerializeField] private ViewController _viewController;
+    [SerializeField] private ItemDatabase _itemDatabase;
 
     private void Awake()
     {
@@ -23,6 +25,7 @@ public class LevelBootstrap : MonoBehaviour
         ServiceLocator.Instance.Add(_toolController);
         ServiceLocator.Instance.Add(_gameStateMachine);
         ServiceLocator.Instance.Add(_viewController);
+        ServiceLocator.Instance.Add(_itemDatabase);
     }
 
     private void Construct()

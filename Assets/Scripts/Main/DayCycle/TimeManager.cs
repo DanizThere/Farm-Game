@@ -55,6 +55,7 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
 
     private void Start()
     {
+        Load();
         StartCoroutine(SetView());
     }
 
@@ -65,14 +66,29 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
         UpdateLightSettings();
     }
 
+    private void OnDestroy()
+    {
+        Save();
+    }
+
     public void SetTimeScale(float timeScale)
     {
         _timeScale = timeScale;
     }
 
-    public void Setup()
+    public void Setup(TimeSerialize timeSerialize = null)
     {
-        _timeService = new(_timeSettings);
+        var timeSettings = Instantiate(_timeSettings);
+        if(timeSerialize != null)
+        {
+            timeSettings.TimeMultiplier = timeSerialize.TimeMultiplier;
+            timeSettings.SunsetHour = timeSerialize.SunsetHour;
+            timeSettings.SunriseHour = timeSerialize.SunriseHour;
+            timeSettings.StartHour = timeSerialize.StartHour;
+            timeSettings.StartDate = timeSerialize.CurrentDate;
+        }
+
+        _timeService = new(timeSerialize == null ? _timeSettings : timeSettings);
         _volume.profile.TryGet(out _colorAdjustments);
     }
 
@@ -106,6 +122,28 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
     {
         var rotation = _timeService.CalculateSunAngle();
         _sun.transform.rotation = Quaternion.AngleAxis(rotation, Vector3.right);
+    }
+
+    private void Save()
+    {
+        var data = new TimeSerialize
+        {
+            SunriseHour = _timeSettings.SunriseHour,
+            SunsetHour = _timeSettings.SunsetHour,
+            TimeMultiplier = _timeSettings.TimeMultiplier,
+            CurrentDate = _timeService.CurrentTime.Date,
+            StartHour = _timeService.CurrentTime.Hour
+        };
+
+        ServiceLocator.Instance.GetService<JsonSaveService>().Save("TimeData", data);
+    }
+
+    private void Load()
+    {
+        ServiceLocator.Instance.GetService<JsonSaveService>().Load<TimeSerialize>("TimeData", value =>
+        {
+            Setup(value);
+        });
     }
 
     private IEnumerator SetView()

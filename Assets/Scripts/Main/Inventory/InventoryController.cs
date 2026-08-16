@@ -42,6 +42,8 @@ public class InventoryController : MonoBehaviour
         _inventoryUIQuick.Setup(_inventory);
         _inventoryUI.Setup(_inventory);
 
+        LoadInventory();
+
         _playerController = ServiceLocator.Instance.GetService<PlayerController>();
         _toolController = ServiceLocator.Instance.GetService<ToolController>();
         _gameStateMachine = ServiceLocator.Instance.GetService<GameStateMachine>();
@@ -87,6 +89,8 @@ public class InventoryController : MonoBehaviour
             _outerState.OnStartEvent -= SetupOuterState;
             _outerState.OnExitEvent -= DisposeOuterState;
         }
+
+        SaveInventory();
     }
 
     private void Update()
@@ -104,6 +108,26 @@ public class InventoryController : MonoBehaviour
                 dragRect.anchoredPosition = localMousePosition;
             }
         }
+    }
+
+    private void SaveInventory()
+    {
+        var data = _inventory.SaveData();
+
+        ServiceLocator.Instance.GetService<JsonSaveService>().Save("InventoryData", data);
+    }
+
+    private void LoadInventory()
+    {
+        ServiceLocator.Instance.GetService<JsonSaveService>().Load<InventorySerializable>("InventoryData", data =>
+        {
+            if(data == null)
+            {
+                print("InventoryData not found");
+                return;
+            }
+            _inventory.Load(data);
+        });
     }
 
     private void OnClick()

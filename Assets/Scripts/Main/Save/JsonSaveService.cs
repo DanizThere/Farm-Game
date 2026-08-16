@@ -8,13 +8,19 @@ public class JsonSaveService : ISaveService
     public void Load<T>(string key, Action<T> callback)
     {
         var path = SavePath(key);
-        
-        using(var streamReader = new StreamReader(path))
+        try
         {
-            var json = streamReader.ReadToEnd();
-            var data = JsonConvert.DeserializeObject<T>(json);
+            using (var streamReader = new StreamReader(path))
+            {
+                var json = streamReader.ReadToEnd();
+                var data = JsonConvert.DeserializeObject<T>(json);
 
-            callback.Invoke(data);
+                callback.Invoke(data);
+            }
+        }
+        catch
+        {
+            callback.Invoke(default);
         }
     }
 
@@ -22,6 +28,12 @@ public class JsonSaveService : ISaveService
     {
         var path = SavePath(key);
         var json = JsonConvert.SerializeObject(value);
+
+        var directory = Path.GetDirectoryName(path);
+        if (!string.IsNullOrEmpty(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
 
         using(var streamWriter = new StreamWriter(path))
         {

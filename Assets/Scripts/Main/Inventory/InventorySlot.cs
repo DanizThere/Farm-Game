@@ -26,7 +26,7 @@ public class InventorySlot
         };
     }
 
-    public InventorySlot(ToolItem data, int count, float dur = -1)
+    public InventorySlot(Item data, int count, float dur = -1)
     {
         Item = new(data);
         Amount = count;
