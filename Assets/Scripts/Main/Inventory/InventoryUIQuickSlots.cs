@@ -26,8 +26,6 @@ public class InventoryUIQuickSlots : MonoBehaviour, IView
         _inventory = inventory;
         _playerController = ServiceLocator.Instance.GetService<PlayerController>();
 
-        ServiceLocator.Instance.GetService<ViewController>().Add(this);
-
         ServiceLocator.Instance.GetService<GameStateMachine>().GetState<UIGameState>().OnStartEvent += Hide;
         ServiceLocator.Instance.GetService<GameStateMachine>().GetState<OuterWorldGameState>().OnStartEvent += Show;
 

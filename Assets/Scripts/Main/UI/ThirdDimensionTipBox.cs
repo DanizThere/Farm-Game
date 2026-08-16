@@ -13,12 +13,6 @@ public class ThirdDimensionTipBox : MonoBehaviour, IView
 
     private List<SelectableAction> _actions = new();
 
-
-    private void Start()
-    {
-        ServiceLocator.Instance.GetService<ViewController>().Add(this);
-    }
-
     public void Hide()
     {
         IsActive = false;

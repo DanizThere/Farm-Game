@@ -13,13 +13,8 @@ public class SecondDimensionTipBox : MonoBehaviour, IView
 
     [SerializeField] private TextMeshProUGUI _nameText, _descriptionText;
 
-    private ViewController _viewController;
-
     private void Start()
     {
-        _viewController = ServiceLocator.Instance.GetService<ViewController>();
-
-        _viewController.Add(this);
         Hide();
     }
 

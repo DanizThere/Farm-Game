@@ -33,6 +33,6 @@ public class JsonSaveService : ISaveService
 
     private string SavePath(string key)
     {
-        return Path.Combine(Application.persistentDataPath, key);
+        return Path.Combine(Application.persistentDataPath, "saves", key);
     }
 }

@@ -5,9 +5,12 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler
+public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler, IPointerDownHandler, IPointerUpHandler
 {
+    public UnityEvent OnPointerDownEvent = new();
     public UnityEvent OnClickEvent = new();
+
+    private bool _isHolding = false;
 
     [SerializeField] private Button _button;
 
@@ -16,14 +19,25 @@ public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         _button.onClick.AddListener(OnClick);
     }
 
+    private void Update()
+    {
+        if(_isHolding)
+        {
+            OnPointerDownEvent?.Invoke();
+
+        }
+    }
+
     private Tween OnHoverEnter()
     {
-        return _button.transform.DOScale(1.2f, .5f);
+        var rect = _button.GetComponent<RectTransform>();
+        return rect.DOScale(1.2f, .5f);
     }
 
     private Tween OnHoverExit()
     {
-        return _button.transform.DOScale(1f, .5f);
+        var rect = _button.GetComponent<RectTransform>();
+        return rect.DOScale(1f, .5f);
     }
 
     private void OnClick()
@@ -55,7 +69,15 @@ public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             Camera.main,
             out var localMousePosition
         );
+    }
 
-        print(localMousePosition);
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        _isHolding = true;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        _isHolding = false;
     }
 }

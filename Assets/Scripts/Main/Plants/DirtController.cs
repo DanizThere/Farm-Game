@@ -12,8 +12,22 @@ public class DirtController : MonoBehaviour
 
     private List<Dirt> _dirt = new();
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            Generate();
+        }
+    }
+
     public void CreateDirt(int maxWidth, int maxLength)
     {
+        foreach(var dirt in _dirt)
+        {
+            Destroy(dirt.gameObject);
+        }
+        _dirt.Clear();
+
         for(int i = 0; i < maxWidth; i++)
         {
             for(int j = 0; j < maxLength; j++)
@@ -40,16 +54,28 @@ public class DirtController : MonoBehaviour
         Destroy(dirt.gameObject);
     }
 
+    public Dirt GetDirtSlot(int x, int y)
+    {
+        var dirtSlot = _dirt.FirstOrDefault(dirt => dirt.DirtPosition.x == x && dirt.DirtPosition.y == y);
+        return dirtSlot;
+    }
+
+    public void Generate()
+    {
+        CreateDirt(_maxWidth, _maxLength);
+    }
+
     private Dirt GetRandomDirt()
     {
-        var value = Random.value;
         Dirt finalDirt = _dirtVariable[0].Dirt;
 
         var sum = _dirtVariable.Sum(x => x.Rate);
+        var value = Random.Range(0, sum);
+
         var rate = 0f;
         foreach(var dirt in _dirtVariable)
         {
-            if(dirt.Rate > rate)
+            if(value > rate)
             {
                 rate += dirt.Rate;
                 finalDirt = dirt.Dirt;
@@ -59,11 +85,6 @@ public class DirtController : MonoBehaviour
         return finalDirt;
     }
 
-    public Dirt GetDirtSlot(int x, int y)
-    {
-        var dirtSlot = _dirt.FirstOrDefault(dirt => dirt.DirtPosition.x == x && dirt.DirtPosition.y == y);
-        return dirtSlot;
-    }
 }
 
 [System.Serializable]
@@ -71,5 +92,5 @@ public class DirtVariable
 {
     public Dirt Dirt;
     [Range(.1f, 1f)]
-    public float Rate;
+    public float Rate = .1f;
 }

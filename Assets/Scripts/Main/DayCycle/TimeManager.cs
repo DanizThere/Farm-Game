@@ -26,6 +26,12 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
         remove => _timeService.OnHourChange -= value;
     }
 
+    public event Action OnDayChange
+    {
+        add => _timeService.OnDayChange += value;
+        remove => _timeService.OnDayChange -= value;
+    }
+
     [SerializeField] private TimeView _timeView;
 
     [SerializeField] private TimeSettings _timeSettings;

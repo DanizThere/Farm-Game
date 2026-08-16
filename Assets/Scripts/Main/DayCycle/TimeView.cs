@@ -9,11 +9,6 @@ public class TimeView : MonoBehaviour, IView
 
     [SerializeField] private TextMeshProUGUI _dateText, _timeText;
 
-    private void Start()
-    {
-        ServiceLocator.Instance.GetService<ViewController>().Add(this);
-    }
-
     public void Hide()
     {
         IsActive = false;

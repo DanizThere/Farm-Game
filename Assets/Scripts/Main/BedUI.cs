@@ -12,16 +12,12 @@ public class BedUI : MonoBehaviour, IView
     [SerializeField] private TextMeshProUGUI _text;
     private Bed _bed;
 
-    private GameStateMachine _gameStateMachine;
-
     private float _sleepHour;
 
     public void Setup(Bed bed)
     {
         _bed = bed;
         _slider.onValueChanged.AddListener(SetText);
-        ServiceLocator.Instance.GetService<ViewController>().Add(this);
-        _gameStateMachine = ServiceLocator.Instance.GetService<GameStateMachine>();
         Hide();
     }
 
@@ -32,14 +28,12 @@ public class BedUI : MonoBehaviour, IView
         _slider.value = 1;
         _text.text = string.Empty;
         _bed.HideActions();
-        _gameStateMachine.SetState<OuterWorldGameState>();
     }
 
     public void Show()
     {
         IsActive = true;
         _panel.SetActive(IsActive);
-        _gameStateMachine.SetState<UIGameState>();
     }
 
     public void Sleep()

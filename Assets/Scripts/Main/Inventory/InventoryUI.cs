@@ -26,8 +26,6 @@ public class InventoryUI : MonoBehaviour, IView
         }
 
         _inventory.OnInventoryChanged += RefreshUI;
-
-        ServiceLocator.Instance.GetService<ViewController>().Add(this);
     }
 
     private void OnDestroy()

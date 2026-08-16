@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ToolController : MonoBehaviour, IService
 {
+    public Tool CurrentTool => _currentTool;
     private Tool _currentTool;
     private PlayerController _playerController;
     private OuterWorldGameState _state;
