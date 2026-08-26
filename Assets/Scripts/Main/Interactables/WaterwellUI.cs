@@ -33,7 +33,7 @@ public class WaterwellUI : MonoBehaviour, IView
         IsActive = true;
         _panel.SetActive(IsActive);
 
-        var currentTool = ServiceLocator.Instance.GetService<ToolController>().CurrentTool;
+        var currentTool = ServiceLocator.Instance.GetService<ItemObjectController>().CurrentTool;
 
         if (currentTool != null && currentTool is Bucket bucket)
             _imageFill.fillAmount = bucket.VolumePercent;
@@ -46,7 +46,7 @@ public class WaterwellUI : MonoBehaviour, IView
 
     private void OnPointerDown()
     {
-        var currentTool = ServiceLocator.Instance.GetService<ToolController>().CurrentTool;
+        var currentTool = ServiceLocator.Instance.GetService<ItemObjectController>().CurrentTool;
 
         if(currentTool != null && currentTool is Bucket bucket)
         {

@@ -5,6 +5,7 @@ public interface ISelectable
 {
     public void Show();
     public void Hide();
+    public bool CanSelect();
 }
 
 public interface ISelectableActions

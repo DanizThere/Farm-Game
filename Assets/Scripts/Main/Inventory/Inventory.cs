@@ -23,7 +23,7 @@ public class Inventory : MonoBehaviour
 
     public InventorySerializable SaveData()
     {
-        ServiceLocator.Instance.GetService<ToolController>().CurrentTool?.Hide();
+        ServiceLocator.Instance.GetService<ItemObjectController>().CurrentTool?.Hide();
 
         var saveData = new InventorySerializable
         {

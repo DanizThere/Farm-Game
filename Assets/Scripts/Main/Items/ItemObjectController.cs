@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class ToolController : MonoBehaviour, IService
+public class ItemObjectController : MonoBehaviour, IService
 {
-    public Tool CurrentTool => _currentTool;
-    private Tool _currentTool;
+    public ItemObject CurrentTool => _currentTool;
+    private ItemObject _currentTool;
     private PlayerController _playerController;
     private OuterWorldGameState _state;
 
@@ -25,23 +25,28 @@ public class ToolController : MonoBehaviour, IService
         _state.OnExitEvent -= Dispose;
     }
 
-    public void SetTool(Tool tool)
+    public void SetTool(ItemObject tool, bool shouldDestroy = true)
     {
-        _currentTool?.Hide();
-        Destroy(_currentTool?.gameObject);
+        _currentTool?.HideItem();
+        if(shouldDestroy) Destroy(_currentTool?.gameObject);
 
         _currentTool = tool;
-        _currentTool?.Show();
+        _currentTool?.ShowItem();
     }
 
-    public void Use()
+    private void Use()
     {
         _currentTool?.Use();
     }
 
-    public void StopUse()
+    private void StopUse()
     {
         _currentTool?.StopUse();
+    }
+
+    private void Throw()
+    {
+        _currentTool?.OnThrow();
     }
 
     private void Setup()
@@ -49,6 +54,7 @@ public class ToolController : MonoBehaviour, IService
         _playerController.OnClickEvent += Use;
         _playerController.OnClickReleased += StopUse;
         _playerController.OnClickHoldedEvent += StopUse;
+        _playerController.OnThrowEvent += Throw;
     }
 
     private void Dispose()
@@ -56,5 +62,6 @@ public class ToolController : MonoBehaviour, IService
         _playerController.OnClickEvent -= Use;
         _playerController.OnClickReleased -= StopUse;
         _playerController.OnClickHoldedEvent -= StopUse;
+        _playerController.OnThrowEvent -= Throw;
     }
 }

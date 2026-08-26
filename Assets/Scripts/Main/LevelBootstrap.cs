@@ -5,10 +5,13 @@ public class LevelBootstrap : MonoBehaviour
 {
     [SerializeField] private TimeManager _timeManager;
     [SerializeField] private CameraHandler _cameraHandler;
-    [SerializeField] private ToolController _toolController;
+    [SerializeField] private ItemObjectController _toolController;
     [SerializeField] private GameStateMachine _gameStateMachine;
     [SerializeField] private ViewController _viewController;
     [SerializeField] private ItemDatabase _itemDatabase;
+    [SerializeField] private DialogueSystem _dialogueSystem;
+
+    [SerializeField] private LevelEntryPoint _levelEntryPoint;
 
     private void Awake()
     {
@@ -26,10 +29,11 @@ public class LevelBootstrap : MonoBehaviour
         ServiceLocator.Instance.Add(_gameStateMachine);
         ServiceLocator.Instance.Add(_viewController);
         ServiceLocator.Instance.Add(_itemDatabase);
+        ServiceLocator.Instance.Add(_dialogueSystem);
     }
 
     private void Construct()
     {
-        _timeManager.Setup();
+        StartCoroutine(_levelEntryPoint.Initialize());
     }
 }

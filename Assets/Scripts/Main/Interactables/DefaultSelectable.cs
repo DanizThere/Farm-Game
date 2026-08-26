@@ -5,12 +5,14 @@ public class DefaultSelectable : MonoBehaviour, ISelectable, ISelectableActions
 {
     [SerializeField] protected List<SelectableAction> _actions = new();
     [SerializeField] protected float _maxDistance = 15f;
+    [SerializeField] protected DialogueHandler _dialogueHandler;
 
     protected bool _actionsIsShows = false;
     protected Transform _player;
     protected ThirdDimensionTipBox _thirdDimensionTipBox;
     protected GameStateMachine _gameStateMachine;
     protected ViewController _viewController;
+    protected bool _canSelect = true;
 
 
     private void Start()
@@ -44,24 +46,28 @@ public class DefaultSelectable : MonoBehaviour, ISelectable, ISelectableActions
                 action.OnClickEvent.AddListener(() => _gameStateMachine.SetState<OuterWorldGameState>());
                 continue;
             }
+            if(action.ActionName == "TalkAction" && _dialogueHandler != null)
+            {
+                action.OnClickEvent.AddListener(() => _dialogueHandler.StartDialogue(ServiceLocator.Instance.GetService<DialogueSystem>()));
+            }
 
             action.OnClickEvent.AddListener(() => _gameStateMachine.SetState<UIGameState>());
         }
     }
 
-    public void Show()
+    public virtual void Show()
     {
         var box = _viewController.Get<ThirdDimensionTipBox>();
         box.Show();
     }
 
-    public void Hide()
+    public virtual void Hide()
     {
         _viewController.Get<ThirdDimensionTipBox>().Hide();
         HideActions();
     }
 
-    public void ShowActions()
+    public virtual void ShowActions()
     {
         if (_actionsIsShows) return;
 
@@ -76,7 +82,7 @@ public class DefaultSelectable : MonoBehaviour, ISelectable, ISelectableActions
         _thirdDimensionTipBox.ShowAction(_actions);
     }
 
-    public void HideActions()
+    public virtual void HideActions()
     {
         _actionsIsShows = false;
 
@@ -92,5 +98,10 @@ public class DefaultSelectable : MonoBehaviour, ISelectable, ISelectableActions
     public void SetTarget(Transform target)
     {
         _player = target;
+    }
+
+    public bool CanSelect()
+    {
+        return _canSelect;
     }
 }

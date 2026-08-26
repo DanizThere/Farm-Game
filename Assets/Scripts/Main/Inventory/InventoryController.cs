@@ -20,7 +20,7 @@ public class InventoryController : MonoBehaviour
     private int _iconIndex;
 
     private PlayerController _playerController;
-    private ToolController _toolController;
+    private ItemObjectController _toolController;
 
     private GameStateMachine _gameStateMachine;
     private UIGameState _uiState;
@@ -45,7 +45,7 @@ public class InventoryController : MonoBehaviour
         LoadInventory();
 
         _playerController = ServiceLocator.Instance.GetService<PlayerController>();
-        _toolController = ServiceLocator.Instance.GetService<ToolController>();
+        _toolController = ServiceLocator.Instance.GetService<ItemObjectController>();
         _gameStateMachine = ServiceLocator.Instance.GetService<GameStateMachine>();
 
         _uiState = _gameStateMachine.GetState<UIGameState>();
@@ -65,6 +65,7 @@ public class InventoryController : MonoBehaviour
         _gameStateMachine.SetState<OuterWorldGameState>();
 
         _currentIndex.ValueChanged += _inventoryUIQuick.TryGetSlot;
+        _currentIndex.ValueChanged += TryGetTool;
 
         _selectableObservable = new(null);
         _selectableObservable.ValueChanged += value => value.Show();
@@ -190,7 +191,7 @@ public class InventoryController : MonoBehaviour
         }
 
         var instantTool = Instantiate(item.Value.Prefab, _toolController.transform);
-        if(instantTool.TryGetComponent<Tool>(out var tool)){
+        if(instantTool.TryGetComponent<ItemObject>(out var tool)){
             var toolItem = item.Value as ToolItem;
 
             var inst = Instantiate(toolItem);

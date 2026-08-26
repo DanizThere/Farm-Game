@@ -15,6 +15,6 @@ MonoBehaviour:
   Id: bucket_tool
   MaxStack: 1
   Prefab: {fileID: 8834884687336616714, guid: 27f85a43395a2b848aa0ff65c3070d4c, type: 3}
-  Icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  Icon: {fileID: 21300000, guid: 50816719c7ad3904a8f88eea33131c15, type: 3}
   MaxDurability: 10
   Durability: 10

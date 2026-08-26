@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Bucket : Tool
+public class Bucket : ItemObject
 {
     public float VolumePercent => _volume / _toolItem.MaxDurability;
     [SerializeField] private ParticleSystem _waterVFX;
@@ -14,6 +14,12 @@ public class Bucket : Tool
     private bool _allowUse;
 
     private BucketUI _bucketUI;
+
+    public override void InitializeInStart()
+    {
+        base.InitializeInStart();
+        _canSelect = false;
+    }
 
     private void Update()
     {
@@ -41,14 +47,14 @@ public class Bucket : Tool
         throw new System.NotImplementedException();
     }
 
-    public override void Hide()
+    public override void HideItem()
     {
         //_animator.SetTrigger(_hideHash);
         _inventory.ChangeItemWithDurability(_slotIndex, _volume);
         _bucketUI.Hide();
     }
 
-    public override void Show()
+    public override void ShowItem()
     {
         //_animator.SetTrigger(_showHash);
         _bucketUI.Show();
@@ -74,5 +80,30 @@ public class Bucket : Tool
     {
         _volume += value;
         _volume = Mathf.Clamp(_volume, 0, _toolItem.MaxDurability);
+    }
+
+    public override void OnThrow()
+    {
+        var direction = ServiceLocator.Instance.GetService<CameraHandler>().GetDirectionForward() - transform.position;
+        _rb.isKinematic = false;
+        _rb.useGravity = true;
+        _collider.isTrigger = false;
+
+        transform.parent = null;
+
+        _rb.AddForce(direction, ForceMode.Impulse);
+        _inventory.RemoveItem(_slotIndex, 1);
+        _canSelect = true;
+    }
+
+    public override void OnPickup()
+    {
+        _rb.isKinematic = true;
+        _rb.useGravity = false;
+        _collider.isTrigger = true;
+        _canSelect = false;
+
+        _inventory.AddItem(_toolItem, 1);
+        Destroy(gameObject);
     }
 }

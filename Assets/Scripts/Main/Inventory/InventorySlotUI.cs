@@ -71,4 +71,9 @@ public class InventorySlotUI : MonoBehaviour, ISelectable
         }
         _secondDimensionTipBox.Hide();
     }
+
+    public bool CanSelect()
+    {
+        return true;
+    }
 }

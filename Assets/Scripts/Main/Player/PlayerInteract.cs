@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerInteract : MonoBehaviour
 {
@@ -37,8 +38,9 @@ public class PlayerInteract : MonoBehaviour
 
         foreach (var result in results)
         {
-            if (result.gameObject.TryGetComponent<ISelectable>(out _selectable))
+            if (result.gameObject.TryGetComponent<ISelectable>(out _selectable) && _selectable.CanSelect())
             {
+                //_selectable = selectable.GetSelectable();
                 _selectableObservable.Value = _selectable;
                 _selectableTransform = result.gameObject.transform;
                 break;
@@ -55,7 +57,7 @@ public class PlayerInteract : MonoBehaviour
     {
         if (Physics.Raycast(_cameraHandler.Position, _cameraHandler.GetDirection(), out var hit))
         {
-            if (hit.transform.TryGetComponent<ISelectable>(out _selectable))
+            if (hit.transform.TryGetComponent<ISelectable>(out _selectable) && _selectable.CanSelect())
             {
                 _selectableObservable.Value = _selectable;
                 _selectableTransform = hit.transform;
