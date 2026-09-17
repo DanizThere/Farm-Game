@@ -2,10 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ThirdDimensionTipBox : MonoBehaviour, IView
+public class ThirdDimensionTipBox : View
 {
-    public int Order { get; set; } = 0;
-    public bool IsActive { get; set; } = false;
 
     [SerializeField] private RectTransform _dragParent;
     [SerializeField] private RectTransform _dragTransform;
@@ -13,16 +11,16 @@ public class ThirdDimensionTipBox : MonoBehaviour, IView
 
     private List<SelectableAction> _actions = new();
 
-    public void Hide()
+    public override void Hide()
     {
-        IsActive = false;
+        _isActive = false;
         _dragTransform.gameObject.SetActive(IsActive);
         Deselect();
     }
 
-    public void Show()
+    public override void Show()
     {
-        IsActive = true;
+        _isActive = true;
         _dragTransform.gameObject.SetActive(IsActive);
     }
 

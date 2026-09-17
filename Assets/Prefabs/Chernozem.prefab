@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 227226601344122719}
   - component: {fileID: 187590992677984988}
   - component: {fileID: 2924834891608757212}
+  - component: {fileID: -340374322097557789}
   m_Layer: 0
   m_Name: Chernozem
   m_TagString: Untagged
@@ -127,3 +128,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dirt
   _plantType: 0
+--- !u!114 &-340374322097557789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9145616641668865923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a73123767baafd4f9b81daa47b17ae6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DefaultSelectable
+  _actions: []
+  _maxDistance: 15
+  _dialogueHandler: {fileID: 0}

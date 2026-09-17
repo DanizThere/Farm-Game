@@ -18,6 +18,11 @@ public class LevelBootstrap : MonoBehaviour
         Add();
 
         Construct();
+
+    }
+
+    private void Start()
+    {
     }
 
     private void Add()
@@ -34,6 +39,7 @@ public class LevelBootstrap : MonoBehaviour
 
     private void Construct()
     {
-        StartCoroutine(_levelEntryPoint.Initialize());
+        var saveService = ServiceLocator.Instance.GetService<JsonSaveService>();
+        StartCoroutine(_levelEntryPoint.Initialize(saveService));
     }
 }

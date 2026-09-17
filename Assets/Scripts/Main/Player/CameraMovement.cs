@@ -19,12 +19,13 @@ public class CameraMovement : MonoBehaviour, IService
 
     private Camera _camera;
 
-    private PlayerController _playerController;
+    private InputHandler _playerController;
 
 
-    private void Start()
+    public void Initialize(Transform body)
     {
-        _playerController = ServiceLocator.Instance.GetService<PlayerController>();
+        _body = body;
+        _playerController = ServiceLocator.Instance.GetService<InputHandler>();
 
         ServiceLocator.Instance.GetService<GameStateMachine>().GetState<UIGameState>().OnStartEvent += () => SetMove(false, () =>
         {

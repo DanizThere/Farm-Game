@@ -19,7 +19,7 @@ public class InventoryController : MonoBehaviour
     [SerializeField] private RectTransform _dragParent;
     private int _iconIndex;
 
-    private PlayerController _playerController;
+    private InputHandler _playerController;
     private ItemObjectController _toolController;
 
     private GameStateMachine _gameStateMachine;
@@ -36,7 +36,7 @@ public class InventoryController : MonoBehaviour
     private int _lastIndex = 3;
     private int _firstIndex = 0;
 
-    private void Start()
+    public void Setup()
     {
         _inventory.InitializeSlots();
         _inventoryUIQuick.Setup(_inventory);
@@ -44,7 +44,7 @@ public class InventoryController : MonoBehaviour
 
         LoadInventory();
 
-        _playerController = ServiceLocator.Instance.GetService<PlayerController>();
+        _playerController = ServiceLocator.Instance.GetService<InputHandler>();
         _toolController = ServiceLocator.Instance.GetService<ItemObjectController>();
         _gameStateMachine = ServiceLocator.Instance.GetService<GameStateMachine>();
 
@@ -61,8 +61,6 @@ public class InventoryController : MonoBehaviour
             _outerState.OnStartEvent += SetupOuterState;
             _outerState.OnExitEvent += DisposeOuterState;
         }
-
-        _gameStateMachine.SetState<OuterWorldGameState>();
 
         _currentIndex.ValueChanged += _inventoryUIQuick.TryGetSlot;
         _currentIndex.ValueChanged += TryGetTool;

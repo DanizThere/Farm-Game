@@ -1,9 +1,10 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
 
 public class Bobbing : MonoBehaviour
 {
-    private PlayerController _playerController;
+    private InputHandler _playerController;
 
     [SerializeField] private CharacterController _characterController;
 
@@ -19,15 +20,9 @@ public class Bobbing : MonoBehaviour
     private Vector3 _startPosition;
     private Vector3 _movePosition;
 
-    private void Start()
-    {
-        _startPosition = _cameraTransform.localPosition;
-        _playerController = ServiceLocator.Instance.GetService<PlayerController>();
-    }
-
     private void Update()
     {
-        if (!_enable) return;
+        if (!_enable || !_cameraTransform) return;
 
         _cameraTransform.localPosition = Vector3.Lerp(_cameraTransform.localPosition, _movePosition, Time.deltaTime * _smooth);
 
@@ -47,5 +42,14 @@ public class Bobbing : MonoBehaviour
         pos.y += Mathf.Sin(Time.time * _frequency) * _amplitude;
         pos.x += Mathf.Cos(Time.time * _frequency * .5f) * _amplitude * 2;
         return pos;
+    }
+
+    public void Initialize(BobbingTransforms transforms)
+    {
+        _cameraTransform = transforms.CameraTransform;
+        _cameraHolderTransform = transforms.CameraHandlerTransform;
+
+        _startPosition = _cameraTransform.localPosition;
+        _playerController = ServiceLocator.Instance.GetService<InputHandler>();
     }
 }

@@ -2,10 +2,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BedUI : MonoBehaviour, IView
+public class BedUI : View
 {
-    public int Order { get; set; } = 20;
-    public bool IsActive { get; set; } = false;
 
     [SerializeField] private GameObject _panel;
     [SerializeField] private Slider _slider;
@@ -21,18 +19,18 @@ public class BedUI : MonoBehaviour, IView
         Hide();
     }
 
-    public void Hide()
+    public override void Hide()
     {
-        IsActive = false;
+        _isActive = false;
         _panel.SetActive(IsActive);
         _slider.value = 1;
         _text.text = string.Empty;
         _bed.HideActions();
     }
 
-    public void Show()
+    public override void Show()
     {
-        IsActive = true;
+        _isActive = true;
         _panel.SetActive(IsActive);
     }
 

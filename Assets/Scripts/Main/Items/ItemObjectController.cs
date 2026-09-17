@@ -4,12 +4,12 @@ public class ItemObjectController : MonoBehaviour, IService
 {
     public ItemObject CurrentTool => _currentTool;
     private ItemObject _currentTool;
-    private PlayerController _playerController;
+    private InputHandler _playerController;
     private OuterWorldGameState _state;
 
     private void Start()
     {
-        _playerController = ServiceLocator.Instance.GetService<PlayerController>();
+        _playerController = ServiceLocator.Instance.GetService<InputHandler>();
 
         _state = ServiceLocator.Instance.GetService<GameStateMachine>().GetState<OuterWorldGameState>();
 

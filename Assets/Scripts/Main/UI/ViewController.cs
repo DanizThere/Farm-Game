@@ -13,13 +13,13 @@ public class ViewController : MonoBehaviour, IService
     [SerializeField] private BedUI _bedUI;
     [SerializeField] private WaterwellUI _waterwellUI;
 
-    private Dictionary<Type, IView> _views = new();
+    private Dictionary<Type, View> _views = new();
 
-    private PlayerController _playerController;
+    private InputHandler _playerController;
 
     private void Start()
     {
-        _playerController = ServiceLocator.Instance.GetService<PlayerController>();
+        _playerController = ServiceLocator.Instance.GetService<InputHandler>();
 
         Add(_thirdDimensionBox);
         Add(_secondDimensionBox);
@@ -48,12 +48,12 @@ public class ViewController : MonoBehaviour, IService
 
     }
 
-    public void Add(IView view)
+    public void Add(View view)
     {
         _views.Add(view.GetType(), view);
     }
 
-    public T Get<T>() where T : IView
+    public T Get<T>() where T : View
     {
         _views.TryGetValue(typeof(T), out var view);
 

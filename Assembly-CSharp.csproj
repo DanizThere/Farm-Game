@@ -56,11 +56,11 @@
     <Compile Include="Assets\Scripts\Main\Observable.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\ToolItem.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
-    <Compile Include="Assets\Scripts\Main\UI\IView.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\InventoryController.cs" />
     <Compile Include="Assets\Scripts\Main\UI\SelectableAction.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\Attribute.cs" />
+    <Compile Include="Assets\Scripts\Main\UI\View.cs" />
     <Compile Include="Assets\Scripts\Main\Player\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\Main\BedUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
@@ -68,12 +68,15 @@
     <Compile Include="Assets\Scripts\Main\Save\InventorySerializable.cs" />
     <Compile Include="Assets\Scripts\Main\Player\CameraHandler.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\Item.cs" />
+    <Compile Include="Assets\Scripts\Main\PlayerInitializer.cs" />
     <Compile Include="Assets\Scripts\Main\Player\PlayerInteract.cs" />
     <Compile Include="Assets\Scripts\Main\UI\CustomButton.cs" />
     <Compile Include="Assets\Scripts\Main\Save\JsonSaveService.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\Scripts\AnimationEventS\AnimationEventReceiver.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\InventoryUIQuickSlots.cs" />
+    <Compile Include="Assets\Scripts\Main\Inventory\NewGameItem.cs" />
+    <Compile Include="Assets\Scripts\Factories\UIFactory.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\InventoryUIQuickSlot.cs" />
     <Compile Include="Assets\Scripts\Main\Save\InventoryItemSerialize.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\ItemDatabase.cs" />
@@ -103,13 +106,15 @@
     <Compile Include="Assets\Scripts\Main\Services\ServiceLocator.cs" />
     <Compile Include="Assets\Scripts\Main\DayCycle\TimeView.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
-    <Compile Include="Assets\Scripts\Main\Player\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Main\DayCycle\TimeSettings.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\Scripts\Main\UI\ViewController.cs" />
     <Compile Include="Assets\Scripts\Extenisions\ListExtension.cs" />
     <Compile Include="Assets\Scripts\Main\GameState\UIGameState.cs" />
+    <Compile Include="Assets\Scripts\Main\Player\InputHandler.cs" />
     <Compile Include="Assets\Scripts\Main\Items\BucketUI.cs" />
+    <Compile Include="Assets\Scripts\Main\DialogueSystem\DialogueView.cs" />
+    <Compile Include="Assets\Scripts\Main\Player\PlayerWallet.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
@@ -124,6 +129,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\Scripts\Main\Player\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\Main\Save\ISaveService.cs" />
+    <Compile Include="Assets\Scripts\Main\Inventory\NewGameInventory.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\Plant.cs" />
     <Compile Include="Assets\Scripts\Main\Save\ISaveable.cs" />
     <Compile Include="Assets\Scripts\Main\Interactables\ISelectable.cs" />
@@ -133,6 +139,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\Scripts\Main\GameState\OuterWorldGameState.cs" />
+    <Compile Include="Assets\Scripts\Main\Player\CameraHolder.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\AttributeSettings.cs" />
     <Compile Include="Assets\Scripts\Main\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Main\Interactables\WaterwellUI.cs" />
@@ -143,6 +150,7 @@
     <Compile Include="Assets\Scripts\Main\Plants\PlantsLifetime.cs" />
     <Compile Include="Assets\Scripts\Main\DayCycle\TimeService.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\InventorySlot.cs" />
+    <Compile Include="Assets\Scripts\Main\Player\HandController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\Scripts\Main\GameState\GameStateMachine.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
@@ -1392,12 +1400,12 @@
       <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Addressables">
-      <HintPath>Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.PathTracing.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.PathTracing.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Addressables">
+      <HintPath>Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Runtime.Shared">
@@ -1412,12 +1420,12 @@
       <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEngineBridge.RenderPipelines.Core.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.ScriptableBuildPipeline.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.VisualScripting.Shared.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.ScriptableBuildPipeline.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Searcher.Editor">
@@ -1476,6 +1484,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.ProBuilder.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
       <Private>False</Private>
@@ -1512,6 +1524,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.InputSystem.ForUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.ProBuilder.AddOns.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.AddOns.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
       <Private>False</Private>
@@ -1528,10 +1544,6 @@
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.RenderPipelines.GPUDriven.Runtime">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.GPUDriven.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Shaders">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
       <Private>False</Private>
@@ -1542,6 +1554,10 @@
     </Reference>
     <Reference Include="Unity.Multiplayer.Center.Common">
       <HintPath>Library\ScriptAssemblies\Unity.Multiplayer.Center.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.GPUDriven.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.GPUDriven.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Burst">
@@ -1564,8 +1580,16 @@
       <HintPath>Library\ScriptAssemblies\Unity.PathTracing.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.ProBuilder.AssetIdRemapUtility">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.AssetIdRemapUtility.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.ProBuilder">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.State">

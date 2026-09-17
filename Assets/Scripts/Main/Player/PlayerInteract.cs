@@ -10,12 +10,12 @@ public class PlayerInteract : MonoBehaviour
     private ISelectable _selectable;
     private Transform _selectableTransform;
     private CameraHandler _cameraHandler;
-    private PlayerController _playerController;
+    private InputHandler _playerController;
 
-    private void Start()
+    public void Initialize()
     {
         _cameraHandler = ServiceLocator.Instance.GetService<CameraHandler>();
-        _playerController = ServiceLocator.Instance.GetService<PlayerController>();
+        _playerController = ServiceLocator.Instance.GetService<InputHandler>();
 
         _playerController.OnInteractEvent += TryInteract;
 

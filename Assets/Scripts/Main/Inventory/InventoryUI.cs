@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryUI : MonoBehaviour, IView
+public class InventoryUI : View
 {
     [SerializeField] private GameObject _slotPrefab;
     [SerializeField] private Transform _slotsParent;
@@ -9,9 +9,6 @@ public class InventoryUI : MonoBehaviour, IView
 
     private Inventory _inventory;
     private List<InventorySlotUI> _slotsUI = new();
-
-    public int Order { get; set; } = 10;
-    public bool IsActive { get; set; }
 
     public void Setup(Inventory inventory)
     {
@@ -41,15 +38,15 @@ public class InventoryUI : MonoBehaviour, IView
         }
     }
 
-    public void Show()
+    public override void Show()
     {
-        IsActive = true;
+        _isActive = true;
         _panel.SetActive(true);
     }
 
-    public void Hide()
+    public override void Hide()
     {
-        IsActive = false;
+        _isActive = false;
         _panel.SetActive(false);
     }
 }

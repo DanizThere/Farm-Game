@@ -2,29 +2,26 @@ using System;
 using TMPro;
 using UnityEngine;
 
-public class PlayerInfo : MonoBehaviour, IView
+public class PlayerInfo : View
 {
-    public int Order { get; set; } = 0;
-    public bool IsActive { get; set; } = true;
-
     [SerializeField] private GameObject _panel;
 
     [SerializeField] private TextMeshProUGUI _moneyText;
 
-    private void Start()
-    {
-        ServiceLocator.Instance.GetService<ViewController>().Add(this);
-    }
+    //private void Start()
+    //{
+    //    ServiceLocator.Instance.GetService<ViewController>().Add(this);
+    //}
 
-    public void Hide()
+    public override void Hide()
     {
-        IsActive = false;
+        _isActive = false;
         _panel.SetActive(IsActive);
     }
 
-    public void Show()
+    public override void Show()
     {
-        IsActive = true;
+        _isActive = true;
         _panel.SetActive(IsActive);
     }
 

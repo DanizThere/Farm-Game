@@ -1,30 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryUIQuickSlots : MonoBehaviour, IView
+public class InventoryUIQuickSlots : View
 {
-    public int Order { get; set; } = 0;
-    public bool IsActive { get; set; } = true;
-
     [SerializeField] private Transform _parent;
     [SerializeField] private InventoryUIQuickSlot _prefab;
 
-    private PlayerController _playerController;
+    private InputHandler _playerController;
     private List<InventoryUIQuickSlot> _quickBar = new();
     private Inventory _inventory;
 
     private Observable<InventoryUIQuickSlot> _currentSlot = new(null);
 
-    public void Hide()
+    public override void Hide()
     {
-        IsActive = false;
+        _isActive = false;
         _parent.gameObject.SetActive(IsActive);
     }
 
     public void Setup(Inventory inventory)
     {
         _inventory = inventory;
-        _playerController = ServiceLocator.Instance.GetService<PlayerController>();
+        _playerController = ServiceLocator.Instance.GetService<InputHandler>();
 
         ServiceLocator.Instance.GetService<GameStateMachine>().GetState<UIGameState>().OnStartEvent += Hide;
         ServiceLocator.Instance.GetService<GameStateMachine>().GetState<OuterWorldGameState>().OnStartEvent += Show;
@@ -51,9 +48,9 @@ public class InventoryUIQuickSlots : MonoBehaviour, IView
         };
     }
 
-    public void Show()
+    public override void Show()
     {
-        IsActive = true;
+        _isActive = true;
         _parent.gameObject.SetActive(IsActive);
     }
 

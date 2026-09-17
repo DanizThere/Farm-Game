@@ -5,16 +5,28 @@ using Newtonsoft.Json;
 
 public class JsonSaveService : ISaveService
 {
+    public bool FileExists<T>(string key)
+    {
+        var path = SavePath(key);
+
+        return File.Exists(path);
+    }
+
     public void Load<T>(string key, Action<T> callback)
     {
         var path = SavePath(key);
-        using (var streamReader = new StreamReader(path))
-        {
-            var json = streamReader.ReadToEnd();
-            var data = JsonConvert.DeserializeObject<T>(json);
 
-            callback.Invoke(data);
+        if (!File.Exists(path))
+        {
+            callback.Invoke(default);
+            return;
         }
+
+        using var streamReader = new StreamReader(path);
+        var json = streamReader.ReadToEnd();
+        var data = JsonConvert.DeserializeObject<T>(json);
+
+        callback.Invoke(data);
     }
 
     public void Save(string key, object value, Action<bool> callback = null)

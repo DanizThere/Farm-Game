@@ -3,11 +3,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WaterwellUI : MonoBehaviour, IView
+public class WaterwellUI : View
 {
-
-    public int Order { get; set; } = 20;
-    public bool IsActive { get; set; } = false;
     [SerializeField] private CustomButton _button;
     [SerializeField] private GameObject _panel;
     [SerializeField] private Image _imageFill;
@@ -15,9 +12,9 @@ public class WaterwellUI : MonoBehaviour, IView
 
     private Waterwell _waterwell;
 
-    public void Hide()
+    public override void Hide()
     {
-        IsActive = false;
+        _isActive = false;
         _panel.SetActive(IsActive);
     }
 
@@ -28,9 +25,9 @@ public class WaterwellUI : MonoBehaviour, IView
         _button.OnPointerDownEvent.AddListener(OnPointerDown);
     }
 
-    public void Show()
+    public override void Show()
     {
-        IsActive = true;
+        _isActive = true;
         _panel.SetActive(IsActive);
 
         var currentTool = ServiceLocator.Instance.GetService<ItemObjectController>().CurrentTool;

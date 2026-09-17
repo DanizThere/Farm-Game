@@ -10,11 +10,6 @@ public class GameStateMachine : MonoBehaviour, IService
 
     private GameState _currentState;
 
-    private void Start()
-    {
-        InitializeStates();
-    }
-
     private void Update()
     {
         _currentState?.OnUpdate();

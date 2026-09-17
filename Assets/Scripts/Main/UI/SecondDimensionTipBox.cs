@@ -3,10 +3,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class SecondDimensionTipBox : MonoBehaviour, IView
+public class SecondDimensionTipBox : View
 {
-    public int Order { get; set; } = 0;
-    public bool IsActive { get; set; } = true;
 
     [SerializeField] private RectTransform _dragParent;
     [SerializeField] private RectTransform _dragTransform;
@@ -27,16 +25,16 @@ public class SecondDimensionTipBox : MonoBehaviour, IView
         }
     }
 
-    public void Hide()
+    public override void Hide()
     {
-        IsActive = false;
+        _isActive = false;
         _dragTransform.gameObject.SetActive(IsActive);
         SetInfo(string.Empty, string.Empty);
     }
 
-    public void Show()
+    public override void Show()
     {
-        IsActive = true;
+        _isActive = true;
         _dragTransform.gameObject.SetActive(IsActive);
     }
 

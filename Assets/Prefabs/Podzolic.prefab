@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8162860132118177434}
   - component: {fileID: 173963457262300266}
   - component: {fileID: 652913363934663795}
+  - component: {fileID: -9100062770419671964}
   m_Layer: 0
   m_Name: Podzolic
   m_TagString: Untagged
@@ -127,3 +128,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dirt
   _plantType: 1
+--- !u!114 &-9100062770419671964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2403426641909945431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a73123767baafd4f9b81daa47b17ae6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DefaultSelectable
+  _actions: []
+  _maxDistance: 15
+  _dialogueHandler: {fileID: 0}

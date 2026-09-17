@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SeedItem", menuName = "Items/SeedItem")]
+[CreateAssetMenu(fileName = "Seed", menuName = "Items/Seed")]
 public class SeedItem : Item
 {
     

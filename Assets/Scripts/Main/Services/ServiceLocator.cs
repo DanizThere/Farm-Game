@@ -7,7 +7,7 @@ public class ServiceLocator : MonoBehaviour
 {
     public static ServiceLocator Instance;
 
-    [SerializeField] private PlayerController _playerController;
+    [SerializeField] private InputHandler _playerController;
     [SerializeField] private PlayerSettings _playerSettings;
 
     private Dictionary<Type, IService> _services = new();
