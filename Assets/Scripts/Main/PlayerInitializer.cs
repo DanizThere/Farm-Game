@@ -7,12 +7,6 @@ public class PlayerInitializer : MonoBehaviour
     [SerializeField] private HandController _leftHandControllerPrefab;
     [SerializeField] private HandController _rightHandControllerPrefab;
 
-    //test
-    private void Start()
-    {
-        Initialize();
-    }
-
     public void Initialize()
     {
         var player = Instantiate(_playerPrefab);
@@ -22,16 +16,17 @@ public class PlayerInitializer : MonoBehaviour
         var rightController = Instantiate(_rightHandControllerPrefab);
 
         camera.Initialize(player.CameraTransform, player.BodyTransform);
+
         player.Initialize(new BobbingTransforms 
         { 
             CameraHandlerTransform = camera.transform,
             CameraTransform = camera.Camera.transform
         });
-        leftController.Initialize(camera.LeftHandTransform);
-        rightController.Initialize(camera.RightHandTransform);
 
-        ServiceLocator.Instance
-            .GetService<CameraHandler>()
-            .SetHolder(camera);
+        var handler = ServiceLocator.Instance.GetService<CameraHandler>();
+        handler.SetHolder(camera);
+
+        leftController.Initialize(camera.LeftHandTransform, handler, player.OnGrab);
+        rightController.Initialize(camera.RightHandTransform, handler, player.OnGrab);
     }
 }

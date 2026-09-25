@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefaultSelectable : MonoBehaviour, ISelectable, ISelectableActions
+public class DefaultSelectable : SLMonoBehaviour, ISelectable, ISelectableActions
 {
     [SerializeField] protected List<SelectableAction> _actions = new();
     [SerializeField] protected float _maxDistance = 15f;
@@ -15,13 +15,13 @@ public class DefaultSelectable : MonoBehaviour, ISelectable, ISelectableActions
     protected bool _canSelect = true;
 
 
-    private void Start()
+    override protected void SLStart()
     {
         InitializeInStart();
     }
 
 
-    private void Update()
+    override protected void SLUpdate()
     {
         if (_player == null) return;
 
@@ -35,9 +35,11 @@ public class DefaultSelectable : MonoBehaviour, ISelectable, ISelectableActions
 
     public virtual void InitializeInStart()
     {
-        _viewController = ServiceLocator.Instance.GetService<ViewController>();
-        _thirdDimensionTipBox = _viewController.Get<ThirdDimensionTipBox>();
-        _gameStateMachine = ServiceLocator.Instance.GetService<GameStateMachine>();
+        //_viewController = ServiceLocator.Instance.GetService<ViewController>();
+        ////_thirdDimensionTipBox = _viewController.Get<ThirdDimensionTipBox>();
+        //_gameStateMachine = ServiceLocator.Instance.GetService<GameStateMachine>();
+
+        //if (!_gameStateMachine || !_viewController) throw new System.NullReferenceException();
 
         foreach (var action in _actions)
         {
@@ -57,13 +59,13 @@ public class DefaultSelectable : MonoBehaviour, ISelectable, ISelectableActions
 
     public virtual void Show()
     {
-        var box = _viewController.Get<ThirdDimensionTipBox>();
-        box.Show();
+        var box = _viewController?.Get<ThirdDimensionTipBox>();
+        box?.Show();
     }
 
     public virtual void Hide()
     {
-        _viewController.Get<ThirdDimensionTipBox>().Hide();
+        _viewController?.Get<ThirdDimensionTipBox>()?.Hide();
         HideActions();
     }
 

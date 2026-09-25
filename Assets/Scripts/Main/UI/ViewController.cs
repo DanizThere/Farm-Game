@@ -5,14 +5,6 @@ using UnityEngine;
 
 public class ViewController : MonoBehaviour, IService
 {
-    [SerializeField] private ThirdDimensionTipBox _thirdDimensionBox;
-    [SerializeField] private SecondDimensionTipBox _secondDimensionBox;
-    [SerializeField] private InventoryUI _inventoryUI;
-    [SerializeField] private InventoryUIQuickSlots _inventoryUIQuickSlots;
-    [SerializeField] private TimeView _timeView;
-    [SerializeField] private BedUI _bedUI;
-    [SerializeField] private WaterwellUI _waterwellUI;
-
     private Dictionary<Type, View> _views = new();
 
     private InputHandler _playerController;
@@ -20,14 +12,6 @@ public class ViewController : MonoBehaviour, IService
     private void Start()
     {
         _playerController = ServiceLocator.Instance.GetService<InputHandler>();
-
-        Add(_thirdDimensionBox);
-        Add(_secondDimensionBox);
-        Add(_inventoryUI);
-        Add(_inventoryUIQuickSlots);
-        Add(_timeView);
-        Add(_bedUI);
-        Add(_waterwellUI);
 
         _playerController.OnEscapeEvent += OnEscape;
     }

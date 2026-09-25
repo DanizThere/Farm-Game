@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -21,6 +22,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     private InputHandler _controller;
     
     private float _timeScale = 1f;
+    private float _speedScale = 1f;
 
 
     public void Initialize()
@@ -40,7 +42,6 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
             Move(_controller.Direction);
 
         _speed = Mathf.Lerp(_speed, _currentSpeed, Time.deltaTime * 10f);
-        print(_currentSpeed);
         _currentSpeed = _isRunning ? _runningSpeed : _localSpeed;
     }
 
@@ -80,7 +81,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     public void Move(Vector3 move)
     {
         var direction = _body.forward * move.z + _body.right * move.x;
-        _characterController.Move(_currentSpeed * Time.deltaTime * direction);
+        _characterController.Move(_currentSpeed * Time.deltaTime * direction * _speedScale);
     }
 
     private void Jump()
@@ -89,5 +90,10 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
         {
             _velocity.y = Mathf.Sqrt(_jumpForce * -2f * -_gravityForce * _timeScale);
         }
+    }
+
+    public void SetSpeedScale(float obj)
+    {
+        _speedScale = obj;
     }
 }

@@ -6,12 +6,13 @@ public class LevelEntryPoint : MonoBehaviour
 {
     [SerializeField] private TimeManager _timeManager;
     [SerializeField] private NewGameInventory _newGameInventory;
-    [SerializeField] private InventoryController _inventoryController;
     [SerializeField] private GameStateMachine _gameStateMachine;
     [SerializeField] private DirtController _dirtController;
 
     [SerializeField] private DialogueHandler _startNewGameDialogue;
     [SerializeField] private DialogueSystem _dialogueSystem;
+
+    [SerializeField] private PlayerInitializer _playerInitializer;
 
     public IEnumerator Initialize(JsonSaveService saveService)
     {
@@ -20,7 +21,7 @@ public class LevelEntryPoint : MonoBehaviour
         _timeManager.Setup();
         _gameStateMachine.InitializeStates();
 
-        _inventoryController.Setup();
+        _playerInitializer.Initialize();
 
         if (!saveService.FileExists<InventorySerializable>("InventoryData"))
         {

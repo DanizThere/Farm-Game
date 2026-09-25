@@ -1,10 +1,16 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class ItemObject : DefaultSelectable
 {
+    public List<ItemObjectEffortData> Efforts = new(); 
     public Vector3 PositionOffset => _positionOffset;
     public Quaternion RotationOffset => _rotationOffset;
+
+    public Observable<GameObject> CurrentModel { get; private set;}
+
+    [SerializeField] private GameObject[] _itemModels;
 
     [SerializeField] protected Rigidbody _rb;
     [SerializeField] protected Collider _collider;
@@ -18,9 +24,16 @@ public abstract class ItemObject : DefaultSelectable
     private Vector3 _positionOffset;
     private Quaternion _rotationOffset;
 
+    private void Awake()
+    {
+        CurrentModel = new(_itemModels[0]);
+    }
+
     public override void InitializeInStart()
     {
         base.InitializeInStart();
+
+        
 
         foreach (var action in _actions)
         {

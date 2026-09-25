@@ -5,6 +5,7 @@ public class Dirt : MonoBehaviour
     public Observable<Plant> Plant;
     public Vector2Int DirtPosition => _dirtPosition;
     [SerializeField] private PlantType _plantType;
+    [SerializeField] private Transform _plantTransform;
     private Vector2Int _dirtPosition;
 
     public void InitializePosition(int x, int y)
@@ -21,6 +22,9 @@ public class Dirt : MonoBehaviour
         if (Plant != null) return;
 
         if (plant == null) return;
+
+        plant.transform.SetParent(_plantTransform);
+        plant.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
 
         plant.OnDestroy += DestroyPlant;
         plant.StartLife(_plantType);

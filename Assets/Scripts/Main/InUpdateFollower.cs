@@ -9,15 +9,15 @@ public class InUpdateFollower : MonoBehaviour
 
     private Transform _cameraTransform;
 
-    private void Start()
-    {
-        _cameraTransform = ServiceLocator.Instance.GetService<CameraHandler>()?.Camera.transform;
-        _cameraTransform = _cameraTransform != null ? _cameraTransform : Camera.main.transform;
-    }
-
     private void Update()
     {
-        if (_target == null || !_cameraTransform) return;
+        if (_target == null) return;
+        if (!_cameraTransform)
+        {
+            _cameraTransform = ServiceLocator.Instance.GetService<CameraHandler>()?.Camera.transform;
+            _cameraTransform = _cameraTransform != null ? _cameraTransform : Camera.main.transform;
+
+        }
         transform.position = Vector3.Lerp(transform.position, _target.position, _followSpeed * Time.deltaTime);
         if (ShouldLookAsCamera)
         {

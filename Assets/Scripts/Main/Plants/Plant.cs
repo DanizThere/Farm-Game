@@ -2,64 +2,72 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(PlantHealth))]
 public class Plant : MonoBehaviour
 {
     public System.Action OnDestroy = delegate { };
 
-    public float Progress => _currentLife.Progress;
-    public string Status => _currentLife.PlantStatus.ToString();
+    public float Progress => _lifeProgress.Sum(x => x.Progress) / _lifeProgress.Count;
 
     [SerializeField] private Animator _animator;
 
     [SerializeField] private List<PlantRaiseMultiplier> _raiseMultiplier = new();
 
-    [SerializeField] private PlantsLifetime _seedLife;
-    [SerializeField] private PlantsLifetime _plantLife;
-    [SerializeField] private PlantsLifetime _rotLife;
+    [SerializeField] private List<PlantsLifetime> _lifeProgress = new();
+
+    private PlantHealth _plantHealth;
 
     private PlantsLifetime _currentLife;
-    private TimeManager _timeManager;
 
     private void Start()
     {
-        StartLife(PlantType.Chernozems);
+        _plantHealth = GetComponent<PlantHealth>();
+        var timeManager = ServiceLocator.Instance.GetService<TimeManager>();
+        if(timeManager != null)
+            timeManager.OnDayChange += Grow;
     }
 
-
-    private void Update()
+    private void Grow()
     {
-        //evaluate progress to grownAnimation;
+        _currentLife.Grow();
+        print($"i grow. now i am {_currentLife} with {_currentLife.Progress} progress");
+    }
+
+    public void TryEffort(ItemObject itemObject)
+    {
+        foreach(var effort in itemObject.Efforts)
+        {
+            _plantHealth.UpdateCharacteristic(effort.Name.Name, effort.Value);
+        }
     }
 
     public void StartLife(PlantType plantType)
     {
-        _timeManager = ServiceLocator.Instance.GetService<TimeManager>();
+        for(int i = 0; i < _lifeProgress.Count; i++)
+        {
+            if(i == _lifeProgress.Count - 1)
+            {
+                _lifeProgress[i].OnGrown += () => OnDestroy.Invoke();
+                break;
+            }
 
-        _seedLife.OnGrown += () => ChangeLifePeriod(_plantLife);
-        _plantLife.OnGrown += () => ChangeLifePeriod(_rotLife);
-        _rotLife.OnGrown += () => OnDestroy.Invoke();
+            _lifeProgress[i].OnGrown += () => ChangeLifePeriod(_lifeProgress[i + 1]);
+        }
 
-        ChangeLifePeriod(_seedLife);
+        ChangeLifePeriod(_lifeProgress[0]);
 
         var plantMultiplier = _raiseMultiplier.FirstOrDefault(x => x.PlantType == plantType);
         if (plantMultiplier != null)
         {
-            _seedLife.Care(plantMultiplier.RaiseMultiplier);
+            _currentLife.Care(plantMultiplier.RaiseMultiplier);
         }
     }
 
     private void ChangeLifePeriod(PlantsLifetime lifetime)
     {
-        if(_currentLife != null)
-        {
-            _timeManager.OnHourChange -= _currentLife.Grow;
-        }
-        print(lifetime);
         _currentLife = lifetime;
         //_animator.runtimeAnimatorController = _currentLife.AnimatorOverrideController;
         _currentLife.Setup();
-
-        _timeManager.OnHourChange += _currentLife.Grow;
     }
 }
 

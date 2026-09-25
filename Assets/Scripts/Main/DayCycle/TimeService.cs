@@ -36,9 +36,9 @@ public class TimeService
         _currentDay.ValueChanged += _ => OnDayChange?.Invoke();
     }
 
-    public void UpdateTime(float deltaTime)
+    public void UpdateTime(float deltaTime, bool ignoreNight = true)
     {
-        if (!IsDayTime())
+        if (!IsDayTime() && ignoreNight)
         {
             return;
         }

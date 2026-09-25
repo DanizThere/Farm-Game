@@ -1,40 +1,35 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelBootstrap : MonoBehaviour
 {
-    [SerializeField] private TimeManager _timeManager;
-    [SerializeField] private CameraHandler _cameraHandler;
     [SerializeField] private ItemObjectController _toolController;
-    [SerializeField] private GameStateMachine _gameStateMachine;
     [SerializeField] private ViewController _viewController;
     [SerializeField] private ItemDatabase _itemDatabase;
-    [SerializeField] private DialogueSystem _dialogueSystem;
+
+    [SerializeReference] private List<Bootstraper> _bootstrapers = new();
 
     [SerializeField] private LevelEntryPoint _levelEntryPoint;
 
     private void Awake()
     {
         Add();
-
-        Construct();
-
-    }
-
-    private void Start()
-    {
     }
 
     private void Add()
     {
-        ServiceLocator.Instance.Add(_timeManager);
-        ServiceLocator.Instance.Add(_cameraHandler);
-        ServiceLocator.Instance.Add(_cameraHandler);
+        foreach(var boot in _bootstrapers)
+        {
+            boot.Inject(ServiceLocator.Instance);
+        }
+
         ServiceLocator.Instance.Add(_toolController);
-        ServiceLocator.Instance.Add(_gameStateMachine);
         ServiceLocator.Instance.Add(_viewController);
         ServiceLocator.Instance.Add(_itemDatabase);
-        ServiceLocator.Instance.Add(_dialogueSystem);
+
+        Construct();
     }
 
     private void Construct()

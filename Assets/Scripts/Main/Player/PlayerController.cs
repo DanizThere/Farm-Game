@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
 
     public Transform BodyTransform => _playerMovement.Body;
 
+    public System.Action<float> OnGrab = delegate { };
+
     [SerializeField] private Transform _cameraPosition;
 
     [SerializeField] private PlayerWallet _playerWallet;
@@ -19,6 +21,8 @@ public class PlayerController : MonoBehaviour
         _playerWallet.Initialize();
         _playerMovement.Initialize();
         _playerInteract.Initialize();
+
+        OnGrab += _playerMovement.SetSpeedScale;
     }
 }
 

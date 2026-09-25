@@ -7,7 +7,7 @@ public class AttributeSettings : ScriptableObject
     public AttributeType AttributeType;
     public AttributeGenType AttributeGenType;
 
-    public float TimeToGrow = 48f;
+    public float MaxGrowProgress = 48f;
     public float GrowMultiplier = 1f;
 }
 

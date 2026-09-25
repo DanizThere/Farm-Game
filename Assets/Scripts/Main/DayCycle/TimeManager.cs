@@ -115,7 +115,7 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
 
     private void UpdateTimeOfDay()
     {
-        _timeService.UpdateTime(Time.deltaTime * _timeScale);
+        _timeService.UpdateTime(Time.deltaTime * _timeScale, false);
     }
 
     private void RotateSun()
