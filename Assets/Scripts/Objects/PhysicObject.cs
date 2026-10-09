@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PhysicObject : MonoBehaviour, ISelectable
 {
+    public float CurrentWeight => _currentWeight;
+
     [Range(0.1f, 1f)]
     [SerializeField] private float _defaultWeight = .5f;
     [SerializeField] private float _timeForce = 10f;

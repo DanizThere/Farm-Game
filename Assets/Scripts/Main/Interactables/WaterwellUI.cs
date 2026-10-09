@@ -12,10 +12,14 @@ public class WaterwellUI : View
 
     private Waterwell _waterwell;
 
+    private void Awake()
+    {
+        _isActive.ValueChanged += _panel.SetActive;
+    }
+
     public override void Hide()
     {
-        _isActive = false;
-        _panel.SetActive(IsActive);
+        _isActive.Value = false;
     }
 
     public void Setup(Waterwell waterwell)
@@ -27,8 +31,7 @@ public class WaterwellUI : View
 
     public override void Show()
     {
-        _isActive = true;
-        _panel.SetActive(IsActive);
+        _isActive.Value = true;
 
         var currentTool = ServiceLocator.Instance.GetService<ItemObjectController>().CurrentTool;
 

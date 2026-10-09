@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7443955400829145464}
   - component: {fileID: 8031208208754398519}
   - component: {fileID: 447724490887675106}
+  - component: {fileID: 7870494540517903360}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -36,6 +37,7 @@ Transform:
   - {fileID: 190497462105709044}
   - {fileID: 4302332372101396932}
   - {fileID: 6995803254690372161}
+  - {fileID: 3672192826583688194}
   m_Father: {fileID: 863456216782465892}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &8807762679645382622
@@ -157,6 +159,19 @@ MonoBehaviour:
   _topBorder: 80
   _mouseSensevity: 25
   _body: {fileID: 0}
+--- !u!114 &7870494540517903360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3350191118548189846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ede8f3e61b180441a8f6edfee230491, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DrawForward
+  _distance: 5
 --- !u!1 &3391205248163462031
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,6 +198,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.41, y: -0.17, z: 0.71}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3112777483992298108}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6734420978254235245
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3672192826583688194}
+  m_Layer: 0
+  m_Name: WatchPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3672192826583688194
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6734420978254235245}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.029, y: 0.15, z: 0.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -311,6 +357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cdd19594c92c8d47ac3c5d5bac00bb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraHolder
+  _watchPosition: {fileID: 3672192826583688194}
   _leftHandTransform: {fileID: 190497462105709044}
   _rightHandTransform: {fileID: 6995803254690372161}
   _inUpdateFollower: {fileID: 8267620062163888076}

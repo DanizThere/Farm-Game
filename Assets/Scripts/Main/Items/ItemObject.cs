@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class ItemObject : DefaultSelectable
 {
+    public bool IsSingleUse = false;
     public List<ItemObjectEffortData> Efforts = new(); 
     public Vector3 PositionOffset => _positionOffset;
     public Quaternion RotationOffset => _rotationOffset;
@@ -13,12 +14,13 @@ public abstract class ItemObject : DefaultSelectable
     [SerializeField] private GameObject[] _itemModels;
 
     [SerializeField] protected Rigidbody _rb;
-    [SerializeField] protected Collider _collider;
     [SerializeField] protected Animator _animator;
     protected Inventory _inventory;
     protected ToolItem _toolItem;
     protected Transform _UIParent;
     protected int _slotIndex;
+    protected HandController _currentHand;
+    protected GameDbContext _gameDbContext;
 
 
     private Vector3 _positionOffset;
@@ -29,20 +31,12 @@ public abstract class ItemObject : DefaultSelectable
         CurrentModel = new(_itemModels[0]);
     }
 
-    public override void InitializeInStart()
+    protected override void SLStart()
     {
-        base.InitializeInStart();
+        base.SLStart();
 
-        
-
-        foreach (var action in _actions)
-        {
-            if (action.ActionName == "PickupAction")
-            {
-                action.OnClickEvent.AddListener(OnPickup);
-                action.OnClickEvent.AddListener(() => ServiceLocator.Instance.GetService<GameStateMachine>().SetState<OuterWorldGameState>());
-            }
-        }
+        _gameDbContext = ServiceLocator.Instance.GetService<GameDbContext>() ??
+            throw new System.NullReferenceException();
     }
 
     public virtual void Setup(Inventory inventory, ToolItem toolItem, Transform UIParent, int slotIndex)
@@ -60,5 +54,5 @@ public abstract class ItemObject : DefaultSelectable
     public abstract void AltUse();
     public abstract void StopAltUse();
     public abstract void OnThrow();
-    public abstract void OnPickup();
+    public abstract void OnPickup(HandController handController);
 }

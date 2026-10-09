@@ -5,7 +5,7 @@ public class DirtPlaceholder : MonoBehaviour
     [SerializeField] private Dirt _dirt;
     [SerializeField] private Plant _plant;
 
-    private void Awake()
+    private void Start()
     {
         if (!_dirt || !_plant)
         {
@@ -13,6 +13,6 @@ public class DirtPlaceholder : MonoBehaviour
             return;
         }
 
-        _dirt.Plant.Value = _plant;
+        _dirt.PlacePlant(_plant);
     }
 }

@@ -2,32 +2,31 @@ using UnityEngine;
 
 public class Dirt : MonoBehaviour
 {
-    public Observable<Plant> Plant;
+    public Plant Plant => _currentPlant;
     public Vector2Int DirtPosition => _dirtPosition;
     [SerializeField] private PlantType _plantType;
     [SerializeField] private Transform _plantTransform;
     private Vector2Int _dirtPosition;
+    private Plant _currentPlant;
 
     public void InitializePosition(int x, int y)
     {
         _dirtPosition = new Vector2Int(x, y);
         transform.localPosition = new Vector3(x, 0, y);
-
-        Plant = new(null);
-        Plant.ValueChanged += PlacePlant;
     }
 
-    private void PlacePlant(Plant plant)
+    public void PlacePlant(Plant plant)
     {
-        if (Plant != null) return;
-
+        if (_currentPlant != null) return;
         if (plant == null) return;
 
-        plant.transform.SetParent(_plantTransform);
-        plant.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+        _currentPlant = plant;
 
-        plant.OnDestroy += DestroyPlant;
-        plant.StartLife(_plantType);
+        _currentPlant.transform.SetParent(_plantTransform);
+        _currentPlant.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+
+        _currentPlant.OnDestroy += DestroyPlant;
+        _currentPlant.StartLife(_plantType);
     }
 
     public void RemovePlant()
@@ -37,8 +36,8 @@ public class Dirt : MonoBehaviour
 
     private void DestroyPlant()
     {
-        Destroy(Plant.Value.gameObject);
-        Plant.Value = null;
+        Destroy(_currentPlant.gameObject);
+        _currentPlant = null;
     }
 }
 

@@ -10,6 +10,11 @@ public class InventoryUI : View
     private Inventory _inventory;
     private List<InventorySlotUI> _slotsUI = new();
 
+    private void Awake()
+    {
+        _isActive.ValueChanged += _panel.SetActive;
+    }
+
     public void Setup(Inventory inventory)
     {
         _inventory = inventory;
@@ -40,13 +45,11 @@ public class InventoryUI : View
 
     public override void Show()
     {
-        _isActive = true;
-        _panel.SetActive(true);
+        _isActive.Value = true;
     }
 
     public override void Hide()
     {
-        _isActive = false;
-        _panel.SetActive(false);
+        _isActive.Value = false;
     }
 }

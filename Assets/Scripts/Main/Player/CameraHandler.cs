@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class CameraHandler : MonoBehaviour, IService
 {
+    public CameraHolder CameraHolder => _holder;
     public Camera Camera { get; private set;}
     public Vector3 Position => Camera.main.transform.position;
     public Vector3 Forward => Camera.main.transform.position + Camera.main.transform.forward;

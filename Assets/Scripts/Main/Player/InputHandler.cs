@@ -5,7 +5,10 @@ using UnityEngine.InputSystem;
 public class InputHandler : MonoBehaviour, IService
 {
     public Vector3 Direction => _direction; 
-    public Vector3 LookDirection => _lookDirection; 
+    public Vector3 LookDirection => _lookDirection;
+
+    public event Action OnWatchEvent = delegate { };
+    public event Action OnWatchReleasedEvent = delegate { };
 
     public event Action OnSprintEvent = delegate { };
     public event Action OnSprintHoldedEvent = delegate { };
@@ -51,6 +54,18 @@ public class InputHandler : MonoBehaviour, IService
     {
         _direction = Vector3.Lerp(_direction, _rawDirection, Time.deltaTime * _playerSettings.Speed);
         _lookDirection = Vector3.Lerp(_lookDirection, _rawLookDirection, Time.deltaTime * _playerSettings.LookSensevity);
+    }
+
+    public void OnWatch(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            OnWatchEvent?.Invoke();
+        }
+        if (context.canceled)
+        {
+            OnWatchReleasedEvent?.Invoke();
+        }
     }
 
     public void OnRun(InputAction.CallbackContext context)

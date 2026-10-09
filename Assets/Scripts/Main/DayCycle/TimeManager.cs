@@ -6,7 +6,7 @@ using UnityEngine.Rendering.Universal;
 
 public class TimeManager : MonoBehaviour, IService, IFreezeable
 {
-    private readonly WaitForSeconds _waitForSeconds = new(2f);
+    public DateTime CurrentTime => _timeService.CurrentTime;
 
     public event Action OnSunrise
     {
@@ -32,8 +32,6 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
         remove => _timeService.OnDayChange -= value;
     }
 
-    [SerializeField] private TimeView _timeView;
-
     [SerializeField] private TimeSettings _timeSettings;
 
     [SerializeField] private Light _sun;
@@ -56,7 +54,6 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
     private void Start()
     {
         Load();
-        StartCoroutine(SetView());
     }
 
     private void Update()
@@ -144,19 +141,5 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
         {
             Setup(value);
         });
-    }
-
-    private IEnumerator SetView()
-    {
-        _timeView?.SetTimeText(_timeService.CurrentTime.ToShortTimeString());
-        _timeView?.SetDateText(_timeService.CurrentTime.ToShortDateString());
-
-        while (true)
-        {
-            _timeView?.SetTimeText(_timeService.CurrentTime.ToShortTimeString());
-            _timeView?.SetDateText(_timeService.CurrentTime.ToShortDateString());
-
-            yield return _waitForSeconds;
-        }
     }
 }

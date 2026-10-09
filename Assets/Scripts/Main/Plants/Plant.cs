@@ -11,8 +11,6 @@ public class Plant : MonoBehaviour
 
     [SerializeField] private Animator _animator;
 
-    [SerializeField] private List<PlantRaiseMultiplier> _raiseMultiplier = new();
-
     [SerializeField] private List<PlantsLifetime> _lifeProgress = new();
 
     private PlantHealth _plantHealth;
@@ -21,7 +19,6 @@ public class Plant : MonoBehaviour
 
     private void Start()
     {
-        _plantHealth = GetComponent<PlantHealth>();
         var timeManager = ServiceLocator.Instance.GetService<TimeManager>();
         if(timeManager != null)
             timeManager.OnDayChange += Grow;
@@ -43,7 +40,10 @@ public class Plant : MonoBehaviour
 
     public void StartLife(PlantType plantType)
     {
-        for(int i = 0; i < _lifeProgress.Count; i++)
+        _plantHealth = GetComponent<PlantHealth>();
+        _plantHealth.Initialize();
+
+        for (int i = 0; i < _lifeProgress.Count; i++)
         {
             if(i == _lifeProgress.Count - 1)
             {
@@ -55,19 +55,13 @@ public class Plant : MonoBehaviour
         }
 
         ChangeLifePeriod(_lifeProgress[0]);
-
-        var plantMultiplier = _raiseMultiplier.FirstOrDefault(x => x.PlantType == plantType);
-        if (plantMultiplier != null)
-        {
-            _currentLife.Care(plantMultiplier.RaiseMultiplier);
-        }
     }
 
     private void ChangeLifePeriod(PlantsLifetime lifetime)
     {
         _currentLife = lifetime;
         //_animator.runtimeAnimatorController = _currentLife.AnimatorOverrideController;
-        _currentLife.Setup();
+        _currentLife.Setup(_plantHealth);
     }
 }
 

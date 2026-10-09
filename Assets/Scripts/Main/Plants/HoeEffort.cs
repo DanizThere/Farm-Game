@@ -1,22 +1,26 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
-public class HoeEffort : MonoBehaviour 
+public class HoeEffort : Effort
 {
     public bool HoeEnabled => _hoe;
-    public event System.Action OnEnd = delegate { };
 
     [SerializeField] private Vector3 _startHoePosition;
     [SerializeField] private Vector3 _endHoePosition;
     [SerializeField] private Quaternion _startHoeRotation;
+    [SerializeField] private Quaternion _endHoeRotation;
 
     [SerializeField] private HoeEffortModel _model;
 
+    private List<HandController> _holdsHands = new();
     private const float MaxProgress = 2f;
     private float _progress = 0.0f;
     private Hoe _hoe;
     private Plant _plant;
     private bool _canEffort = true;
-    private Vector3 _direction => (_endHoePosition - _startHoePosition) * _progress / MaxProgress;
+    private Vector3 _direction => Vector3.Lerp(_startHoePosition, _endHoePosition, _progress / MaxProgress);
+    private Quaternion _rotation => Quaternion.Lerp(_startHoeRotation, _endHoeRotation, _progress / MaxProgress);
 
     private void Awake()
     {
@@ -26,9 +30,20 @@ public class HoeEffort : MonoBehaviour
             _plant.TryEffort(_hoe);
 
             _hoe.transform.SetParent(null);
-            _model.SetEffort(null);
+            _model.ClearModel();
 
-            print("plant was efforted");
+            var freeHand = _holdsHands.Where(x => !x.IsBusy).ToList();
+
+            if (freeHand.Any())
+            {
+                var hand = freeHand[^1];
+                hand.PickupItem(_hoe);
+            }
+            else
+            {
+                _hoe.gameObject.SetActive(true);
+                _hoe.OnThrow();
+            }
 
             _hoe = null;
         };
@@ -36,13 +51,13 @@ public class HoeEffort : MonoBehaviour
         _model.SetEffort(this);
     }
 
-    public void ResetEffort()
+    public override void ResetEffort()
     {
         _canEffort = true;
         _progress = 0.0f;
     }
 
-    public void SetPlant(Plant plant)
+    public override void SetPlant(Plant plant)
     {
         _plant = plant;
     }
@@ -56,16 +71,32 @@ public class HoeEffort : MonoBehaviour
         _hoe.gameObject.SetActive(false);
     }
 
-    public void Effort()
+    public override void AddHand(HandController hand)
+    {
+        if (_holdsHands.Contains(hand)) return;
+
+        _holdsHands.Add(hand);
+    }
+
+    public override void RemoveHand(HandController hand, System.Action onRemove)
+    {
+        if (!_holdsHands.Contains(hand)) return;
+
+        _holdsHands.Remove(hand);
+        onRemove?.Invoke();
+    }
+
+    public override void DoEffort()
     {
         if (!_canEffort) return;
 
-        if(_progress > MaxProgress)
+        if (_progress > MaxProgress)
         {
             OnEnd?.Invoke();
         }
 
-        _progress += Time.deltaTime;
-        print(_progress / MaxProgress);
+        _progress += Time.deltaTime / _model.PhysicObject.CurrentWeight;
+
+        _model.transform.localPosition = _direction;
     }
 }

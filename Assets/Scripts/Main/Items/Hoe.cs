@@ -1,11 +1,13 @@
+using System.Linq;
 using UnityEngine;
 
 public class Hoe : ItemObject
 {
     [SerializeField] private Collider[] _colliders;
     private CameraHandler _handler;
-    public override void InitializeInStart()
+    protected override void SLStart()
     {
+        base.SLStart();
         _handler = ServiceLocator.Instance.GetService<CameraHandler>();
     }
 
@@ -16,17 +18,29 @@ public class Hoe : ItemObject
 
     public override void HideItem()
     {
-
+        _gameDbContext.ItemEffortHandlers.Action(x =>
+        {
+            x.ResetEffort();
+        });
     }
 
-    public override void OnPickup()
+    public override void OnPickup(HandController handController)
     {
+        _currentHand = handController;
+
         _rb.useGravity = false;
         _rb.isKinematic = true;
         
         foreach(var collider in _colliders)
         {
             collider.isTrigger = true;
+        }
+        _gameDbContext = ServiceLocator.Instance.GetService<GameDbContext>();
+
+        var handlers = _gameDbContext.ItemEffortHandlers.Get(x => x is HoeHandler);
+        foreach(var handler in handlers)
+        {
+            handler.ShowHandle();
         }
     }
 
@@ -39,16 +53,25 @@ public class Hoe : ItemObject
         {
             collider.isTrigger = false;
         }
+
+        _gameDbContext.ItemEffortHandlers.Action(x =>
+        {
+            x.ResetEffort();
+        });
     }
 
     public override void ShowItem()
     {
-
+        var handlers = _gameDbContext.ItemEffortHandlers.Get(x => x is HoeHandler);
+        foreach (var handler in handlers)
+        {
+            handler.ShowHandle();
+        }
     }
 
     public override void StopAltUse()
     {
-        throw new System.NotImplementedException();
+        
     }
 
     public override void StopUse()
@@ -58,18 +81,21 @@ public class Hoe : ItemObject
 
     private void OnDrawGizmosSelected()
     {
-        Debug.DrawRay(_handler.Position, _handler.GetDirection(), Color.red, 100);
+        if(_handler)
+            Debug.DrawRay(_handler.Position, _handler.GetDirection(), Color.red, 100);
     }
 
     public override void Use()
     {
-        if (Physics.Raycast(_handler.Position, _handler.GetDirection(), out var hit, 15))
+        if (Physics.Raycast(_handler.Position, _handler.GetDirection(), out var hit, _currentHand.HandDistance))
         {
-            print(hit.transform.gameObject);
-
             if (hit.transform.TryGetComponent<HoeHandler>(out var handler))
             {
-                handler.TryEffort(this);
+                handler.TryEffort(this, () =>
+                {
+                    _currentHand.ClearItem();
+                    _currentHand = null;
+                });
             }
         }
     }

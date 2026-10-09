@@ -11,17 +11,20 @@ public class ThirdDimensionTipBox : View
 
     private List<SelectableAction> _actions = new();
 
+    private void Awake()
+    {
+        _isActive.ValueChanged += _dragTransform.gameObject.SetActive;
+    }
+
     public override void Hide()
     {
-        _isActive = false;
-        _dragTransform.gameObject.SetActive(IsActive);
+        _isActive.Value = false;
         Deselect();
     }
 
     public override void Show()
     {
-        _isActive = true;
-        _dragTransform.gameObject.SetActive(IsActive);
+        _isActive.Value = true;
     }
 
     public void ShowAction(List<SelectableAction> actions)

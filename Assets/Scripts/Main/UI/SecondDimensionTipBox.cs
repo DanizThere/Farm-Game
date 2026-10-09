@@ -11,6 +11,11 @@ public class SecondDimensionTipBox : View
 
     [SerializeField] private TextMeshProUGUI _nameText, _descriptionText;
 
+    private void Awake()
+    {
+        _isActive.ValueChanged += _dragTransform.gameObject.SetActive;
+    }
+
     private void Start()
     {
         Hide();
@@ -27,15 +32,13 @@ public class SecondDimensionTipBox : View
 
     public override void Hide()
     {
-        _isActive = false;
-        _dragTransform.gameObject.SetActive(IsActive);
+        _isActive.Value = false;
         SetInfo(string.Empty, string.Empty);
     }
 
     public override void Show()
     {
-        _isActive = true;
-        _dragTransform.gameObject.SetActive(IsActive);
+        _isActive.Value = true;
     }
 
     public void SetInfo(string name, string description)

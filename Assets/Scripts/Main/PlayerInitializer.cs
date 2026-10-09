@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerInitializer : MonoBehaviour
@@ -21,7 +22,8 @@ public class PlayerInitializer : MonoBehaviour
         { 
             CameraHandlerTransform = camera.transform,
             CameraTransform = camera.Camera.transform
-        });
+        },
+        new List<HandController> { leftController, rightController});
 
         var handler = ServiceLocator.Instance.GetService<CameraHandler>();
         handler.SetHolder(camera);

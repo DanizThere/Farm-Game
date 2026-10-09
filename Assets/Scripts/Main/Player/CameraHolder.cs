@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class CameraHolder : MonoBehaviour
 {
+    public Transform WatchPosition => _watchPosition;
     public Transform LeftHandTransform => _leftHandTransform;
     public Transform RightHandTransform => _rightHandTransform;
     public Camera Camera => _camera;
 
+    [SerializeField] private Transform _watchPosition;
     [SerializeField] private Transform _leftHandTransform;
     [SerializeField] private Transform _rightHandTransform;
     [SerializeField] private InUpdateFollower _inUpdateFollower;

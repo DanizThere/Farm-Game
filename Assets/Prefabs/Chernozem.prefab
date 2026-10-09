@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2000340363840521512}
   - component: {fileID: 4612824490653926067}
   - component: {fileID: 4412884480147687082}
+  - component: {fileID: 8392396481212445472}
   m_Layer: 0
   m_Name: Plant
   m_TagString: Untagged
@@ -49,7 +50,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd5a4212c51e45740b19057715f18f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlantHealth
-  _healthCharacteristics: []
+  _healthCharacteristics:
+  - {fileID: 11400000, guid: 3159e475daa0af24e90968b2ccd3ad5b, type: 2}
+  - {fileID: 11400000, guid: 3ced08ebe46a89c439ee897f0165e5e6, type: 2}
 --- !u!114 &1307723076328719488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,7 +66,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Plant
   _animator: {fileID: 0}
-  _raiseMultiplier: []
   _lifeProgress:
   - {fileID: 2000340363840521512}
   - {fileID: 4612824490653926067}
@@ -110,6 +112,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlantsLifetime
   AnimatorOverrideController: {fileID: 0}
   _attributeSettingsData: {fileID: 11400000, guid: 7cce8bec667aca643b85a9c8201fb41e, type: 2}
+--- !u!135 &8392396481212445472
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727775419978270896}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2018935085760807407
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,9 +213,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7aaaccda80def0448bbd115d3d045dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoeEffort
-  _startHoePosition: {x: 0, y: 0, z: 0}
-  _endHoePosition: {x: 0, y: 0, z: 0}
+  _startHoePosition: {x: -1.3, y: 13.68, z: 0}
+  _endHoePosition: {x: -6.3, y: 14, z: 0}
   _startHoeRotation: {x: 0, y: 0, z: 0, w: 0}
+  _endHoeRotation: {x: 0, y: 0, z: 0, w: 0}
   _model: {fileID: 8652992991571766639}
 --- !u!114 &6019585296770864426
 MonoBehaviour:
@@ -241,8 +265,8 @@ GameObject:
   - component: {fileID: 1048112986769995347}
   - component: {fileID: 8652992991571766639}
   - component: {fileID: 3961985355362146648}
-  - component: {fileID: 5763710053220023055}
-  - component: {fileID: 8875411185863699331}
+  - component: {fileID: 2886192152177711970}
+  - component: {fileID: 9088728229420237820}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -300,7 +324,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.53, y: 2.91, z: 0.34}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &5763710053220023055
+--- !u!54 &2886192152177711970
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -327,7 +351,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8875411185863699331
+--- !u!114 &9088728229420237820
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -385,7 +409,6 @@ GameObject:
   - component: {fileID: 3164403855372796959}
   - component: {fileID: 6512861796197534299}
   - component: {fileID: 8306130348839637056}
-  - component: {fileID: 3183307905892840864}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -465,27 +488,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &3183307905892840864
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6646581799600622767}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8176834998751123762
 GameObject:
   m_ObjectHideFlags: 0

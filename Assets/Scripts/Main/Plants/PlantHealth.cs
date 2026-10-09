@@ -8,7 +8,7 @@ public class PlantHealth : MonoBehaviour
 
     private List<PlantHealthCharacteristic> _characteristics = new();
 
-    private void Awake()
+    public void Initialize()
     {
         if (_characteristics.Any()) return;
 
@@ -40,6 +40,17 @@ public class PlantHealth : MonoBehaviour
             return;
         }
 
+        if(characteristic.Value <= 1)
+        {
+            characteristic.Value += value;
+        }
         characteristic.Value *= value;
+    }
+
+    public float GetEfficient()
+    {
+        var value = _characteristics.Sum(x => x.GetEfficient()) / _characteristics.Count;
+
+        return value;
     }
 }

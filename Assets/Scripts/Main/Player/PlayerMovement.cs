@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -24,9 +26,12 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     private float _timeScale = 1f;
     private float _speedScale = 1f;
 
+    private List<HandController> _hands = new();
 
-    public void Initialize()
+
+    public void Initialize(List<HandController> handControllers)
     {
+        _hands = handControllers;
         _controller = ServiceLocator.Instance.GetService<InputHandler>();
         _speed = _localSpeed;
 
@@ -80,8 +85,28 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
 
     public void Move(Vector3 move)
     {
+        var anyHold = _hands.Where(x => x.IsTotalBusy).ToList();
+
         var direction = _body.forward * move.z + _body.right * move.x;
-        _characterController.Move(_currentSpeed * Time.deltaTime * direction * _speedScale);
+        var delta = _currentSpeed * Time.deltaTime * direction * _speedScale;
+        var newPosition = _body.position + delta;
+
+        if (anyHold.Any())
+        {
+            var hand = anyHold[0];
+            var offset = newPosition - hand.transform.position;
+
+            if (offset.sqrMagnitude > hand.HandDistance * hand.HandDistance)
+            {
+                newPosition = hand.transform.position + offset.normalized * hand.HandDistance;
+            }
+            //else
+            //{
+            //    newPosition = Vector3.Lerp(newPosition, hand.transform.position, Time.deltaTime * _timeScale * .5f);
+            //}
+        }
+
+        _characterController.Move(newPosition - _body.position);
     }
 
     private void Jump()

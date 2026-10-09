@@ -6,6 +6,5 @@ public class PlayerWallet : MonoBehaviour
 
     public void Initialize()
     {
-        Money.ValueChanged += value => ServiceLocator.Instance.GetService<ViewController>().Get<PlayerInfo>().SetMoneyText(value.ToString());
     }
 }

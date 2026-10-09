@@ -1,0 +1,20 @@
+using System.Linq;
+using UnityEngine;
+
+[System.Serializable]
+public class GameDbBootstraper : Bootstraper
+{
+    private GameDbContext _context = new();
+    [SerializeField] private ItemObjectHandler[] _handlers;
+    public override void Inject(ServiceLocator serviceLocator)
+    {
+        var keyItems = _handlers.Select(x => new KeyItemObjectValue
+        {
+            Handler = x
+        });
+
+        _context.KeyItemObjectValue.AddRange(keyItems);
+
+        serviceLocator.Add(_context);
+    }
+}

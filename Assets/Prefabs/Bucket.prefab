@@ -28,10 +28,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.14785355, y: -0, z: -0, w: 0.98900926}
   m_LocalPosition: {x: 0, y: -0.019999996, z: -0.61}
-  m_LocalScale: {x: 0.41, y: 0.86, z: 0.58}
+  m_LocalScale: {x: 0.40999997, y: 0.8599999, z: 0.5799999}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8458541935045442302}
+  m_Father: {fileID: 6600767563612261887}
   m_LocalEulerAnglesHint: {x: -17.005, y: 0, z: 0}
 --- !u!33 &1561786219838357857
 MeshFilter:
@@ -153,6 +153,100 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8458541935045442302}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6420323023780725504
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8934537997759137621}
+  - component: {fileID: 2762845473396653073}
+  - component: {fileID: 8442371295529111968}
+  - component: {fileID: 6488177143564019922}
+  m_Layer: 0
+  m_Name: BucketWaterbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8934537997759137621
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6420323023780725504}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.51, z: 2.13}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8458541935045442302}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2762845473396653073
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6420323023780725504}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.33, y: 2.16, z: 4.79}
+  m_Center: {x: 0, y: 0, z: 1.34}
+--- !u!114 &8442371295529111968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6420323023780725504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e303177cbc2680b4e81de7c8300c64ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BucketWaterbox
+--- !u!54 &6488177143564019922
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6420323023780725504}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &6572375958606021672
 GameObject:
   m_ObjectHideFlags: 0
@@ -179,12 +273,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6572375958606021672}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.007930695, y: -0, z: -0, w: 0.9999685}
+  m_LocalRotation: {x: 0.007930696, y: -0, z: -0, w: 0.9999686}
   m_LocalPosition: {x: 0, y: 0.31999993, z: 0.52999985}
-  m_LocalScale: {x: 0.41, y: 0.31, z: 1.33}
+  m_LocalScale: {x: 0.40999997, y: 0.31, z: 1.33}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8458541935045442302}
+  m_Father: {fileID: 6600767563612261887}
   m_LocalEulerAnglesHint: {x: 0.909, y: 0, z: 0}
 --- !u!33 &1632863799460817088
 MeshFilter:
@@ -5079,6 +5173,39 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
+--- !u!1 &7542733141357200791
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6600767563612261887}
+  m_Layer: 0
+  m_Name: Model
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6600767563612261887
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7542733141357200791}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3619623813953694888}
+  - {fileID: 4671840729526073625}
+  m_Father: {fileID: 8458541935045442302}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8834884687336616714
 GameObject:
   m_ObjectHideFlags: 0
@@ -5113,11 +5240,11 @@ Transform:
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 3619623813953694888}
-  - {fileID: 4671840729526073625}
   - {fileID: 203084617693782578}
   - {fileID: 2253391998150700045}
   - {fileID: 8332035005258784742}
+  - {fileID: 8934537997759137621}
+  - {fileID: 6600767563612261887}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4078489923421004800
@@ -5193,12 +5320,19 @@ MonoBehaviour:
   - {fileID: 8784256289675117840, guid: 56de804c6c99f0d4b8c81579fb1b17ca, type: 3}
   - {fileID: 4007746943062965558}
   _maxDistance: 15
+  _dialogueHandler: {fileID: 0}
+  Efforts:
+  - {fileID: 11400000, guid: 0b0717f6edfabfc4892b1af7530204df, type: 2}
+  _itemModels:
+  - {fileID: 7542733141357200791}
   _rb: {fileID: 1920514942412581850}
   _collider: {fileID: 656087906740025084}
   _animator: {fileID: 0}
+  _defaultVolume: 10
   _waterVFX: {fileID: 708585815051298961}
   _bucketUIPrefab: {fileID: 6776800882172882962, guid: a3663a264aeabde41a205c8b73ee95fa, type: 3}
   _uiTargetPosition: {fileID: 2253391998150700045}
+  _bucketWaterbox: {fileID: 8442371295529111968}
 --- !u!54 &1920514942412581850
 Rigidbody:
   m_ObjectHideFlags: 0

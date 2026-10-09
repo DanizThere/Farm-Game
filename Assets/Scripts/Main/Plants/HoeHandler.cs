@@ -1,18 +1,14 @@
 using UnityEngine;
 
 [RequireComponent(typeof(HoeEffort))]
-public class HoeHandler : MonoBehaviour
+public class HoeHandler : ItemEffortHandler
 {
-    [SerializeField] private Collider _collider;
-    [SerializeField] private GameObject _handleObject;
-    [SerializeField] private Plant _plant;
-
     private HoeEffort _hoeEffort;
-    private bool _canEffort = true;
 
     private void Awake()
     {
-        _hoeEffort = GetComponent<HoeEffort>();
+        _effort = GetComponent<HoeEffort>();
+        _hoeEffort = _effort as HoeEffort;
 
         _collider.enabled = false;
         _handleObject.SetActive(false);
@@ -25,21 +21,25 @@ public class HoeHandler : MonoBehaviour
         };
     }
 
-    public void ShowHandle(ItemObject itemObject)
+    public override void ShowHandle()
     {
-        var canEffort = _canEffort && itemObject is Hoe;
-
-        _handleObject.SetActive(canEffort);
-        _collider.enabled = canEffort;
+        _handleObject.SetActive(true);
+        _collider.enabled = true;
     }
 
-    public void ResetEffort()
+    public override void HideHandle()
+    {
+        _handleObject.SetActive(false);
+        _collider.enabled = false;
+    }
+
+    public override void ResetEffort()
     {
         _canEffort = true;
         _collider.enabled = true;
     }
 
-    public void TryEffort(ItemObject itemObject)
+    public override void TryEffort(ItemObject itemObject, System.Action onSuccess)
     {
         if (!_canEffort) return;
 
@@ -49,7 +49,9 @@ public class HoeHandler : MonoBehaviour
             {
                 _hoeEffort.Initialize(hoe);
                 _collider.enabled = false;
+                onSuccess?.Invoke();
             }
         }
     }
+
 }

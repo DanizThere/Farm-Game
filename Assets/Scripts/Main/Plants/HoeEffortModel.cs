@@ -1,17 +1,18 @@
 ﻿using UnityEngine;
 
-public class HoeEffortModel : MonoBehaviour
+[RequireComponent(typeof(PhysicObject))]
+public class HoeEffortModel : EffortModel
 {
-    [SerializeField] private Transform _modelTransform;
-    private GameObject _model;
-    private HoeEffort _effort;
-
-    public void SetModel(GameObject model)
+    private void Awake()
     {
-        Destroy(_model);
-        _model = null;
-        
-        if(model != null)
+        _physicObject = GetComponent<PhysicObject>();
+    }
+
+    public override void SetModel(GameObject model)
+    {
+        ClearModel();
+
+        if (model != null)
         {
             _model = Instantiate(model, _modelTransform);
             _model.AddComponent<PhysicObject>();
@@ -22,14 +23,20 @@ public class HoeEffortModel : MonoBehaviour
         }
     }
 
-    public void SetEffort(HoeEffort effort)
+    public override void ClearModel()
+    {
+        Destroy(_model);
+        _model = null;
+    }
+
+    public override void SetEffort(Effort effort)
     {
         _effort = effort;
     }
 
-    public void Effort()
+    public override void Effort()
     {
-        if(_model)
-            _effort.Effort();
+        if (_model != null)
+            _effort.DoEffort();
     }
 }

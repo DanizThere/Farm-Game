@@ -12,10 +12,14 @@ public class InventoryUIQuickSlots : View
 
     private Observable<InventoryUIQuickSlot> _currentSlot = new(null);
 
+    private void Awake()
+    {
+        _isActive.ValueChanged += _parent.gameObject.SetActive;
+    }
+
     public override void Hide()
     {
-        _isActive = false;
-        _parent.gameObject.SetActive(IsActive);
+        _isActive.Value = false;
     }
 
     public void Setup(Inventory inventory)
@@ -50,8 +54,7 @@ public class InventoryUIQuickSlots : View
 
     public override void Show()
     {
-        _isActive = true;
-        _parent.gameObject.SetActive(IsActive);
+        _isActive.Value = true;
     }
 
     private void RefreshUI()

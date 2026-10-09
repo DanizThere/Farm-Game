@@ -9,26 +9,18 @@ public class PlantsLifetime : MonoBehaviour
 
     [SerializeField] protected AttributeSettings _attributeSettingsData;
     private AttributeSettings _attributeSettings;
+    private PlantHealth _plantHealth;
 
     private float _growProgress;
-    private Dictionary<string, float> _injures = new();
 
-    public void Setup()
+
+    public void Setup(PlantHealth health)
     {
-        _attributeSettings = _attributeSettingsData;
+        _attributeSettings = Instantiate(_attributeSettingsData);
+        _plantHealth = health;
     }
 
-    public void AddInsure(string key, float value)
-    {
-        _injures.Add(key, value);
-    }
-
-    public void TryFixInjure(string key)
-    {
-        if (!_injures.TryGetValue(key, out float value)) return;
-
-        _injures.Remove(key);
-    }
+    
 
     public void Care(float multiplier)
     {
@@ -37,7 +29,10 @@ public class PlantsLifetime : MonoBehaviour
 
     public void Grow()
     {
-        _growProgress++;
+        var value = _plantHealth.GetEfficient();
+        print(value);
+
+        _growProgress += value;
         if (Progress > .9f)
         {
             OnGrown?.Invoke();

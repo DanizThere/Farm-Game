@@ -9,19 +9,10 @@ public class Bed : DefaultSelectable
 
     private TimeManager _timeManager;
 
-    public override void InitializeInStart()
+    protected override void SLStart()
     {
-        base.InitializeInStart();
+        base.SLStart();
         _timeManager = ServiceLocator.Instance.GetService<TimeManager>();
-
-        foreach (var action in _actions)
-        {
-            if (action.ActionName == _sleepAction)
-            {
-                action.OnClickEvent.AddListener(_bedUI.Show);
-                continue;
-            }
-        }
 
         _bedUI.Setup(this);
     }
@@ -30,7 +21,6 @@ public class Bed : DefaultSelectable
     public void SkipHours(float hours)
     {
         _timeManager.SkipHours(hours);
-        _gameStateMachine.SetState<OuterWorldGameState>();
     }
 
     public DateTime GetPossibleTime(float hours)

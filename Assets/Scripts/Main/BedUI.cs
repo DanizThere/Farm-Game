@@ -12,6 +12,11 @@ public class BedUI : View
 
     private float _sleepHour;
 
+    private void Awake()
+    {
+        _isActive.ValueChanged += _panel.SetActive;
+    }
+
     public void Setup(Bed bed)
     {
         _bed = bed;
@@ -21,17 +26,14 @@ public class BedUI : View
 
     public override void Hide()
     {
-        _isActive = false;
-        _panel.SetActive(IsActive);
+        _isActive.Value = false;
         _slider.value = 1;
         _text.text = string.Empty;
-        _bed.HideActions();
     }
 
     public override void Show()
     {
-        _isActive = true;
-        _panel.SetActive(IsActive);
+        _isActive.Value = true;
     }
 
     public void Sleep()
@@ -41,7 +43,6 @@ public class BedUI : View
         var value = _slider.value;
         _slider.value = 1;
         _bed.SkipHours(value);
-        _bed.HideActions();
         Hide();
     }
 
