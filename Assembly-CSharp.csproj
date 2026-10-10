@@ -67,13 +67,13 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\Main\Player\PlayerWatch.cs" />
     <Compile Include="Assets\Scripts\Main\Services\SLMonoBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Main\Plants\HoeEffort.cs" />
     <Compile Include="Assets\Scripts\Main\Bootstrapers\GameStateBootstraper.cs" />
     <Compile Include="Assets\Scripts\Main\Save\PlantSerialize.cs" />
     <Compile Include="Assets\Scripts\Main\Save\InventorySerializable.cs" />
     <Compile Include="Assets\Scripts\Main\Bootstrapers\GameDbBootstraper.cs" />
     <Compile Include="Assets\Scripts\Main\Player\CameraHandler.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\Item.cs" />
+    <Compile Include="Assets\Scripts\Main\Items\BucketWaterbox.cs" />
     <Compile Include="Assets\Scripts\Main\PlayerInitializer.cs" />
     <Compile Include="Assets\Scripts\Main\Player\PlayerInteract.cs" />
     <Compile Include="Assets\Scripts\Main\UI\CustomButton.cs" />
@@ -84,6 +84,7 @@
     <Compile Include="Assets\Scripts\Main\Inventory\InventoryUIQuickSlots.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\NewGameItem.cs" />
     <Compile Include="Assets\Scripts\Factories\UIFactory.cs" />
+    <Compile Include="Assets\Scripts\Main\Plants\Efforts\HoeHandler.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\InventoryUIQuickSlot.cs" />
     <Compile Include="Assets\Scripts\Main\Save\InventoryItemSerialize.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\ItemDatabase.cs" />
@@ -93,12 +94,13 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
+    <Compile Include="Assets\Scripts\Main\Plants\Efforts\EffortModel.cs" />
     <Compile Include="Assets\Scripts\Main\Player\Bobbing.cs" />
     <Compile Include="Assets\Scripts\Main\Player\PlayerWatchUI.cs" />
     <Compile Include="Assets\Scripts\Main\Interactables\Bed.cs" />
     <Compile Include="Assets\Scripts\Main\DialogueSystem\DialogueNode.cs" />
     <Compile Include="Assets\Scripts\Main\DayCycle\TimeManager.cs" />
-    <Compile Include="Assets\Scripts\Main\Plants\ItemEffortHandler.cs" />
+    <Compile Include="Assets\Scripts\Main\Plants\Efforts\HoeEffortModel.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\Scripts\Main\Bootstrapers\CameraHandlerBootstrap.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\Scripts\Main\Items\ItemObjectController.cs" />
+    <Compile Include="Assets\Scripts\Main\Plants\Efforts\Effort.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\DirtController.cs" />
     <Compile Include="Assets\Scripts\Main\Services\ServiceLocator.cs" />
@@ -154,7 +157,6 @@
     <Compile Include="Assets\Scripts\Main\Items\Bucket.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\Main\Bootstrapers\TimeManagerBootstrap.cs" />
-    <Compile Include="Assets\Scripts\Main\Plants\Effort.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\Scripts\Main\GameState\OuterWorldGameState.cs" />
     <Compile Include="Assets\Scripts\Main\Player\CameraHolder.cs" />
@@ -168,22 +170,20 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\PlantsLifetime.cs" />
     <Compile Include="Assets\Scripts\Main\DayCycle\TimeService.cs" />
-    <Compile Include="Assets\Scripts\Main\Plants\BucketWaterbox.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\InventorySlot.cs" />
-    <Compile Include="Assets\Scripts\Main\Plants\HoeEffortModel.cs" />
     <Compile Include="Assets\Scripts\Main\Player\HandController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\Scripts\Main\GameState\GameStateMachine.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
-    <Compile Include="Assets\Scripts\Main\Plants\HoeHandler.cs" />
+    <Compile Include="Assets\Scripts\Main\Plants\Efforts\ItemEffortHandler.cs" />
     <Compile Include="Assets\Scripts\Main\DialogueSystem\DialogueOption.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
     <Compile Include="Assets\Scripts\Main\Items\ItemObject.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
     <Compile Include="Assets\Scripts\Main\Interactables\DefaultSelectable.cs" />
-    <Compile Include="Assets\Scripts\Main\Bootstrapers\Bootstraper.cs" />
     <Compile Include="Assets\Scripts\Main\Player\ISlappable.cs" />
+    <Compile Include="Assets\Scripts\Main\Bootstrapers\Bootstraper.cs" />
     <Compile Include="Assets\Scripts\Main\Entities\IMovement.cs" />
     <Compile Include="Assets\Scripts\Main\UI\ThirdDimensionTipBox.cs" />
     <Compile Include="Assets\Scripts\Main\InUpdateFollower.cs" />
@@ -196,7 +196,7 @@
     <Compile Include="Assets\Scripts\Main\LevelBootstrap.cs" />
     <Compile Include="Assets\Scripts\Main\Plants\DirtPlaceholder.cs" />
     <Compile Include="Assets\Scripts\Main\Inventory\InventorySlotUI.cs" />
-    <Compile Include="Assets\Scripts\Main\Plants\EffortModel.cs" />
+    <Compile Include="Assets\Scripts\Main\Plants\Efforts\HoeEffort.cs" />
     <Compile Include="Assets\Scripts\Main\Save\TimeSerialize.cs" />
   </ItemGroup>
   <ItemGroup>

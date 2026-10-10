@@ -7,7 +7,7 @@ public abstract class Effort : MonoBehaviour
 
     public abstract void AddHand(HandController hand);
     public abstract void DoEffort();
-    public abstract void RemoveHand(HandController hand, Action onRemove);
+    public abstract void RemoveHand(HandController hand, Action onRemove = null);
     public abstract void ResetEffort();
     public abstract void SetPlant(Plant plant);
 }

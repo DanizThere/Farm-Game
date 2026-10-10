@@ -11,6 +11,16 @@ public abstract class EffortModel : MonoBehaviour
     protected GameObject _model;
     protected Effort _effort;
 
+    public virtual void AddHand(HandController hand)
+    {
+        _effort?.AddHand(hand);
+    }
+
+    public virtual void RemoveHand(HandController hand)
+    {
+        _effort?.RemoveHand(hand);
+    }
+
     public abstract void ClearModel();
     public abstract void Effort();
     public abstract void SetEffort(Effort effort);

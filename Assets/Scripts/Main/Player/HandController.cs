@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(InUpdateFollower))]
 public class HandController : MonoBehaviour
 {
+    public Quaternion DefaultRotation => _defaultRotation;
     public bool IsBusy => _currentItemObject;
     public bool IsTotalBusy => _currentItemObject || _effortModel || _currentObject;
     public float HandDistance => _handDistance;
@@ -25,6 +26,8 @@ public class HandController : MonoBehaviour
 
     private EffortModel _effortModel;
     private ISelectable _selectable;
+
+    private Quaternion _defaultRotation;
 
     public enum Hand
     {
@@ -52,6 +55,8 @@ public class HandController : MonoBehaviour
     public void Initialize(Transform target, CameraHandler handler, System.Action<float> onGrab)
     {
         _speedScale.AddListener(onGrab);
+
+        _defaultRotation = transform.rotation;
 
         _handler = handler;
 
@@ -137,7 +142,7 @@ public class HandController : MonoBehaviour
 
         if (_currentObject)
         {
-            _currentObject?.UnGrab(_currentHand);
+            _currentObject?.UnGrab(this);
             _currentObject = null;
 
             _inUpdateFollower.enabled = true;
@@ -147,6 +152,7 @@ public class HandController : MonoBehaviour
 
         if (_effortModel)
         {
+            _effortModel.RemoveHand(this);
             _effortModel = null;
         }
     }
@@ -184,7 +190,7 @@ public class HandController : MonoBehaviour
     {
         if (hit.transform.TryGetComponent<EffortModel>(out _effortModel))
         {
-
+            _effortModel.AddHand(this);
             return true;
         }
 
@@ -201,7 +207,7 @@ public class HandController : MonoBehaviour
             transform.position = hit.point;
             transform.SetParent(_currentObject.transform);
 
-            _currentObject.Grab(_handForce, _handler, out var speed, _currentHand);
+            _currentObject.Grab(_handForce, _handler, out var speed, this);
             _speedScale.Value = speed;
         }
 

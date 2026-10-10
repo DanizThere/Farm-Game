@@ -37,12 +37,22 @@ public class HoeEffort : Effort
             if (freeHand.Any())
             {
                 var hand = freeHand[^1];
+
                 hand.PickupItem(_hoe);
+                _hoe.gameObject.SetActive(true);
             }
             else
             {
-                _hoe.gameObject.SetActive(true);
-                _hoe.OnThrow();
+                var hoe = ServiceLocator.Instance
+                .GetService<GameDbContext>().KeyItemObjectValue
+                .Get(x => x.Type is Hoe)
+                .FirstOrDefault();
+
+                if (hoe != null) 
+                {
+                    var itemObject = Instantiate(hoe.Handler.GetItemObject());
+                    itemObject.transform.position = transform.position + Vector3.up;
+                }
             }
 
             _hoe = null;

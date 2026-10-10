@@ -3,6 +3,6 @@
 [Serializable]
 public class KeyItemObjectValue
 {
-    public Type Type => Handler.GetItemObject().GetType();
+    public object Type => Handler.GetItemObject();
     public ItemObjectHandler Handler;
 }

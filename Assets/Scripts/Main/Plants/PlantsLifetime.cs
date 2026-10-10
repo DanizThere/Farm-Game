@@ -30,13 +30,11 @@ public class PlantsLifetime : MonoBehaviour
     public void Grow()
     {
         var value = _plantHealth.GetEfficient();
-        print(value);
 
         _growProgress += value;
         if (Progress > .9f)
         {
             OnGrown?.Invoke();
-            print("Is grown");
         }
     }
 }

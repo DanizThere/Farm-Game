@@ -47,14 +47,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c8f8cdbaba862a4dbba1652ee3f148b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hoe
-  _actions: []
-  _maxDistance: 15
-  _dialogueHandler: {fileID: 0}
-  Efforts: []
+  IsSingleUse: 0
+  Efforts:
+  - {fileID: 11400000, guid: c68d53eddb6b70a42b9e7993eb053a26, type: 2}
   _itemModels:
   - {fileID: 4046315077108574705}
   _rb: {fileID: 4783342150413352839}
-  _collider: {fileID: 3433045156438437540}
   _animator: {fileID: 0}
   _colliders:
   - {fileID: 3448794071523800104}

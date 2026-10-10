@@ -14,7 +14,7 @@ public class PlantHealth : MonoBehaviour
 
         foreach(var characteristic in _healthCharacteristics)
         {
-            AddCharacteristic(characteristic);
+            AddCharacteristic(characteristic, characteristic.DefaultValue);
         }
     }
 
@@ -24,7 +24,8 @@ public class PlantHealth : MonoBehaviour
         {
             Name = characteristicData.Name.Name,
             MaxValue = characteristicData.MaxValue,
-            Value = defaultValue
+            Value = defaultValue,
+            ValueMultiplier = characteristicData.ValueMultiplier,
         };
 
         _characteristics.Add(characteristic);
@@ -40,11 +41,7 @@ public class PlantHealth : MonoBehaviour
             return;
         }
 
-        if(characteristic.Value <= 1)
-        {
-            characteristic.Value += value;
-        }
-        characteristic.Value *= value;
+        characteristic.Value = Mathf.Clamp(characteristic.Value + value * characteristic.ValueMultiplier, -characteristic.MaxValue, characteristic.MaxValue);
     }
 
     public float GetEfficient()

@@ -6,6 +6,7 @@ public class PlantHealthCharacteristic
     public string Name;
     public float MaxValue;
     public float Value;
+    public float ValueMultiplier;
 
     public float GetEfficient()
     {

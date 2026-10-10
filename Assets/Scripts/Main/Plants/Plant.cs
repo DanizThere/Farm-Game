@@ -27,14 +27,13 @@ public class Plant : MonoBehaviour
     private void Grow()
     {
         _currentLife.Grow();
-        print($"i grow. now i am {_currentLife} with {_currentLife.Progress} progress");
     }
 
     public void TryEffort(ItemObject itemObject)
     {
         foreach(var effort in itemObject.Efforts)
         {
-            _plantHealth.UpdateCharacteristic(effort.Name.Name, effort.Value);
+            _plantHealth.UpdateCharacteristic(effort.Name.Name, effort.GetValue());
         }
     }
 
