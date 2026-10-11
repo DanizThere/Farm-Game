@@ -32,11 +32,6 @@ public class WaterwellUI : View
     public override void Show()
     {
         _isActive.Value = true;
-
-        var currentTool = ServiceLocator.Instance.GetService<ItemObjectController>().CurrentTool;
-
-        if (currentTool != null && currentTool is Bucket bucket)
-            _imageFill.fillAmount = bucket.VolumePercent;
     }
 
     public void UpdateText(string text)
@@ -46,12 +41,5 @@ public class WaterwellUI : View
 
     private void OnPointerDown()
     {
-        var currentTool = ServiceLocator.Instance.GetService<ItemObjectController>().CurrentTool;
-
-        if(currentTool != null && currentTool is Bucket bucket)
-        {
-            _waterwell.Fill(bucket);
-            _imageFill.fillAmount = bucket.VolumePercent;
-        }
     }
 }

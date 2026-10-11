@@ -4,6 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(InUpdateFollower))]
 public class HandController : MonoBehaviour
 {
+    public Hand CurrentHand => _currentHand;
+    public bool CanInteract => !IsTotalBusy && _canInteract;
     public Quaternion DefaultRotation => _defaultRotation;
     public bool IsBusy => _currentItemObject;
     public bool IsTotalBusy => _currentItemObject || _effortModel || _currentObject;
@@ -14,6 +16,7 @@ public class HandController : MonoBehaviour
     [SerializeField] private float _handForce = .3f;
     [SerializeField] private float _handDistance = 5f;
     private InUpdateFollower _inUpdateFollower;
+    private bool _canInteract;
 
     private CameraHandler _handler;
     private PhysicObject _currentObject;
@@ -39,13 +42,13 @@ public class HandController : MonoBehaviour
     {
         _effortModel?.Effort();
 
-        if (Physics.Raycast(_handler.Position, _handler.GetDirection(), out var hit, _handDistance))
+        _canInteract = Physics.Raycast(_handler.Position, _handler.GetDirection(), out var hit, _handDistance)
+            && hit.transform.TryGetComponent<ISelectable>(out _selectable);
+
+        if (_canInteract)
         {
-            if (hit.transform.TryGetComponent<ISelectable>(out _selectable))
-            {
-                _selectable.Show();
-                return;
-            }
+            _selectable.Show();
+            return;
         }
 
         _selectable?.Hide();
@@ -87,7 +90,7 @@ public class HandController : MonoBehaviour
         _currentItemObject.OnPickup(this);
         _currentItemObject.GetComponent<Collider>().enabled = false;
         _currentItemObject.transform.SetParent(transform);
-        _currentItemObject.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
+        _currentItemObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
 
     public void ClearItem()
@@ -134,9 +137,14 @@ public class HandController : MonoBehaviour
         if (_currentItemObject && _currentItemObject.IsSingleUse)
         {
             _currentItemObject?.StopUse();
-            _currentItemObject?.StopAltUse();
             _currentItemObject = null;
 
+            return;
+        }
+
+        if (_currentItemObject)
+        {
+            _currentItemObject?.StopUse();
             return;
         }
 

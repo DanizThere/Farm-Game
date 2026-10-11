@@ -18,11 +18,13 @@ public class HoeHandler : ItemEffortHandler
         _hoeEffort.OnEnd += () =>
         {
             _canEffort = false;
+            HideHandle();
         };
     }
 
     public override void ShowHandle()
     {
+        if (!_canEffort) return;
         _handleObject.SetActive(true);
         _collider.enabled = true;
     }
@@ -37,6 +39,7 @@ public class HoeHandler : ItemEffortHandler
     {
         _canEffort = true;
         _collider.enabled = true;
+        _hoeEffort.ResetEffort();
     }
 
     public override void TryEffort(ItemObject itemObject, System.Action onSuccess)

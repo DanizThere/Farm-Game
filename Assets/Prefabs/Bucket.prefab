@@ -453,7 +453,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 0.5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -624,7 +624,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.5
+      scalar: 0.3
       minScalar: 0.1
       maxCurve:
         serializedVersion: 2
@@ -941,7 +941,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 1000
+    maxNumParticles: 100
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -1147,7 +1147,7 @@ ParticleSystem:
     arc:
       value: 360
       mode: 0
-      spread: 0.37
+      spread: 0.21
       speed:
         serializedVersion: 2
         minMaxState: 0
@@ -1313,7 +1313,7 @@ ParticleSystem:
     m_BurstCount: 0
     m_Bursts: []
   SizeModule:
-    enabled: 0
+    enabled: 1
     curve:
       serializedVersion: 2
       minMaxState: 1
@@ -1324,22 +1324,22 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 1
-          tangentMode: 0
+          value: 1
+          inSlope: -1
+          outSlope: -1
+          tangentMode: 34
           weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
+          inWeight: 0
+          outWeight: 0
         - serializedVersion: 3
           time: 1
-          value: 1
-          inSlope: 1
-          outSlope: 0
-          tangentMode: 0
+          value: 0
+          inSlope: -1
+          outSlope: -1
+          tangentMode: 34
           weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
+          inWeight: 0
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
@@ -5316,22 +5316,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07ef1aebad8fce4488af1228b09255c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bucket
-  _actions:
-  - {fileID: 8784256289675117840, guid: 56de804c6c99f0d4b8c81579fb1b17ca, type: 3}
-  - {fileID: 4007746943062965558}
-  _maxDistance: 15
-  _dialogueHandler: {fileID: 0}
+  IsSingleUse: 0
   Efforts:
   - {fileID: 11400000, guid: 0b0717f6edfabfc4892b1af7530204df, type: 2}
   _itemModels:
   - {fileID: 7542733141357200791}
   _rb: {fileID: 1920514942412581850}
-  _collider: {fileID: 656087906740025084}
   _animator: {fileID: 0}
-  _defaultVolume: 10
+  _toolItem: {fileID: 11400000, guid: a3338a67d1c1e5947b68d6aa54ce0908, type: 2}
   _waterVFX: {fileID: 708585815051298961}
-  _bucketUIPrefab: {fileID: 6776800882172882962, guid: a3663a264aeabde41a205c8b73ee95fa, type: 3}
-  _uiTargetPosition: {fileID: 2253391998150700045}
   _bucketWaterbox: {fileID: 8442371295529111968}
 --- !u!54 &1920514942412581850
 Rigidbody:
@@ -5499,14 +5492,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5365309616861076215, guid: d04dc67c15508f64cbc9513e42608e3e, type: 3}
   m_PrefabInstance: {fileID: 5654711411687782438}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4007746943062965558 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8784256289675117840, guid: d04dc67c15508f64cbc9513e42608e3e, type: 3}
-  m_PrefabInstance: {fileID: 5654711411687782438}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 995226e243feafd48a945670580e96ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SelectableAction

@@ -362,3 +362,4 @@ MonoBehaviour:
   _rightHandTransform: {fileID: 6995803254690372161}
   _inUpdateFollower: {fileID: 8267620062163888076}
   _camera: {fileID: 8807762679645382622}
+  _cameraMovement: {fileID: 447724490887675106}

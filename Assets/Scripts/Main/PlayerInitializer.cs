@@ -28,7 +28,17 @@ public class PlayerInitializer : MonoBehaviour
         var handler = ServiceLocator.Instance.GetService<CameraHandler>();
         handler.SetHolder(camera);
 
+        var viewController = ServiceLocator.Instance.GetService<ViewController>();
+        var handControllerUI = viewController
+            .Get<HandAccessibilityUI>();
+
         leftController.Initialize(camera.LeftHandTransform, handler, player.OnGrab);
         rightController.Initialize(camera.RightHandTransform, handler, player.OnGrab);
+
+        var leftHand = Instantiate(handControllerUI, viewController.HandsTransform);
+        leftHand.Initialize(leftController);
+
+        var rightHand = Instantiate(handControllerUI, viewController.HandsTransform);
+        rightHand.Initialize(rightController);
     }
 }

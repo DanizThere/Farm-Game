@@ -7,7 +7,6 @@ public class InventorySlotUI : MonoBehaviour, ISelectable
 {
     public int SlotIndex => _slotIndex;
     [SerializeField] private Image iconImage;
-    [SerializeField] private TextMeshProUGUI amountText;
 
     private Inventory _inventory;
     private int _slotIndex;
@@ -32,13 +31,11 @@ public class InventorySlotUI : MonoBehaviour, ISelectable
         {
             iconImage.sprite = null;
             iconImage.color = _originalColor;
-            amountText.text = "";
         }
         else
         {
             iconImage.sprite = slot.Item.Value.Icon;
             iconImage.color = Color.white;
-            amountText.text = slot.Amount > 1 ? slot.Amount.ToString() : "";
         }
     }
 

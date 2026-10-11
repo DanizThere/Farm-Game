@@ -5,6 +5,12 @@ public class CameraMovement : MonoBehaviour, IService
 {
     public Camera Camera => _camera;
 
+    public float XRotation => _xRotation;
+    public float YRotation => _yRotation;
+
+    public bool IsXNearBottom(float value) => _xRotation > _topBorder - value;
+    public bool IsXNearTop(float value) => _xRotation < _bottomBorder + value;
+
     [SerializeField] private float _bottomBorder, _topBorder;
     [SerializeField] private float _mouseSensevity = 100f;
     [SerializeField] private Transform _body;
@@ -97,8 +103,6 @@ public class CameraMovement : MonoBehaviour, IService
 
     public void Move(Vector3 mousePosition)
     {
-        if (!_canMove) return;
-
         var mouseX = mousePosition.z * Time.deltaTime * _mouseSensevity;
         var mouseY = mousePosition.x * Time.deltaTime * _mouseSensevity;
 
@@ -107,9 +111,11 @@ public class CameraMovement : MonoBehaviour, IService
         if (_leftBorder > 0) _yRotation = Mathf.Clamp(_yRotation, _leftBorder, _rightBorder);
         _xRotation = Mathf.Clamp(_xRotation, _bottomBorder, _topBorder);
 
+        if (!_canMove) return;
         var rotation = Quaternion.Euler(0, _yRotation, 0);
 
-        transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
+        var newRotation = Quaternion.Euler(_xRotation, _yRotation, 0);
+        transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * 15);
         _body.rotation = rotation;
     }
 }

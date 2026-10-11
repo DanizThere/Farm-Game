@@ -16,7 +16,7 @@ public abstract class ItemObject : DefaultSelectable
     [SerializeField] protected Rigidbody _rb;
     [SerializeField] protected Animator _animator;
     protected Inventory _inventory;
-    protected ToolItem _toolItem;
+    [SerializeField] protected ToolItem _toolItem;
     protected Transform _UIParent;
     protected int _slotIndex;
     protected HandController _currentHand;
@@ -51,8 +51,6 @@ public abstract class ItemObject : DefaultSelectable
     public abstract void HideItem();
     public abstract void Use();
     public abstract void StopUse();
-    public abstract void AltUse();
-    public abstract void StopAltUse();
     public abstract void OnThrow();
     public abstract void OnPickup(HandController handController);
 }

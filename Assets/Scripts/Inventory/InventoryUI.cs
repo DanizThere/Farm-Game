@@ -4,7 +4,6 @@ using UnityEngine;
 public class InventoryUI : View
 {
     [SerializeField] private GameObject _slotPrefab;
-    [SerializeField] private Transform _slotsParent;
     [SerializeField] private GameObject _panel;
 
     private Inventory _inventory;
@@ -18,10 +17,10 @@ public class InventoryUI : View
     public void Setup(Inventory inventory)
     {
         _inventory = inventory;
-        _slotsUI = new(_inventory.SlotsCount);
+        _slotsUI = new();
         for (int i = 0; i < _inventory.SlotsCount; i++)
         {
-            var slotGO = Instantiate(_slotPrefab, _slotsParent);
+            var slotGO = Instantiate(_slotPrefab, _panel.transform);
             var slotUI = slotGO.GetComponent<InventorySlotUI>();
             slotUI.Initialize(_inventory, i);
             _slotsUI.Add(slotUI);

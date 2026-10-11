@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class LevelBootstrap : MonoBehaviour
 {
-    [SerializeField] private ItemObjectController _toolController;
-    [SerializeField] private ViewController _viewController;
-    [SerializeField] private ItemDatabase _itemDatabase;
-
     [SerializeReference] private List<Bootstraper> _bootstrapers = new();
 
     [SerializeField] private LevelEntryPoint _levelEntryPoint;
@@ -25,16 +21,11 @@ public class LevelBootstrap : MonoBehaviour
             boot.Inject(ServiceLocator.Instance);
         }
 
-        ServiceLocator.Instance.Add(_toolController);
-        ServiceLocator.Instance.Add(_viewController);
-        ServiceLocator.Instance.Add(_itemDatabase);
-
         Construct();
     }
 
     private void Construct()
     {
-        var saveService = ServiceLocator.Instance.GetService<JsonSaveService>();
-        StartCoroutine(_levelEntryPoint.Initialize(saveService));
+        StartCoroutine(_levelEntryPoint.Initialize());
     }
 }

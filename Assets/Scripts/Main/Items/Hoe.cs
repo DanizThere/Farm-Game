@@ -11,17 +11,22 @@ public class Hoe : ItemObject
         _handler = ServiceLocator.Instance.GetService<CameraHandler>();
     }
 
-    public override void AltUse()
-    {
-        throw new System.NotImplementedException();
-    }
-
     public override void HideItem()
     {
         _gameDbContext.ItemEffortHandlers.Action(x =>
         {
             x.ResetEffort();
         });
+        HideEffort();
+    }
+
+    private void HideEffort()
+    {
+        var handlers = _gameDbContext.ItemEffortHandlers.Get(x => x is HoeHandler);
+        foreach (var handler in handlers)
+        {
+            handler.HideHandle();
+        }
     }
 
     public override void OnPickup(HandController handController)
@@ -30,15 +35,19 @@ public class Hoe : ItemObject
 
         _rb.useGravity = false;
         _rb.isKinematic = true;
-        
-        foreach(var collider in _colliders)
+
+        foreach (var collider in _colliders)
         {
             collider.isTrigger = true;
         }
         _gameDbContext = ServiceLocator.Instance.GetService<GameDbContext>();
+        ShowHandle();
+    }
 
+    private void ShowHandle()
+    {
         var handlers = _gameDbContext.ItemEffortHandlers.Get(x => x is HoeHandler);
-        foreach(var handler in handlers)
+        foreach (var handler in handlers)
         {
             handler.ShowHandle();
         }
@@ -58,20 +67,12 @@ public class Hoe : ItemObject
         {
             x.ResetEffort();
         });
+        HideEffort();
     }
 
     public override void ShowItem()
     {
-        var handlers = _gameDbContext.ItemEffortHandlers.Get(x => x is HoeHandler);
-        foreach (var handler in handlers)
-        {
-            handler.ShowHandle();
-        }
-    }
-
-    public override void StopAltUse()
-    {
-        
+        ShowHandle();
     }
 
     public override void StopUse()

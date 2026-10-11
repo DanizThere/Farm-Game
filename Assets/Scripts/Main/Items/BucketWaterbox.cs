@@ -21,7 +21,6 @@ public class BucketWaterbox : MonoBehaviour
 
         if(other.transform.TryGetComponent<Plant>(out var plant))
         {
-            print(plant);
             plant.TryEffort(_bucket);
         }
     }

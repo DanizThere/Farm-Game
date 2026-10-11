@@ -8,6 +8,7 @@ public class GameStateBootstraper : Bootstraper
 
     public override void Inject(ServiceLocator serviceLocator)
     {
-        serviceLocator.Add(_gameState);
+        var go = GameObject.Instantiate(_gameState, serviceLocator.transform);
+        serviceLocator.Add(go);
     }
 }

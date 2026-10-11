@@ -10,7 +10,7 @@ public class NewGameInventory : MonoBehaviour
     {
         foreach(var item in _items)
         {
-            _inventory.AddItem(item.Item, item.Count);
+            _inventory.AddItem(item.Item);
         }
     }
 }

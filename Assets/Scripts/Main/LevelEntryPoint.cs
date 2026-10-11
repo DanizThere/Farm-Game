@@ -6,7 +6,6 @@ public class LevelEntryPoint : MonoBehaviour
 {
     [SerializeField] private TimeManager _timeManager;
     [SerializeField] private NewGameInventory _newGameInventory;
-    [SerializeField] private GameStateMachine _gameStateMachine;
     [SerializeField] private DirtController _dirtController;
 
     [SerializeField] private DialogueHandler _startNewGameDialogue;
@@ -14,15 +13,18 @@ public class LevelEntryPoint : MonoBehaviour
 
     [SerializeField] private PlayerInitializer _playerInitializer;
 
-    public IEnumerator Initialize(JsonSaveService saveService)
+    public IEnumerator Initialize()
     {
         _dirtController.Generate();
 
         _timeManager.Setup();
-        _gameStateMachine.InitializeStates();
+        ServiceLocator.Instance.GetService<GameStateMachine>().InitializeStates();
 
         _playerInitializer.Initialize();
 
+        ServiceLocator.Instance.GetService<ViewController>().Initialize();
+
+        var saveService = ServiceLocator.Instance.GetService<JsonSaveService>();
         if (!saveService.FileExists<InventorySerializable>("InventoryData"))
         {
             ServiceLocator.Instance.GetService<GameStateMachine>().SetState<UIGameState>();
@@ -31,8 +33,10 @@ public class LevelEntryPoint : MonoBehaviour
 
             yield break;
         }
-
-        //ServiceLocator.Instance.GetService<GameStateMachine>().SetState<OuterWorldGameState>();
+        else
+        {
+            ServiceLocator.Instance.GetService<GameStateMachine>().SetState<OuterWorldGameState>();
+        }
 
         yield return null;
     }

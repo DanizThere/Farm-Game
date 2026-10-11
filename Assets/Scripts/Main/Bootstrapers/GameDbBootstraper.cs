@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class GameDbBootstraper : Bootstraper
 {
     private GameDbContext _context = new();
     [SerializeField] private ItemObjectHandler[] _handlers;
+    [SerializeField] private Item[] _items;
     public override void Inject(ServiceLocator serviceLocator)
     {
         var keyItems = _handlers.Select(x => new KeyItemObjectValue
@@ -14,6 +16,7 @@ public class GameDbBootstraper : Bootstraper
         });
 
         _context.KeyItemObjectValue.AddRange(keyItems);
+        _context.Items.AddRange(_items);
 
         serviceLocator.Add(_context);
     }
