@@ -248,7 +248,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d743ef5383525147a0ceca764f2be82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  _hands: []
   _cameraPosition: {fileID: 5524167187058330425}
+  _xForceScale: 0.02
+  _yForceScale: 0.01
   _playerWallet: {fileID: 3116721866386683039}
   _playerMovement: {fileID: 5053414974455030398}
   _playerInteract: {fileID: 554839085417424495}

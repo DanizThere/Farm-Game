@@ -12,7 +12,6 @@ public class Bucket : ItemObject
     protected override void SLStart()
     {
         base.SLStart();
-        _canSelect = false;
         _bucketWaterbox.Initialize(this);
         _volume = _toolItem.MaxDurability;
     }
@@ -61,7 +60,6 @@ public class Bucket : ItemObject
         transform.parent = null;
 
         _rb.AddForce(direction, ForceMode.Impulse);
-        _canSelect = true;
     }
 
     public override void OnPickup(HandController handController)
@@ -72,6 +70,5 @@ public class Bucket : ItemObject
 
         _rb.isKinematic = true;
         _rb.useGravity = false;
-        _canSelect = false;
     }
 }

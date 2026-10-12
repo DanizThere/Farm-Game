@@ -54,6 +54,7 @@ MonoBehaviour:
   - {fileID: 4046315077108574705}
   _rb: {fileID: 4783342150413352839}
   _animator: {fileID: 0}
+  _toolItem: {fileID: 11400000, guid: c1f9b17d31a0ee64cbd668f669e7ef4b, type: 2}
   _colliders:
   - {fileID: 3448794071523800104}
   - {fileID: 4831420667844454938}

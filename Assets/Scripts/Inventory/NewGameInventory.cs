@@ -8,9 +8,12 @@ public class NewGameInventory : MonoBehaviour
 
     public void Initialize()
     {
-        foreach(var item in _items)
+        for(int i = 0; i  < _items.Length; i++)
         {
-            _inventory.AddItem(item.Item);
+            var newPosition = Vector3.one;
+            newPosition.x *= i;
+
+            _inventory.AddItem(_items[i].Item, newPosition);
         }
     }
 }

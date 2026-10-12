@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8591104829053220248}
   - component: {fileID: 2922435218704743471}
   - component: {fileID: 1219291378992385276}
+  - component: {fileID: 187917495743585684}
   m_Layer: 0
   m_Name: LeftHand
   m_TagString: Untagged
@@ -34,7 +35,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8899422234490830196}
-  - {fileID: 2152155636402049946}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6394361518906854498
@@ -51,7 +51,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InUpdateFollower
   ShouldLookAsCamera: 1
   _target: {fileID: 0}
-  _followSpeed: 100
+  _followSpeed: 20
+  _rotationSpeed: 10
 --- !u!114 &8591104829053220248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,6 +68,7 @@ MonoBehaviour:
   _currentHand: 0
   _handForce: 0.3
   _handDistance: 5
+  _modelTransform: {fileID: 8899422234490830196}
 --- !u!114 &2922435218704743471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,10 +95,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93df260ef9e844040a63f3cae05cdb7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWatchUI
-  _order: 0
   _dayText: {fileID: 4601660275336772422}
   _timeText: {fileID: 3093703649045442646}
   _viewObject: {fileID: 8703456792531569313}
+--- !u!114 &187917495743585684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2944537880839361171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8981978c2429520409cf643e0685b3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HandSlot
 --- !u!1 &5001855653071102839
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,14 +496,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8703456792531569313}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.18084942, y: 0.010655634, z: 0.62975603, w: 0.75537235}
-  m_LocalPosition: {x: -0.0662, y: -0.1625, z: -0.0754}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.7068383, y: 0.7067404, z: -0.021187436, w: -0.021184443}
+  m_LocalPosition: {x: 0.00020737223, y: -0.0018486845, z: 0.000432142}
+  m_LocalScale: {x: 0.0100000035, y: 0.010000001, z: 0.009999998}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3625857826375144556}
   - {fileID: 4077855907594684241}
-  m_Father: {fileID: 1822740825422732962}
+  m_Father: {fileID: 8899422234490830196}
   m_LocalEulerAnglesHint: {x: 15.058, y: 14.629, z: 81.58}
 --- !u!1001 &8938413955478755999
 PrefabInstance:
@@ -550,7 +563,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3ff17df293e50674682bb4823c598e24, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2152155636402049946}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ff17df293e50674682bb4823c598e24, type: 3}
 --- !u!4 &8899422234490830196 stripped

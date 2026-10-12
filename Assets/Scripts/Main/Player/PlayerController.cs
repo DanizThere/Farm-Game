@@ -14,10 +14,31 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Transform _cameraPosition;
 
+    [SerializeField] private float _xForceScale = 1f, _yForceScale = 1f;
+
+
     [SerializeField] private PlayerWallet _playerWallet;
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private PlayerInteract _playerInteract;
     [SerializeField] private Bobbing _playerBobbing;
+
+    private void Update()
+    {
+        for(int i = 0; i < _hands.Count; i++)
+        {
+            if (_hands[i].IsEffortOrObjectBusy) continue;
+
+            var order = i + 1;
+            var newPosition = new Vector3();
+            var handTransform = _hands[i].ModelTransform;
+            var handDefaultTransform = _hands[i].DefaultModelPosition;
+
+            newPosition.x = handDefaultTransform.x + Mathf.Sin(Time.time * order) * _xForceScale;
+            newPosition.y = handDefaultTransform.y + Mathf.Cos(Time.time * order) * _yForceScale;
+
+            handTransform.localPosition = Vector3.Lerp(handTransform.localPosition, newPosition, Time.deltaTime * 10f);
+        }
+    }
 
     public HandController GetFreeHand()
     {

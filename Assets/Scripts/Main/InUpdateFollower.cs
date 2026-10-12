@@ -6,6 +6,7 @@ public class InUpdateFollower : MonoBehaviour
 
     [SerializeField] private Transform _target;
     [SerializeField] private float _followSpeed = 10;
+    [SerializeField] private float _rotationSpeed = 10;
 
     private Transform _cameraTransform;
 
@@ -22,7 +23,7 @@ public class InUpdateFollower : MonoBehaviour
         if (ShouldLookAsCamera)
         {
             var targetRotation = _cameraTransform.rotation;
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _followSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
         }
     }
 

@@ -16,6 +16,9 @@ public class PlayerInitializer : MonoBehaviour
         var leftController = Instantiate(_leftHandControllerPrefab);
         var rightController = Instantiate(_rightHandControllerPrefab);
 
+        leftController.GetComponent<HandSlot>().Initialize(leftController);
+        rightController.GetComponent<HandSlot>().Initialize(rightController);
+
         camera.Initialize(player.CameraTransform, player.BodyTransform);
 
         player.Initialize(new BobbingTransforms 

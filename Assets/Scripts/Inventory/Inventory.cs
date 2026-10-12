@@ -20,9 +20,10 @@ public class Inventory : MonoBehaviour
         {
             var slotData = new InventoryItemSerialize
             {
-                Id = slot.Item.Value.Id,
-                Weight = slot.Item.Value.Weight,
-                Durability = slot.Durability
+                Id = slot.Item.Id,
+                Weight = slot.Item.Weight,
+                Durability = slot.Durability,
+                Position = slot.Position,
             };
 
             saveData.Slots.Add(slotData);
@@ -31,14 +32,14 @@ public class Inventory : MonoBehaviour
         return saveData;
     }
 
-    public void AddItem(Item item)
+    public void AddItem(Item item, Vector3 position)
     {
         if (item == null) return;
 
         var newWeight = _currentWeight + item.Weight;
         if (newWeight > _maxWeight) return;
 
-        var slot = new InventorySlot(item);
+        var slot = new InventorySlot(item, position);
         _slots.Add(slot);
         _currentWeight = newWeight;
 
@@ -51,12 +52,8 @@ public class Inventory : MonoBehaviour
         var slot = _slots[slotIndex];
         if (slot.IsEmpty) return;
 
-        if (slot.Amount <= 0)
-        {
-            slot.Item.Value = null;
-            slot.Amount = 0;
-            slot.Durability = 0;
-        }
+        _slots.Remove(slot);
+
         OnInventoryChanged?.Invoke();
     }
 
@@ -86,7 +83,7 @@ public class Inventory : MonoBehaviour
                 var item = itemDatabase.Items.Get(x => x.Id == slotData.Id).FirstOrDefault();
                 if(item != null)
                 {
-                    _slots[i] = new InventorySlot(item, slotData.Durability);
+                    _slots[i] = new InventorySlot(item, slotData.Position, slotData.Durability);
                 }
                 else
                 {

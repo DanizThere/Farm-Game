@@ -13,8 +13,6 @@ public class InventorySlotUI : MonoBehaviour, ISelectable
 
     private Color _originalColor;
 
-    private SecondDimensionTipBox _secondDimensionTipBox;
-
     public virtual void Initialize(Inventory inventory, int index)
     {
         _inventory = inventory;
@@ -34,7 +32,7 @@ public class InventorySlotUI : MonoBehaviour, ISelectable
         }
         else
         {
-            iconImage.sprite = slot.Item.Value.Icon;
+            iconImage.sprite = slot.Item.Icon;
             iconImage.color = Color.white;
         }
     }
@@ -48,25 +46,10 @@ public class InventorySlotUI : MonoBehaviour, ISelectable
     {
         var slot = GetSlotByIndex();
         if (slot.IsEmpty) return;
-
-        Debug.Log(slot);
-
-        if (_secondDimensionTipBox == null)
-        {
-            _secondDimensionTipBox = ServiceLocator.Instance.GetService<ViewController>().Get<SecondDimensionTipBox>();
-        }
-
-        _secondDimensionTipBox.Show();
-        _secondDimensionTipBox.SetInfo(slot.Item.Value.Id, string.Empty);
     }
 
     public void Hide()
     {
-        if (_secondDimensionTipBox == null)
-        {
-            _secondDimensionTipBox = ServiceLocator.Instance.GetService<ViewController>().Get<SecondDimensionTipBox>();
-        }
-        _secondDimensionTipBox.Hide();
     }
 
     public bool CanSelect()

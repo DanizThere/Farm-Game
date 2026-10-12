@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class ItemObject : DefaultSelectable
 {
+    public ToolItem ToolItem => _toolItem;
     public bool IsSingleUse = false;
     public List<ItemObjectEffortData> Efforts = new(); 
     public Vector3 PositionOffset => _positionOffset;

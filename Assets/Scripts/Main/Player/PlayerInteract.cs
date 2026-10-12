@@ -6,24 +6,13 @@ using UnityEngine.UI;
 
 public class PlayerInteract : MonoBehaviour
 {
-    private Observable<ISelectable> _selectableObservable;
-    private ISelectable _selectable;
-    private Transform _selectableTransform;
     private CameraHandler _cameraHandler;
-    private InputHandler _playerController;
 
     public void Initialize()
     {
         _cameraHandler = ServiceLocator.Instance.GetService<CameraHandler>();
-        _playerController = ServiceLocator.Instance.GetService<InputHandler>();
 
-        _playerController.OnInteractEvent += TryInteract;
-
-        ServiceLocator.Instance.GetService<GameStateMachine>().GetState<OuterWorldGameState>().OnUpdateEvent += ThirdDimensionInteract;
         ServiceLocator.Instance.GetService<GameStateMachine>().GetState<UIGameState>().OnUpdateEvent += SecondDimensionInteract;
-
-        _selectableObservable = new(_selectable);
-        _selectableObservable.ValueChanged += view => view?.Show();
     }
 
     private void SecondDimensionInteract()
@@ -35,64 +24,5 @@ public class PlayerInteract : MonoBehaviour
 
         var results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(pointerData, results);
-
-        foreach (var result in results)
-        {
-            if (result.gameObject.TryGetComponent<ISelectable>(out _selectable) && _selectable.CanSelect())
-            {
-                //_selectable = selectable.GetSelectable();
-                _selectableObservable.Value = _selectable;
-                _selectableTransform = result.gameObject.transform;
-                break;
-            }
-            else
-            {
-                if (_selectable != null)
-                    Hide();
-            }
-        }
-    }
-
-    private void ThirdDimensionInteract()
-    {
-        if (Physics.Raycast(_cameraHandler.Position, _cameraHandler.GetDirection(), out var hit))
-        {
-            if (hit.transform.TryGetComponent<ISelectable>(out _selectable) && _selectable.CanSelect())
-            {
-                _selectableObservable.Value = _selectable;
-                _selectableTransform = hit.transform;
-                return;
-            }
-            else
-            {
-                Hide();
-                return;
-            }
-        }
-        else
-        {
-            Hide();
-            return;
-        }
-    }
-
-    private void TryInteract()
-    {
-        if (_selectableObservable.Value == null) return;
-        
-        if(_selectableTransform.TryGetComponent<ISelectableActions>(out var actions))
-        {
-            actions.ShowActions();
-            actions.SetTarget(transform);
-            ServiceLocator.Instance.GetService<GameStateMachine>().SetState<UIGameState>();
-        }
-    }
-
-    private void Hide()
-    {
-        _selectableObservable?.Value?.Hide();
-        _selectableTransform = null;
-        _selectable = null;
-        _selectableObservable.Value = _selectable;
     }
 }

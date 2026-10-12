@@ -3,18 +3,14 @@ using UnityEngine;
 
 public class Bed : DefaultSelectable
 {
-    [SerializeField] private BedUI _bedUI;
-
-    private const string _sleepAction = "SleepAction";
-
+    private BedUI _bedUI;
     private TimeManager _timeManager;
 
     protected override void SLStart()
     {
         base.SLStart();
-        _timeManager = ServiceLocator.Instance.GetService<TimeManager>();
-
-        _bedUI.Setup(this);
+        _timeManager = ServiceLocator.Instance.GetService<TimeManager>() ??
+            throw new NullReferenceException($"{nameof(TimeManager)} doens't exist");
     }
 
 
@@ -26,5 +22,13 @@ public class Bed : DefaultSelectable
     public DateTime GetPossibleTime(float hours)
     {
         return _timeManager.GetDate().AddHours(hours);
+    }
+
+    public void Show()
+    {
+        var viewController = ServiceLocator.Instance.GetService<ViewController>();
+
+        var prefab = viewController.Get<BedUI>();
+        _bedUI = Instantiate(_bedUI, viewController.Canvas2D.transform);
     }
 }

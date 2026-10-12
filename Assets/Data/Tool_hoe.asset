@@ -9,10 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 615f88e8bdf723f4883e5f346b093d3d, type: 3}
-  m_Name: SeedItem_Test
-  m_EditorClassIdentifier: Assembly-CSharp::SeedItem
-  Id: Test_Seed
-  MaxStack: 10
-  Prefab: {fileID: 810492828485161965, guid: 4033098ab40f19b46a142764e9270fc9, type: 3}
+  m_Script: {fileID: 11500000, guid: 7c766121cbef6f3448a6c31346943f3d, type: 3}
+  m_Name: Tool_hoe
+  m_EditorClassIdentifier: Assembly-CSharp::ToolItem
+  Id: hoe_tool
+  MaxStack: 1
+  Weight: 10
+  Prefab: {fileID: 3758497154970267100, guid: d281fc95e90779d4e9e2cd4325576ab0, type: 3}
   Icon: {fileID: 21300000, guid: 542973fead988834fa4d25be97b95fb0, type: 3}
+  MaxDurability: 100
+  Durability: 100

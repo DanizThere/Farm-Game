@@ -4,17 +4,22 @@ using UnityEngine;
 [RequireComponent(typeof(InUpdateFollower))]
 public class HandController : MonoBehaviour
 {
-    public Hand CurrentHand => _currentHand;
+    public Vector3 DefaultModelPosition {  get; private set; }
+    public Transform ModelTransform => _modelTransform;
     public bool CanInteract => !IsTotalBusy && _canInteract;
     public Quaternion DefaultRotation => _defaultRotation;
     public bool IsBusy => _currentItemObject;
+    public bool IsEffortOrObjectBusy => _effortModel || _currentObject;
     public bool IsTotalBusy => _currentItemObject || _effortModel || _currentObject;
     public float HandDistance => _handDistance;
+
+    public Hand CurrentHandType => _currentHand;
 
     [SerializeField] private Hand _currentHand;
     [Range(.1f, 1f)]
     [SerializeField] private float _handForce = .3f;
     [SerializeField] private float _handDistance = 5f;
+    [SerializeField] private Transform _modelTransform;
     private InUpdateFollower _inUpdateFollower;
     private bool _canInteract;
 
@@ -28,7 +33,6 @@ public class HandController : MonoBehaviour
     private Transform _currentTarget;
 
     private EffortModel _effortModel;
-    private ISelectable _selectable;
 
     private Quaternion _defaultRotation;
 
@@ -43,16 +47,7 @@ public class HandController : MonoBehaviour
         _effortModel?.Effort();
 
         _canInteract = Physics.Raycast(_handler.Position, _handler.GetDirection(), out var hit, _handDistance)
-            && hit.transform.TryGetComponent<ISelectable>(out _selectable);
-
-        if (_canInteract)
-        {
-            _selectable.Show();
-            return;
-        }
-
-        _selectable?.Hide();
-        _selectable = null;
+            && hit.transform.TryGetComponent<ISelectable>(out _);
     }
 
     public void Initialize(Transform target, CameraHandler handler, System.Action<float> onGrab)
@@ -60,6 +55,7 @@ public class HandController : MonoBehaviour
         _speedScale.AddListener(onGrab);
 
         _defaultRotation = transform.rotation;
+        DefaultModelPosition = _modelTransform.position;
 
         _handler = handler;
 
@@ -187,6 +183,8 @@ public class HandController : MonoBehaviour
             PickupItem(itemObject);
 
             Destroy(itemObjectHandler.gameObject);
+
+            GetComponent<HandSlot>().SetItem(_currentItemObject.ToolItem);
 
             return true;
         }

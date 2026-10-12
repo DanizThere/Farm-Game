@@ -1,31 +1,24 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public class InventorySlot
 {
-    public Observable<Item> Item;
+    public Item Item;
     public int Amount;
     public float Durability;
-    public bool IsEmpty => Item.Value == null && Amount <= 0;
+    public bool IsEmpty => Item == null && Amount <= 0;
+    public Vector3 Position;
 
     public InventorySlot()
     {
-        Item = new(null);
         Amount = 0;
         Durability = 0;
-
-        Item.ValueChanged += value =>
-        {
-            if (value is ToolItem toolValue)
-            {
-                Durability = toolValue.Durability;
-            }
-        };
     }
 
-    public InventorySlot(Item data, float dur = -1)
+    public InventorySlot(Item data, Vector3 position, float dur = -1)
     {
-        Item = new(data);
+        SetPosition(position);
         if (data is ToolItem toolData)
         {
             Durability = (dur >= 0) ? dur : toolData.Durability;
@@ -34,12 +27,10 @@ public class InventorySlot
         {
             Durability = 0;
         }
-        Item.ValueChanged += value =>
-        {
-            if (value is ToolItem toolValue)
-            {
-                Durability = toolValue.Durability;
-            }
-        };
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        Position = position;
     }
 }
