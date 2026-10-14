@@ -16,8 +16,10 @@ public class PlayerInitializer : MonoBehaviour
         var leftController = Instantiate(_leftHandControllerPrefab);
         var rightController = Instantiate(_rightHandControllerPrefab);
 
-        leftController.GetComponent<HandSlot>().Initialize(leftController);
-        rightController.GetComponent<HandSlot>().Initialize(rightController);
+        var inventory = ServiceLocator.Instance.GetService<InventoryController>();
+
+        leftController.GetComponent<HandSlot>().Initialize(leftController, inventory);
+        rightController.GetComponent<HandSlot>().Initialize(rightController, inventory);
 
         camera.Initialize(player.CameraTransform, player.BodyTransform);
 

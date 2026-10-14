@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3649018927696345041}
-  - component: {fileID: 377504950316090781}
   - component: {fileID: 1307723076328719488}
+  - component: {fileID: 377504950316090781}
+  - component: {fileID: 4007331558250197877}
   - component: {fileID: 2000340363840521512}
   - component: {fileID: 4612824490653926067}
   - component: {fileID: 4412884480147687082}
@@ -38,21 +39,6 @@ Transform:
   - {fileID: 3164403855372796959}
   m_Father: {fileID: 8203165248221249070}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &377504950316090781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 727775419978270896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd5a4212c51e45740b19057715f18f58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlantHealth
-  _healthCharacteristics:
-  - {fileID: 11400000, guid: 3159e475daa0af24e90968b2ccd3ad5b, type: 2}
-  - {fileID: 11400000, guid: 3ced08ebe46a89c439ee897f0165e5e6, type: 2}
 --- !u!114 &1307723076328719488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,6 +56,33 @@ MonoBehaviour:
   - {fileID: 2000340363840521512}
   - {fileID: 4612824490653926067}
   - {fileID: 4412884480147687082}
+--- !u!114 &377504950316090781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727775419978270896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd5a4212c51e45740b19057715f18f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlantHealth
+  _healthCharacteristics:
+  - {fileID: 11400000, guid: 3159e475daa0af24e90968b2ccd3ad5b, type: 2}
+  - {fileID: 11400000, guid: 3ced08ebe46a89c439ee897f0165e5e6, type: 2}
+--- !u!114 &4007331558250197877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727775419978270896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3109dee8ca6cc448ff3d657332492d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlantEmotions
 --- !u!114 &2000340363840521512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,6 +379,7 @@ MonoBehaviour:
   _defaultWeight: 0.5
   _timeForce: 10
   _canMove: 0
+  _angleClamp: 30
 --- !u!1 &6337293768145109836
 GameObject:
   m_ObjectHideFlags: 0
@@ -722,9 +736,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a73123767baafd4f9b81daa47b17ae6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefaultSelectable
-  _actions: []
-  _maxDistance: 15
-  _dialogueHandler: {fileID: 0}
 --- !u!114 &2734480315940892261
 MonoBehaviour:
   m_ObjectHideFlags: 0

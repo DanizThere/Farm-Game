@@ -5,19 +5,21 @@ using UnityEngine;
 public class InventorySlot
 {
     public Item Item;
-    public int Amount;
+    public float Weight;
     public float Durability;
-    public bool IsEmpty => Item == null && Amount <= 0;
-    public Vector3 Position;
+    public bool IsEmpty => Item == null;
+    public Vector2 Position;
 
     public InventorySlot()
     {
-        Amount = 0;
+        Weight = 0;
         Durability = 0;
     }
 
-    public InventorySlot(Item data, Vector3 position, float dur = -1)
+    public InventorySlot(Item data, Vector2 position, float dur = -1)
     {
+        Item = data;
+        Weight = Item.Weight;
         SetPosition(position);
         if (data is ToolItem toolData)
         {
@@ -29,7 +31,7 @@ public class InventorySlot
         }
     }
 
-    public void SetPosition(Vector3 position)
+    public void SetPosition(Vector2 position)
     {
         Position = position;
     }

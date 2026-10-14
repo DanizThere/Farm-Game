@@ -1,10 +1,17 @@
+using System;
 using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public class InventoryItemSerialize
 {
     public string Id;
     public float Weight;
     public float Durability;
-    public Vector3 Position;
+    public Vector2Serialize Position;
+}
+
+[Serializable]
+public class Vector2Serialize
+{
+    public float X, Y;
 }

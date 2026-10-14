@@ -80,12 +80,6 @@ public class Hoe : ItemObject
 
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        if(_handler)
-            Debug.DrawRay(_handler.Position, _handler.GetDirection(), Color.red, 100);
-    }
-
     public override void Use()
     {
         if (Physics.Raycast(_handler.Position, _handler.GetDirection(), out var hit, _currentHand.HandDistance))
@@ -95,6 +89,12 @@ public class Hoe : ItemObject
                 handler.TryEffort(this, () =>
                 {
                     _currentHand.ClearItem();
+                    _gameDbContext.ItemEffortHandlers.Action(x =>
+                    {
+                        x.ResetEffort();
+                    });
+                    HideEffort();
+
                     _currentHand = null;
                 });
             }

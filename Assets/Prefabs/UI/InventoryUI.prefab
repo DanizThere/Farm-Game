@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -100}
+  m_SizeDelta: {x: -900, y: -300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &523247090838273644
 MonoBehaviour:
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40cfbd3c3211b8149be7f1e094109536, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryUI
-  _slotPrefab: {fileID: 2753944272316961407, guid: 0d75f10e9f574f945ba60e2375bd2a0d, type: 3}
+  _slotPrefab: {fileID: 9130996291602425227, guid: 1a3303bde6d19764fbb57d084bf03c49, type: 3}
   _panel: {fileID: 2514508589588704091}
 --- !u!1 &2514508589588704091
 GameObject:
@@ -85,8 +85,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -125}
-  m_SizeDelta: {x: -900, y: -350}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6296964544255473383
 CanvasRenderer:

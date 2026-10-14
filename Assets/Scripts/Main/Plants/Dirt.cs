@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Dirt : MonoBehaviour
@@ -38,6 +39,11 @@ public class Dirt : MonoBehaviour
     {
         Destroy(_currentPlant.gameObject);
         _currentPlant = null;
+    }
+
+    internal void Dig()
+    {
+        throw new NotImplementedException();
     }
 }
 

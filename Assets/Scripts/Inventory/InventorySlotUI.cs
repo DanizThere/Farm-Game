@@ -1,12 +1,16 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class InventorySlotUI : MonoBehaviour, ISelectable
+public class InventorySlotUI : View, ISelectable, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     public int SlotIndex => _slotIndex;
     [SerializeField] private Image iconImage;
+    [SerializeField] private CanvasGroup _canvasGroup;
+    private RectTransform _imageRect;
 
     private Inventory _inventory;
     private int _slotIndex;
@@ -18,6 +22,7 @@ public class InventorySlotUI : MonoBehaviour, ISelectable
         _inventory = inventory;
         _slotIndex = index;
         _originalColor = iconImage.color;
+        _imageRect = iconImage.GetComponent<RectTransform>();
 
         UpdateSlot();
     }
@@ -25,6 +30,7 @@ public class InventorySlotUI : MonoBehaviour, ISelectable
     public void UpdateSlot()
     {
         var slot = _inventory.GetSlot(_slotIndex);
+        _imageRect.anchoredPosition = slot.Position;
         if (slot.IsEmpty)
         {
             iconImage.sprite = null;
@@ -42,18 +48,35 @@ public class InventorySlotUI : MonoBehaviour, ISelectable
         return _inventory.GetSlot(_slotIndex);
     }
 
-    public void Show()
+    public override void Show()
     {
         var slot = GetSlotByIndex();
         if (slot.IsEmpty) return;
     }
 
-    public void Hide()
+    public override void Hide()
     {
     }
 
     public bool CanSelect()
     {
         return true;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        _canvasGroup.alpha = .6f;
+        _canvasGroup.blocksRaycasts = false;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        _canvasGroup.alpha = 1f;
+        _canvasGroup.blocksRaycasts = true;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        _imageRect.anchoredPosition += eventData.delta;
     }
 }

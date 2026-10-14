@@ -3,7 +3,8 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(PlantHealth))]
-public class Plant : MonoBehaviour
+[RequireComponent(typeof(PlantEmotions))]
+public class Plant : MonoBehaviour, ISlappable
 {
     public System.Action OnDestroy = delegate { };
 
@@ -14,7 +15,7 @@ public class Plant : MonoBehaviour
     [SerializeField] private List<PlantsLifetime> _lifeProgress = new();
 
     private PlantHealth _plantHealth;
-
+    private PlantEmotions _plantEmotions;
     private PlantsLifetime _currentLife;
 
     private void Start()
@@ -40,6 +41,7 @@ public class Plant : MonoBehaviour
     public void StartLife(PlantType plantType)
     {
         _plantHealth = GetComponent<PlantHealth>();
+        _plantEmotions = GetComponent<PlantEmotions>();
         _plantHealth.Initialize();
 
         for (int i = 0; i < _lifeProgress.Count; i++)
@@ -61,6 +63,16 @@ public class Plant : MonoBehaviour
         _currentLife = lifetime;
         //_animator.runtimeAnimatorController = _currentLife.AnimatorOverrideController;
         _currentLife.Setup(_plantHealth);
+    }
+
+    public void Slap()
+    {
+        _plantEmotions.Emote();
+    }
+
+    public void Collect(Inventory inventory)
+    {
+        
     }
 }
 

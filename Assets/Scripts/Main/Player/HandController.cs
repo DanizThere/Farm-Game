@@ -42,14 +42,6 @@ public class HandController : MonoBehaviour
         Right
     }
 
-    private void Update()
-    {
-        _effortModel?.Effort();
-
-        _canInteract = Physics.Raycast(_handler.Position, _handler.GetDirection(), out var hit, _handDistance)
-            && hit.transform.TryGetComponent<ISelectable>(out _);
-    }
-
     public void Initialize(Transform target, CameraHandler handler, System.Action<float> onGrab)
     {
         _speedScale.AddListener(onGrab);
@@ -65,7 +57,64 @@ public class HandController : MonoBehaviour
         _inUpdateFollower.SetTarget(_defaultTarget);
         var inputHandler = ServiceLocator.Instance.GetService<InputHandler>();
 
-        if(_currentHand == Hand.Left)
+        var gameState = ServiceLocator.Instance.GetService<GameStateMachine>();
+
+        gameState.GetState<OuterWorldGameState>().OnUpdateEvent += OuterUpdate;
+        gameState.GetState<OuterWorldGameState>().OnStartEvent += () => SetupOuter(inputHandler);
+        gameState.GetState<OuterWorldGameState>().OnExitEvent += () => DisposeOuter(inputHandler);
+    }
+
+
+    public void PickupItem(ItemObject item, bool fromWorld = true)
+    {
+        if (item == null) return;
+
+        var go = Instantiate(item);
+        go.gameObject.SetActive(true);
+        _currentItemObject = go;
+        _currentItemObject.OnPickup(this);
+        _currentItemObject.GetComponent<Collider>().enabled = false;
+        _currentItemObject.transform.SetParent(transform);
+        _currentItemObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        
+        if(fromWorld) GetComponent<HandSlot>().SetItem(_currentItemObject.ToolItem);
+    }
+
+    public void ClearItem()
+    {
+        _currentItemObject = null;
+        GetComponent<HandSlot>().SetItem(null);
+    }
+
+    public void DeleteItem()
+    {
+        if(_currentItemObject)
+            Destroy(_currentItemObject.gameObject);
+
+        _currentItemObject = null;
+    }
+
+    public void SetTarget(Transform target)
+    {
+        _currentTarget = target;
+        _inUpdateFollower.SetTarget(_currentTarget);
+    }
+
+    public void ResetTarget()
+    {
+        _inUpdateFollower.SetTarget(_defaultTarget);
+    }
+    private void OuterUpdate()
+    {
+        _effortModel?.Effort();
+
+        _canInteract = Physics.Raycast(_handler.Position, _handler.GetDirection(), out var hit, _handDistance)
+            && hit.transform.TryGetComponent<ISelectable>(out _);
+    }
+
+    private void SetupOuter(InputHandler inputHandler)
+    {
+        if (_currentHand == Hand.Left)
         {
             inputHandler.OnClickEvent += OnClick;
             inputHandler.OnClickHoldedEvent += OnHold;
@@ -79,30 +128,20 @@ public class HandController : MonoBehaviour
         }
     }
 
-
-    public void PickupItem(ItemObject item)
+    private void DisposeOuter(InputHandler inputHandler)
     {
-        _currentItemObject = item;
-        _currentItemObject.OnPickup(this);
-        _currentItemObject.GetComponent<Collider>().enabled = false;
-        _currentItemObject.transform.SetParent(transform);
-        _currentItemObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-    }
-
-    public void ClearItem()
-    {
-        _currentItemObject = null;
-    }
-
-    public void SetTarget(Transform target)
-    {
-        _currentTarget = target;
-        _inUpdateFollower.SetTarget(_currentTarget);
-    }
-
-    public void ResetTarget()
-    {
-        _inUpdateFollower.SetTarget(_defaultTarget);
+        if (_currentHand == Hand.Left)
+        {
+            inputHandler.OnClickEvent -= OnClick;
+            inputHandler.OnClickHoldedEvent -= OnHold;
+            inputHandler.OnClickReleased -= OnRelease;
+        }
+        else
+        {
+            inputHandler.OnRightClickEvent -= OnClick;
+            inputHandler.OnRightClickHoldedEvent -= OnHold;
+            inputHandler.OnRightClickReleased -= OnRelease;
+        }
     }
 
     private void OnClick()
@@ -179,13 +218,9 @@ public class HandController : MonoBehaviour
     {
         if (hit.transform.TryGetComponent<ItemObjectHandler>(out var itemObjectHandler))
         {
-            var itemObject = Instantiate(itemObjectHandler.GetItemObject());
-            PickupItem(itemObject);
+            PickupItem(itemObjectHandler.GetItemObject());
 
             Destroy(itemObjectHandler.gameObject);
-
-            GetComponent<HandSlot>().SetItem(_currentItemObject.ToolItem);
-
             return true;
         }
 

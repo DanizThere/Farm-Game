@@ -51,31 +51,26 @@ public class InventoryController : SLMonoBehaviour, IService
 
     public void AddSlot(HandSlot slot)
     {
-        if (!_slots.Contains(slot)) _slots.Add(slot);
+        if (!_slots.Contains(slot))
+        {
+            _slots.Add(slot);
+        }
     }
 
     public void Show()
     {
         _gameStateMachine.SetState<UIGameState>();
-        foreach(var item in _slots)
-        {
-            item.Show();
-        }
     }
 
     public void Hide()
     {
         _gameStateMachine.SetState<OuterWorldGameState>();
-        foreach (var item in _slots)
-        {
-            item.Hide();
-        }
     }
 
     private void ShowUI()
     {
         _inventoryUI = Instantiate(_viewController.Get<InventoryUI>(), _viewController.Canvas2D.transform);
-        _inventoryUI.Setup(_inventory);
+        _inventoryUI.Setup(_inventory, _slots);
     }
 
     private void HideUI()

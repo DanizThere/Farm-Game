@@ -40,14 +40,6 @@ public abstract class ItemObject : DefaultSelectable
             throw new System.NullReferenceException();
     }
 
-    public virtual void Setup(Inventory inventory, ToolItem toolItem, Transform UIParent, int slotIndex)
-    {
-        _inventory = inventory;
-        _toolItem = toolItem;
-        _UIParent = UIParent;
-        _slotIndex = slotIndex;
-    }
-
     public abstract void ShowItem();
     public abstract void HideItem();
     public abstract void Use();

@@ -51,8 +51,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InUpdateFollower
   ShouldLookAsCamera: 1
   _target: {fileID: 0}
-  _followSpeed: 20
-  _rotationSpeed: 10
+  _followSpeed:
+    Max: -5
+    Min: 5
+    InitValue: 25
+  _rotationSpeed:
+    Max: -2
+    Min: 2
+    InitValue: 10
 --- !u!114 &8591104829053220248
 MonoBehaviour:
   m_ObjectHideFlags: 0

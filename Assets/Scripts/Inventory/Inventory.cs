@@ -6,8 +6,10 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     public float SlotsCount => _slots.Count;
+    public float HandSlotsCount => _handSlots.Count;
     [SerializeField] private float _maxWeight = 200f;
     [SerializeField] private List<InventorySlot> _slots = new();
+    [SerializeField] private List<InventoryHandSlot> _handSlots = new();
     private float _currentWeight = 0f;
 
     public Action OnInventoryChanged = delegate { };
@@ -23,16 +25,32 @@ public class Inventory : MonoBehaviour
                 Id = slot.Item.Id,
                 Weight = slot.Item.Weight,
                 Durability = slot.Durability,
-                Position = slot.Position,
+                Position = new Vector2Serialize
+                {
+                    X = slot.Position.x,
+                    Y = slot.Position.y
+                },
             };
 
             saveData.Slots.Add(slotData);
         }
 
+        foreach(var slot in _handSlots)
+        {
+            var slotData = new InventorySlotItemSerialize
+            {
+                Id = slot.Item.Id,
+                Durability = slot.Durability,
+                Hand = slot.Hand,
+            };
+
+            saveData.HandSlots.Add(slotData);
+        }
+
         return saveData;
     }
 
-    public void AddItem(Item item, Vector3 position)
+    public void AddItem(Item item, Vector2 position)
     {
         if (item == null) return;
 
@@ -46,6 +64,32 @@ public class Inventory : MonoBehaviour
         OnInventoryChanged?.Invoke();
     }
 
+    public void AddItemToHandSlot(Item item, string hand, float durability = -1)
+    {
+        if(item == null) return;
+
+        var slot = new InventoryHandSlot(item, hand, durability);
+        _handSlots.Add(slot);
+
+        OnInventoryChanged?.Invoke();
+    }
+
+    public void RemoveItemFromHand(string hand)
+    {
+        var slot = _handSlots.FirstOrDefault(x => x.Hand == hand);
+        if (slot != null)
+        {
+            var handSlot = FindObjectsByType<HandSlot>();
+            foreach(var slotObject in handSlot)
+            {
+                slotObject.TryClearItem(hand);
+            }
+            _handSlots.Remove(slot);
+
+            OnInventoryChanged?.Invoke();
+        }
+    }
+
     public void RemoveItem(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= _slots.Count) return;
@@ -53,6 +97,7 @@ public class Inventory : MonoBehaviour
         if (slot.IsEmpty) return;
 
         _slots.Remove(slot);
+        _currentWeight -= slot.Weight;
 
         OnInventoryChanged?.Invoke();
     }
@@ -60,6 +105,11 @@ public class Inventory : MonoBehaviour
     public InventorySlot GetSlot(int index)
     {
         return _slots[index];
+    }
+
+    public InventoryHandSlot GetHandSlot(string hand)
+    {
+        return _handSlots.FirstOrDefault(x => x.Hand == hand);
     }
 
     public void Load(InventorySerializable data)
@@ -83,7 +133,8 @@ public class Inventory : MonoBehaviour
                 var item = itemDatabase.Items.Get(x => x.Id == slotData.Id).FirstOrDefault();
                 if(item != null)
                 {
-                    _slots[i] = new InventorySlot(item, slotData.Position, slotData.Durability);
+                    var vector2 = new Vector2(slotData.Position.X, slotData.Position.Y);
+                    _slots[i] = new InventorySlot(item, vector2, slotData.Durability);
                 }
                 else
                 {

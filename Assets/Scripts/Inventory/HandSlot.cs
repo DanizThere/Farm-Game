@@ -1,67 +1,51 @@
 ﻿using System;
-using UnityEngine;
 
 public class HandSlot : SLMonoBehaviour
 {
     private HandController _hand;
     private InventoryController _inventory;
-    private HandSlotUI _handSlotUI;
     private Item _currentItem;
     private HandController.Hand _handType;
 
-    protected override void SLStart()
-    {
-        base.SLStart();
-        _inventory = ServiceLocator.Instance.GetService<InventoryController>() ??
-            throw new NullReferenceException($"{nameof(InventoryController)} doesn't exist");
+    public string GetHand() => _handType.ToString();
 
-        _inventory.AddSlot(this);
-    }
-
-    public Item GetItem() => _currentItem;
-
-    public void Show()
-    {
-        var viewController = ServiceLocator.Instance.GetService<ViewController>();
-
-        var prefab = Instantiate(viewController.Get<HandSlotUI>(), viewController.HandsSlotTransform);
-        _handSlotUI = prefab;
-        _handSlotUI.Initialize(_currentItem, this);
-
-        if(_handType == HandController.Hand.Left)
-        {
-            _handSlotUI.transform.SetAsFirstSibling();
-        }
-        else
-        {
-            _handSlotUI.transform.SetAsLastSibling();
-        }
-    }
-
-    public void Hide()
-    {
-        Destroy(_handSlotUI.gameObject);
-        _handSlotUI = null;
-    }
-
-    public void Initialize(HandController hand, Item item = null)
+    public void Initialize(HandController hand, InventoryController inventory, Item item = null)
     {
         _hand = hand;
         _handType = _hand.CurrentHandType;
+        _inventory = inventory;
 
+        _inventory.AddSlot(this);
         SetItem(item);
     }
 
     public void SetItem(Item item)
     {
-        if (item == null) return;
+        if (item == null)
+        {
+            _inventory.Inventory.RemoveItemFromHand(_handType.ToString());
+            return;
+        }
         _currentItem = item;
-
-        _inventory.Inventory.AddItem(item, Vector3.zero);
+        _inventory.Inventory.AddItemToHandSlot(_currentItem, _handType.ToString());   
     }
 
-    public void ClearItem()
+    public void SetItemObject(ItemObject itemObject)
     {
-        _currentItem = null;
+        if (itemObject == null)
+        {
+            return;
+        }
+
+        _hand.PickupItem(itemObject, fromWorld: false);
+    }
+
+    public void TryClearItem(string hand)
+    {
+        if(hand == _handType.ToString())
+        {
+            _currentItem = null;
+            _hand.DeleteItem();
+        }   
     }
 }

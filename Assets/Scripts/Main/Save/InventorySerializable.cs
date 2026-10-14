@@ -6,4 +6,5 @@ using System.Text;
 public class InventorySerializable
 {
     public List<InventoryItemSerialize> Slots = new();
+    public List<InventorySlotItemSerialize> HandSlots = new();
 }
