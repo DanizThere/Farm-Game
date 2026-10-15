@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c766121cbef6f3448a6c31346943f3d, type: 3}
+  m_Name: Tool_showel
+  m_EditorClassIdentifier: Assembly-CSharp::ToolItem
+  Id: showel_tool
+  MaxStack: 4
+  Weight: 10
+  Prefab: {fileID: 3565305390140017693, guid: f0fa3fe12e6547a4bb5ff3a35ebe4378, type: 3}
+  Icon: {fileID: 21300000, guid: 8d8819ce12da9df4c8bba262f7cc3641, type: 3}
+  MaxDurability: 10
+  Durability: 10

@@ -13,10 +13,6 @@ public class Hoe : ItemObject
 
     public override void HideItem()
     {
-        _gameDbContext.ItemEffortHandlers.Action(x =>
-        {
-            x.ResetEffort();
-        });
         HideEffort();
     }
 

@@ -17,7 +17,7 @@ public class HoeEffort : Effort
     private const float MaxProgress = 2f;
     private float _progress = 0.0f;
     private Hoe _hoe;
-    private Plant _plant;
+    private Dirt _dirt;
     private bool _canEffort = true;
     private Vector3 _direction => Vector3.Lerp(_startHoePosition, _endHoePosition, _progress / MaxProgress);
     private Quaternion _rotation => Quaternion.Lerp(_startHoeRotation, _endHoeRotation, _progress / MaxProgress);
@@ -27,7 +27,7 @@ public class HoeEffort : Effort
         OnEnd += () =>
         {
             _canEffort = false;
-            _plant.TryEffort(_hoe);
+            _dirt.TryEffort(_hoe);
 
             _hoe.transform.SetParent(null);
             _model.ClearModel();
@@ -67,9 +67,9 @@ public class HoeEffort : Effort
         _progress = 0.0f;
     }
 
-    public override void SetPlant(Plant plant)
+    public override void SetDirt(Dirt dirt)
     {
-        _plant = plant;
+        _dirt = dirt;
     }
 
     public void Initialize(Hoe hoe)

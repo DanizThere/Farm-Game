@@ -5,7 +5,7 @@ public abstract class ItemEffortHandler : SLMonoBehaviour
 {
     [SerializeField] protected Collider _collider;
     [SerializeField] protected GameObject _handleObject;
-    [SerializeField] protected Plant _plant;
+    [SerializeField] protected Dirt _dirt;
 
     protected Effort _effort;
     protected bool _canEffort = true;

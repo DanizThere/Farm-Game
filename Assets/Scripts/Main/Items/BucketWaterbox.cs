@@ -19,9 +19,9 @@ public class BucketWaterbox : MonoBehaviour
     {
         if (!_isUsed) return;
 
-        if(other.transform.TryGetComponent<Plant>(out var plant))
+        if(other.transform.TryGetComponent<Dirt>(out var dirt))
         {
-            plant.TryEffort(_bucket);
+            dirt.TryEffort(_bucket);
         }
     }
 }

@@ -6,6 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(PlantEmotions))]
 public class Plant : MonoBehaviour, ISlappable
 {
+    public Item InitItem;
+
     public System.Action OnDestroy = delegate { };
 
     public float Progress => _lifeProgress.Sum(x => x.Progress) / _lifeProgress.Count;
@@ -27,7 +29,7 @@ public class Plant : MonoBehaviour, ISlappable
 
     private void Grow()
     {
-        _currentLife.Grow();
+        _currentLife?.Grow();
     }
 
     public void TryEffort(ItemObject itemObject)
@@ -55,7 +57,7 @@ public class Plant : MonoBehaviour, ISlappable
             _lifeProgress[i].OnGrown += () => ChangeLifePeriod(_lifeProgress[i + 1]);
         }
 
-        ChangeLifePeriod(_lifeProgress[0]);
+        ChangeLifePeriod(_currentLife ?? _lifeProgress[0]);
     }
 
     private void ChangeLifePeriod(PlantsLifetime lifetime)
@@ -68,11 +70,6 @@ public class Plant : MonoBehaviour, ISlappable
     public void Slap()
     {
         _plantEmotions.Emote();
-    }
-
-    public void Collect(Inventory inventory)
-    {
-        
     }
 }
 

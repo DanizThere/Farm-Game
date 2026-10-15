@@ -33,19 +33,23 @@ public class InventoryController : SLMonoBehaviour, IService
     {
         var data = _inventory.SaveData();
 
-        ServiceLocator.Instance.GetService<JsonSaveService>().Save("InventoryData", data);
+        ServiceLocator.Instance.GetService<JsonSaveService>().Load<GameData>(nameof(GameData), dataInv =>
+        {
+            dataInv.Inventory = data;
+            ServiceLocator.Instance.GetService<JsonSaveService>().Save(nameof(GameData), dataInv);
+        });
     }
 
     private void LoadInventory()
     {
-        ServiceLocator.Instance.GetService<JsonSaveService>().Load<InventorySerializable>("InventoryData", data =>
+        ServiceLocator.Instance.GetService<JsonSaveService>().Load<GameData>(nameof(GameData), data =>
         {
-            if(data == null)
+            if(data == null || data.Inventory == null)
             {
                 print("InventoryData not found");
                 return;
             }
-            _inventory.Load(data);
+            _inventory.Load(data.Inventory);
         });
     }
 

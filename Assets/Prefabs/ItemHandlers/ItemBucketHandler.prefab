@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1489827872230859619}
   - component: {fileID: 9103723453297456513}
   - component: {fileID: 3748326899049793132}
+  - component: {fileID: 6229810149660796353}
   m_Layer: 0
   m_Name: ItemBucketHandler
   m_TagString: Untagged
@@ -68,6 +69,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.57, y: 0.64, z: 0.53}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &6229810149660796353
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1756770851366459058}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &5498733980106318367
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -122,6 +150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2820157314919927153, guid: 27f85a43395a2b848aa0ff65c3070d4c, type: 3}
+    - {fileID: 1920514942412581850, guid: 27f85a43395a2b848aa0ff65c3070d4c, type: 3}
     m_RemovedGameObjects:
     - {fileID: 4841050639762830641, guid: 27f85a43395a2b848aa0ff65c3070d4c, type: 3}
     - {fileID: 7040544916388976262, guid: 27f85a43395a2b848aa0ff65c3070d4c, type: 3}

@@ -13,7 +13,7 @@ public class HoeHandler : ItemEffortHandler
         _collider.enabled = false;
         _handleObject.SetActive(false);
 
-        _hoeEffort.SetPlant(_plant);
+        _hoeEffort.SetDirt(_dirt);
 
         _hoeEffort.OnEnd += () =>
         {

@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    public float CurrentWeight => _currentWeight;
+    public float MaxWeight => _maxWeight;
+
     public float SlotsCount => _slots.Count;
     public float HandSlotsCount => _handSlots.Count;
     [SerializeField] private float _maxWeight = 200f;
@@ -20,6 +23,8 @@ public class Inventory : MonoBehaviour
 
         foreach (var slot in _slots)
         {
+            if (slot.IsEmpty) continue;
+
             var slotData = new InventoryItemSerialize
             {
                 Id = slot.Item.Id,
@@ -37,6 +42,8 @@ public class Inventory : MonoBehaviour
 
         foreach(var slot in _handSlots)
         {
+            if (slot == null) continue;
+
             var slotData = new InventorySlotItemSerialize
             {
                 Id = slot.Item.Id,
@@ -50,18 +57,19 @@ public class Inventory : MonoBehaviour
         return saveData;
     }
 
-    public void AddItem(Item item, Vector2 position)
+    public bool AddItem(Item item, Vector2 position)
     {
-        if (item == null) return;
+        if (item == null) return false;
 
         var newWeight = _currentWeight + item.Weight;
-        if (newWeight > _maxWeight) return;
+        if (newWeight > _maxWeight) return false;
 
         var slot = new InventorySlot(item, position);
         _slots.Add(slot);
         _currentWeight = newWeight;
 
         OnInventoryChanged?.Invoke();
+        return true;
     }
 
     public void AddItemToHandSlot(Item item, string hand, float durability = -1)
@@ -135,6 +143,7 @@ public class Inventory : MonoBehaviour
                 {
                     var vector2 = new Vector2(slotData.Position.X, slotData.Position.Y);
                     _slots[i] = new InventorySlot(item, vector2, slotData.Durability);
+                    _currentWeight += slotData.Weight;
                 }
                 else
                 {

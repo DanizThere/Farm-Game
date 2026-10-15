@@ -73,7 +73,7 @@ public class HandController : MonoBehaviour
         go.gameObject.SetActive(true);
         _currentItemObject = go;
         _currentItemObject.OnPickup(this);
-        _currentItemObject.GetComponent<Collider>().enabled = false;
+        //_currentItemObject.GetComponent<Collider>().enabled = false;
         _currentItemObject.transform.SetParent(transform);
         _currentItemObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         

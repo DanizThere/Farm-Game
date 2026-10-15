@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class InventoryUI : View, IDropHandler
 {
     [SerializeField] private GameObject _panel;
+    [SerializeField] private TextMeshProUGUI _weight;
 
     private Inventory _inventory;
     private List<InventorySlotUI> _slotsUI = new();
@@ -73,9 +75,8 @@ public class InventoryUI : View, IDropHandler
             {
                 var slotItem = slot.GetSlot();
                 if (slotItem == null) return;
-
-                _inventory.RemoveItemFromHand(slotItem.Hand);
-                _inventory.AddItem(slotItem.Item, eventData.position);
+                if(_inventory.AddItem(slotItem.Item, eventData.position))
+                    _inventory.RemoveItemFromHand(slotItem.Hand);
             }
 
             if (eventData.pointerDrag.TryGetComponent<InventorySlotUI>(out var ui))
@@ -111,5 +112,7 @@ public class InventoryUI : View, IDropHandler
 
             slot.UpdateSlot();
         }
+
+        _weight.text = $"Weight: {_inventory.CurrentWeight} / {_inventory.MaxWeight} (max)";
     }
 }

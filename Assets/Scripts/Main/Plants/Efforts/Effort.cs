@@ -9,5 +9,5 @@ public abstract class Effort : MonoBehaviour
     public abstract void DoEffort();
     public abstract void RemoveHand(HandController hand, Action onRemove = null);
     public abstract void ResetEffort();
-    public abstract void SetPlant(Plant plant);
+    public abstract void SetDirt(Dirt dirt);
 }

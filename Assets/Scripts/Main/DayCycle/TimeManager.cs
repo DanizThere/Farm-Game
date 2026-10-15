@@ -123,7 +123,7 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
 
     private void Save()
     {
-        var data = new TimeSerialize
+        var dataTime = new TimeSerialize
         {
             SunriseHour = _timeSettings.SunriseHour,
             SunsetHour = _timeSettings.SunsetHour,
@@ -132,7 +132,12 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
             StartHour = _timeService.CurrentTime.Hour
         };
 
-        ServiceLocator.Instance.GetService<JsonSaveService>().Save("TimeData", data);
+        ServiceLocator.Instance.GetService<JsonSaveService>().Load<GameData>(nameof(GameData), value =>
+        {
+            value.Time = dataTime;
+            ServiceLocator.Instance.GetService<JsonSaveService>().Save(nameof(GameData), value);
+        });
+
     }
 
     private void Load()

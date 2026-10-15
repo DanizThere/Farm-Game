@@ -10,11 +10,12 @@ public class Showel : ItemObject
         base.SLStart();
         _cameraHandler = ServiceLocator.Instance.GetService<CameraHandler>() ??
             throw new System.NullReferenceException($"{nameof(CameraHandler)} doesn't exist");
+        _inventory = ServiceLocator.Instance.GetService<InventoryController>().Inventory ??
+            throw new System.NullReferenceException($"{nameof(InventoryController)} doesn't exist");
     }
 
     public override void HideItem()
     {
-        throw new System.NotImplementedException();
     }
 
     public override void OnPickup(HandController handController)
@@ -33,31 +34,23 @@ public class Showel : ItemObject
 
     public override void OnThrow()
     {
-        throw new System.NotImplementedException();
     }
 
     public override void ShowItem()
     {
-        throw new System.NotImplementedException();
     }
 
     public override void StopUse()
     {
-        throw new System.NotImplementedException();
     }
 
     public override void Use()
     {
         if (Physics.Raycast(_cameraHandler.Position, _cameraHandler.GetDirection(), out var hit, _currentHand.HandDistance))
         {
-            if(hit.transform.TryGetComponent<Plant>(out var plant))
-            {
-                plant.Collect(_inventory);
-                return;
-            }
             if(hit.transform.TryGetComponent<Dirt>(out var dirt))
             {
-                dirt.Dig();
+                dirt.Dig(_inventory);
             }
         }
 
