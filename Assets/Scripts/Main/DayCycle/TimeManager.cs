@@ -51,21 +51,11 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
 
     private float _timeScale = 1f;
 
-    private void Start()
-    {
-        Load();
-    }
-
     private void Update()
     {
         UpdateTimeOfDay();
         RotateSun();
         UpdateLightSettings();
-    }
-
-    private void OnDestroy()
-    {
-        Save();
     }
 
     public void SetTimeScale(float timeScale)
@@ -121,7 +111,7 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
         _sun.transform.rotation = Quaternion.AngleAxis(rotation, Vector3.right);
     }
 
-    private void Save()
+    public void Save(ref TimeSerialize timeSerialize)
     {
         var dataTime = new TimeSerialize
         {
@@ -132,19 +122,11 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
             StartHour = _timeService.CurrentTime.Hour
         };
 
-        ServiceLocator.Instance.GetService<JsonSaveService>().Load<GameData>(nameof(GameData), value =>
-        {
-            value.Time = dataTime;
-            ServiceLocator.Instance.GetService<JsonSaveService>().Save(nameof(GameData), value);
-        });
-
+        timeSerialize = dataTime;
     }
 
-    private void Load()
+    public void Load(TimeSerialize timeSerialize)
     {
-        ServiceLocator.Instance.GetService<JsonSaveService>().Load<TimeSerialize>("TimeData", value =>
-        {
-            Setup(value);
-        });
+        Setup(timeSerialize);
     }
 }

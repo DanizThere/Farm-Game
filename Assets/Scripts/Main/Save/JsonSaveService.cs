@@ -5,51 +5,118 @@ using Newtonsoft.Json;
 
 public class JsonSaveService : ISaveService
 {
-    public bool FileExists<T>(string key)
-    {
-        var path = SavePath(key);
+    private const string FileName = "GameData.json";
+    private const string BackupExt = ".bak";
 
-        return File.Exists(path);
+    private readonly string _savePath;
+    private readonly string _backupPath;
+
+    public GameData Data { get; private set; } = new();
+
+    public event Action<GameData> OnLoaded;
+
+    public JsonSaveService()
+    {
+        _savePath = Path.Combine(Application.persistentDataPath, "saves", FileName);
+        _backupPath = _savePath + BackupExt;
     }
 
-    public void Load<T>(string key, Action<T> callback)
+    public bool HasSave => File.Exists(_savePath);
+
+    public void NewGame(InitData data)
     {
-        var path = SavePath(key);
-
-        if (!File.Exists(path))
+        Data = new GameData
         {
-            callback.Invoke(default);
-            return;
-        }
+            Chests = data.Chests,
+            Inventory = data.Inventory,
+            Time = new TimeSerialize
+            {
+                CurrentDate = data.Time.StartDate,
+                StartHour = data.Time.StartHour,
+                SunriseHour = data.Time.SunriseHour,
+                SunsetHour = data.Time.SunsetHour,
+                TimeMultiplier = data.Time.TimeMultiplier,
+            }
+        };
 
-        using var streamReader = new StreamReader(path);
-        var json = streamReader.ReadToEnd();
-        var data = JsonConvert.DeserializeObject<T>(json);
-
-        callback.Invoke(data);
+        OnLoaded?.Invoke(Data);
     }
 
-    public void Save(string key, object value, Action<bool> callback = null)
+    public void Save()
     {
-        var path = SavePath(key);
-        var json = JsonConvert.SerializeObject(value);
-
-        var directory = Path.GetDirectoryName(path);
-        if (!string.IsNullOrEmpty(directory))
+        try
         {
-            Directory.CreateDirectory(directory);
-        }
+            string tmpPath = _savePath + ".tmp";
+            string json = JsonConvert.SerializeObject(Data);
+            File.WriteAllText(tmpPath, json);
 
-        using(var streamWriter = new StreamWriter(path))
+            if (File.Exists(_savePath))
+            {
+                if (File.Exists(_backupPath)) File.Delete(_backupPath);
+                File.Move(_savePath, _backupPath);
+            }
+
+            File.Move(tmpPath, _savePath);
+        }
+        catch (Exception e)
         {
-            streamWriter.Write(json);
+            Debug.LogError($"Save failed: {e}");
         }
-
-        callback?.Invoke(true);
     }
 
-    private string SavePath(string key)
+    public bool Load()
     {
-        return Path.Combine(Application.persistentDataPath, "saves", key);
+        if (!TryLoadFrom(_savePath, out var data))
+        {
+            Debug.LogWarning("[SaveService] Main save corrupted, trying backup...");
+            if (!TryLoadFrom(_backupPath, out data))
+            {
+                Debug.LogError("[SaveService] No valid save found.");
+                return false;
+            }
+        }
+
+        Data = data;
+        OnLoaded?.Invoke(Data);
+        Debug.Log("[SaveService] Loaded.");
+        return true;
+    }
+
+    public void Delete()
+    {
+        try
+        {
+            if (File.Exists(_savePath)) File.Delete(_savePath);
+            if (File.Exists(_backupPath)) File.Delete(_backupPath);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[SaveService] Delete failed: {e}");
+        }
+    }
+
+    private bool TryLoadFrom(string path, out GameData data)
+    {
+        data = null;
+        if (!File.Exists(path)) return false;
+
+        try
+        {
+            string json = File.ReadAllText(path);
+            if (string.IsNullOrWhiteSpace(json)) return false;
+
+            data = JsonConvert.DeserializeObject<GameData>(json);
+            if (data == null) return false;
+
+            data.Inventory ??= new InventorySerializable();
+            data.Time ??= new TimeSerialize();
+            data.Chests ??= new ChestsSerialize();
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Load from {path} failed: {e}");
+            return false;
+        }
     }
 }

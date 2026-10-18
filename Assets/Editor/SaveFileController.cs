@@ -7,15 +7,15 @@ public class SaveFileController : MonoBehaviour
     [MenuItem("Tools/SaveFile/Delete InventorySave")]
     private static void DeleteInventorySave()
     {
-        var path = Path.Combine(Application.persistentDataPath, "saves", "InventoryData");
+        var path = Path.Combine(Application.persistentDataPath, "saves", "data.json");
 
         if (File.Exists(path))
         {
-            Debug.Log("InventoryData was deleted");
+            Debug.Log("SaveData was deleted");
             File.Delete(path);
             return;
         }
 
-        Debug.Log("InventoryData was already deleted");
+        Debug.Log("SaveData was already deleted");
     }
 }

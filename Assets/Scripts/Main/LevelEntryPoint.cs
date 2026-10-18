@@ -2,18 +2,18 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class LevelEntryPoint : MonoBehaviour
+public class LevelEntryPoint : AbstractEntryPoint
 {
-    [SerializeField] private TimeManager _timeManager;
     [SerializeField] private DirtController _dirtController;
 
     [SerializeField] private PlayerInitializer _playerInitializer;
+    [SerializeField] private SaveHandler _saveHandler;
 
-    public IEnumerator Initialize()
+    public override IEnumerator Initialize()
     {
         _dirtController.Generate();
+        _saveHandler.Initialize();
 
-        _timeManager.Setup();
         ServiceLocator.Instance.GetService<GameStateMachine>().InitializeStates();
 
         _playerInitializer.Initialize();

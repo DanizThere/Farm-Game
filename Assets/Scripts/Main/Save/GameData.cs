@@ -3,7 +3,7 @@ using UnityEngine;
 [System.Serializable]
 public class GameData
 {
-    public InventorySerializable Inventory;
-    public TimeSerialize Time;
-    public ChestsSerialize Chests;
+    public InventorySerializable Inventory = new();
+    public TimeSerialize Time = new();
+    public ChestsSerialize Chests = new();
 }

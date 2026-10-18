@@ -7,6 +7,12 @@ public abstract class View : MonoBehaviour
 
     [SerializeField] protected Observable<bool> _isActive = new(false);
 
-    public abstract void Show();
-    public abstract void Hide();
+    public virtual void Show()
+    {
+        _isActive.Value = true;
+    }
+    public virtual void Hide()
+    {
+        _isActive.Value = false;
+    }
 }

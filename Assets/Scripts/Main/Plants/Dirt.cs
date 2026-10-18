@@ -7,6 +7,7 @@ public class Dirt : MonoBehaviour
     public Vector2Int DirtPosition => _dirtPosition;
     [SerializeField] private PlantType _plantType;
     [SerializeField] private Transform _plantTransform;
+    [SerializeField] private ParticleSystem _digParticles;
     private Vector2Int _dirtPosition;
     private Plant _currentPlant;
     private bool _canPlace = true;
@@ -45,8 +46,10 @@ public class Dirt : MonoBehaviour
     public void Dig(Inventory inventory)
     {
         //here another plants should react
-        
-        if(_currentPlant != null)
+
+        _digParticles.Play();
+
+        if (_currentPlant != null)
         {
             if(inventory.AddItem(_currentPlant.InitItem,
                 UnityEngine.Random.onUnitCircle))
@@ -56,7 +59,8 @@ public class Dirt : MonoBehaviour
             }
         }
 
-        print("i dig a hole");
+        //if (_canPlace) return;
+
         _canPlace = true;
     }
 

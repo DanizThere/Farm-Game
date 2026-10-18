@@ -37,7 +37,8 @@ public class InventoryUI : View, IDropHandler
             Destroy(slot.gameObject);
         }
 
-        _inventory.OnInventoryChanged -= RefreshUI;
+        if(_inventory != null)
+            _inventory.OnInventoryChanged -= RefreshUI;
     }
 
     private void RefreshUI()

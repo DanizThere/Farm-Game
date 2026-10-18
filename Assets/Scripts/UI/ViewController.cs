@@ -30,7 +30,10 @@ public class ViewController : MonoBehaviour, IService
 
     public T Get<T>() where T : View
     {
-        _views.TryGetValue(typeof(T), out var view);
+        if(!_views.TryGetValue(typeof(T), out var view))
+        {
+            throw new NullReferenceException($"{nameof(T)} doesn't exist");
+        }
 
         return (T)view;
     }

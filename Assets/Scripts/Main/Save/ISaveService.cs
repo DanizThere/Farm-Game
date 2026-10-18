@@ -3,8 +3,11 @@ using UnityEngine;
 
 public interface ISaveService : IService
 {
-    public void Save(string key, object value, Action<bool> callback = null);
-    public void Load<T>(string key, Action<T> callback);
-
-    public bool FileExists<T>(string key);
+    public GameData Data { get; }
+    public bool HasSave { get; }
+    public void NewGame(InitData data);
+    public void Save();
+    public bool Load();
+    public void Delete();
+    public event Action<GameData> OnLoaded;
 }

@@ -1,27 +1,20 @@
 using Assets.Scripts.Extenisions;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using UnityEditor.Localization.Plugins.XLIFF.V20;
 
 public class ChestService : IService
 {
     private ChestsSerialize _chests = new();
 
-    public void LoadChests()
+    public void Load(ChestsSerialize chests)
     {
-        ServiceLocator.Instance.GetService<JsonSaveService>().Load<GameData>(nameof(GameData), data =>
-        {
-            _chests = data.Chests;
-        });
+        _chests = chests;
     }
 
-    public void SaveChests()
+    public void Save(ref ChestsSerialize chests)
     {
-        ServiceLocator.Instance.GetService<JsonSaveService>().Load<GameData>(nameof(GameData), data =>
-        {
-            data.Chests = _chests;
-            ServiceLocator.Instance.GetService<JsonSaveService>().Save(nameof(GameData), data);
-        });
+        chests = _chests;
     }
 
     public ChestSerialize GetChest(string id)

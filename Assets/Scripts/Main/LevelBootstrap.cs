@@ -7,7 +7,7 @@ public class LevelBootstrap : MonoBehaviour
 {
     [SerializeReference] private List<Bootstraper> _bootstrapers = new();
 
-    [SerializeField] private LevelEntryPoint _levelEntryPoint;
+    [SerializeField] private AbstractEntryPoint _levelEntryPoint;
 
     private void Awake()
     {

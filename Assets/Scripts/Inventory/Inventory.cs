@@ -17,9 +17,8 @@ public class Inventory : MonoBehaviour
 
     public Action OnInventoryChanged = delegate { };
 
-    public InventorySerializable SaveData()
+    public void Save(InventorySerializable target)
     {
-        var saveData = new InventorySerializable();
 
         foreach (var slot in _slots)
         {
@@ -37,7 +36,7 @@ public class Inventory : MonoBehaviour
                 },
             };
 
-            saveData.Slots.Add(slotData);
+            target.Slots.Add(slotData);
         }
 
         foreach(var slot in _handSlots)
@@ -51,10 +50,8 @@ public class Inventory : MonoBehaviour
                 Hand = slot.Hand,
             };
 
-            saveData.HandSlots.Add(slotData);
+            target.HandSlots.Add(slotData);
         }
-
-        return saveData;
     }
 
     public bool AddItem(Item item, Vector2 position)
@@ -112,6 +109,8 @@ public class Inventory : MonoBehaviour
 
     public InventorySlot GetSlot(int index)
     {
+        if (index >= _slots.Count) return null;
+
         return _slots[index];
     }
 

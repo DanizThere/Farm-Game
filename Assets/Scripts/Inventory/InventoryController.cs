@@ -13,8 +13,6 @@ public class InventoryController : SLMonoBehaviour, IService
 
     protected override void SLStart()
     {
-        LoadInventory();
-
         _gameStateMachine = ServiceLocator.Instance.GetService<GameStateMachine>() ??
             throw new System.NullReferenceException($"{nameof(GameStateMachine)} doens't exist");
         _viewController = ServiceLocator.Instance.GetService<ViewController>() ??
@@ -22,35 +20,6 @@ public class InventoryController : SLMonoBehaviour, IService
 
         _gameStateMachine.GetState<OuterWorldGameState>().OnStartEvent += HideUI;
         _gameStateMachine.GetState<UIGameState>().OnStartEvent += ShowUI;
-    }
-
-    private void OnDestroy()
-    {
-        SaveInventory();
-    }
-
-    private void SaveInventory()
-    {
-        var data = _inventory.SaveData();
-
-        ServiceLocator.Instance.GetService<JsonSaveService>().Load<GameData>(nameof(GameData), dataInv =>
-        {
-            dataInv.Inventory = data;
-            ServiceLocator.Instance.GetService<JsonSaveService>().Save(nameof(GameData), dataInv);
-        });
-    }
-
-    private void LoadInventory()
-    {
-        ServiceLocator.Instance.GetService<JsonSaveService>().Load<GameData>(nameof(GameData), data =>
-        {
-            if(data == null || data.Inventory == null)
-            {
-                print("InventoryData not found");
-                return;
-            }
-            _inventory.Load(data.Inventory);
-        });
     }
 
     public void AddSlot(HandSlot slot)
