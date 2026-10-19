@@ -20,6 +20,7 @@ public class HandController : MonoBehaviour
     [SerializeField] private float _handForce = .3f;
     [SerializeField] private float _handDistance = 5f;
     [SerializeField] private Transform _modelTransform;
+    [SerializeField] private float _angleClamp = 30f;
     private InUpdateFollower _inUpdateFollower;
     private bool _canInteract;
 
@@ -35,6 +36,11 @@ public class HandController : MonoBehaviour
     private EffortModel _effortModel;
 
     private Quaternion _defaultRotation;
+
+    private void FixedUpdate()
+    {
+        _currentObject?.Move(_angleClamp);
+    }
 
     public enum Hand
     {
@@ -185,7 +191,8 @@ public class HandController : MonoBehaviour
 
         if (_currentObject)
         {
-            _currentObject?.UnGrab(this);
+            _currentObject.UnGrab(this, out var speed);
+            _speedScale.Value = speed;
             _currentObject = null;
 
             _inUpdateFollower.enabled = true;

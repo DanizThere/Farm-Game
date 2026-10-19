@@ -8,25 +8,27 @@ public class PhysicObject : MonoBehaviour, ISelectable
     public float CurrentWeight => _currentWeight;
 
     [Range(0.1f, 1f)]
-    [SerializeField] private float _defaultWeight = .5f;
-    [SerializeField] private float _timeForce = 10f;
-    [SerializeField] private bool _canMove = true;
-    [SerializeField] private float _angleClamp = 30f;
-    private float _currentWeight;
-    private Rigidbody _rb;
-    private CameraHandler _handler;
+    [SerializeField] protected float _defaultWeight = .5f;
+    [SerializeField] protected float _timeForce = 10f;
+    [SerializeField] protected bool _canMove = true;
+    [SerializeField] protected ParticleSystem _collideFX;
+    protected float _currentWeight;
+    protected Rigidbody _rb;
+    protected CameraHandler _handler;
 
-    private Vector3 _velocity;
-    private bool _isGrabbed = false;
-    private List<HandController> _hands = new();
+    protected Vector3 _velocity;
+    protected bool _isGrabbed = false;
+    protected List<HandController> _hands = new();
+    private float _emitProgress = 1f;
 
     private void Awake()
     {
         _currentWeight = _defaultWeight;
         _rb = GetComponent<Rigidbody>();
+        _rb.mass = _defaultWeight * 10f;
     }
 
-    private void FixedUpdate()
+    public virtual void Move(float angleHandClamp = 30)
     {
         if (!_isGrabbed) return;
         if (!_canMove) return;
@@ -39,22 +41,22 @@ public class PhysicObject : MonoBehaviour, ISelectable
 
         var hand = _hands[0];
         var diff = hand.transform.rotation * Quaternion.Inverse(hand.DefaultRotation);
-        var targetRotation = diff * transform.rotation * Quaternion.AngleAxis(_angleClamp, transform.right);
+        var targetRotation = diff * transform.rotation * Quaternion.AngleAxis(angleHandClamp, transform.right);
 
         var angleClamp = Quaternion.Angle(transform.rotation, targetRotation);
 
-        var targetPosition = Vector3.MoveTowards(transform.position, _velocity, Time.deltaTime * _currentWeight * _timeForce);
+        var targetPosition = Vector3.MoveTowards(transform.position, _velocity, Time.deltaTime * (1 - _currentWeight) * _timeForce);
 
         _rb.MovePosition(targetPosition);
 
 
-        if (angleClamp > _angleClamp)
+        if (angleClamp > angleHandClamp)
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 5f * _currentWeight * _timeForce);
         }
     }
 
-    public void Grab(float force, CameraHandler handler, out float speedScale, HandController hand)
+    public virtual void Grab(float force, CameraHandler handler, out float speedScale, HandController hand)
     {
         if (!_hands.Contains(hand)) _hands.Add(hand);
         _isGrabbed = true;
@@ -67,33 +69,56 @@ public class PhysicObject : MonoBehaviour, ISelectable
         _rb.useGravity = false;
         _rb.interpolation = RigidbodyInterpolation.None;
         _currentWeight = Mathf.Max(0.1f, _currentWeight - force);
-        speedScale = 1 - _currentWeight / _defaultWeight;
+        speedScale = _currentWeight / _defaultWeight;
     }
 
-    public void UnGrab(HandController hand)
+    public virtual void UnGrab(HandController hand, out float speedScale)
     {
         if (_hands.Contains(hand)) _hands.Remove(hand);
 
         _isGrabbed = _hands.Any();
 
         _currentWeight = _defaultWeight;
-        _rb.useGravity = true;
-        _rb.interpolation = RigidbodyInterpolation.Interpolate;
+        speedScale = _currentWeight / _defaultWeight;
+        if (!_isGrabbed)
+        {
+            _rb.useGravity = true;
+            _rb.interpolation = RigidbodyInterpolation.Interpolate;
+        }
     }
 
-    public bool CanSelect()
+    private void OnCollisionStay(Collision collision)
     {
-        //throw new System.NotImplementedException();
-        return true;
+        print($"{gameObject.name} speed: {_rb.linearVelocity.normalized.sqrMagnitude}");
+        if(_rb.linearVelocity.normalized.sqrMagnitude > .5f)
+        {
+            EmitOnStay(collision.contacts.FirstOrDefault().point);
+        }
     }
 
-    public void Hide()
+    private void OnCollisionEnter(Collision collision)
     {
-        //throw new System.NotImplementedException();
+        EmitOnEnter(collision.contacts.FirstOrDefault().point);
     }
 
-    public void Show()
+    private void EmitOnEnter(Vector3 point)
     {
-        //throw new System.NotImplementedException();
+        _collideFX.transform.position = point;
+
+        _collideFX?.Play();
+    }
+
+    private void EmitOnStay(Vector3 point)
+    {
+        _collideFX.transform.position = point;
+
+        if (_emitProgress > 1f)
+        {
+            _collideFX?.Play();
+            _emitProgress = 0f;
+            return;
+        }
+
+        _emitProgress += Time.deltaTime;
     }
 }
