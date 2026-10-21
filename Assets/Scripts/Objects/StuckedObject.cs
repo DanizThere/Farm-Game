@@ -27,6 +27,7 @@ public class StuckedObject : PhysicObject
                 if(_breakProgress > 1f)
                 {
                     _canMove = true;
+                    _rb.isKinematic = false;
                 }
             }
         }

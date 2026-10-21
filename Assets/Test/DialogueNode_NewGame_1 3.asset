@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df0f00f5fe6eca14eb99fb65fddc2120, type: 3}
   m_Name: DialogueNode_NewGame_1 3
   m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
+  Id: NG_4
   NameKey:
     m_TableReference:
       m_TableCollectionName: GUID:78a0518d6721d4945890f57e88c3272f

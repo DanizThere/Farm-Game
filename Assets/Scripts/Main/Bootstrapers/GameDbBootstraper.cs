@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameDbBootstraper : Bootstraper
 {
     private GameDbContext _context = new();
+    [SerializeField] private DialogueNode[] _nodes;
     [SerializeField] private ItemObjectHandler[] _handlers;
     [SerializeField] private Item[] _items;
     public override void Inject(ServiceLocator serviceLocator)
@@ -15,6 +16,7 @@ public class GameDbBootstraper : Bootstraper
             Handler = x
         });
 
+        _context.DialogueNodes.AddRange(_nodes);
         _context.KeyItemObjectValue.AddRange(keyItems);
         _context.Items.AddRange(_items);
 

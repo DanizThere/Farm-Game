@@ -21,8 +21,10 @@ public class HandController : MonoBehaviour
     [SerializeField] private float _handDistance = 5f;
     [SerializeField] private Transform _modelTransform;
     [SerializeField] private float _angleClamp = 30f;
+    [SerializeField] private Animator _animator;
     private InUpdateFollower _inUpdateFollower;
     private bool _canInteract;
+    private bool _isHold = false;
 
     private CameraHandler _handler;
     private PhysicObject _currentObject;
@@ -70,6 +72,11 @@ public class HandController : MonoBehaviour
         gameState.GetState<OuterWorldGameState>().OnExitEvent += () => DisposeOuter(inputHandler);
     }
 
+    public bool CurrentObjectIsThat(PhysicObject obj)
+    {
+        return obj == _currentObject;
+    }
+
 
     public void PickupItem(ItemObject item, bool fromWorld = true)
     {
@@ -114,8 +121,10 @@ public class HandController : MonoBehaviour
     {
         _effortModel?.Effort();
 
+        _animator.SetBool("IsHold", _isHold && !IsTotalBusy);
+
         _canInteract = Physics.Raycast(_handler.Position, _handler.GetDirection(), out var hit, _handDistance)
-            && hit.transform.TryGetComponent<ISelectable>(out _);
+            && hit.transform.TryGetComponent<ISelectable>(out var sel) && sel.CanSelect();
     }
 
     private void SetupOuter(InputHandler inputHandler)
@@ -160,7 +169,9 @@ public class HandController : MonoBehaviour
             return;
         }
 
-        if(raycast)
+        print(_isHold && !IsTotalBusy);
+
+        if (raycast)
         {
             if(TryGetItemObject(hit)) return;
             if(TryGetEffortObject(hit)) return;
@@ -168,10 +179,13 @@ public class HandController : MonoBehaviour
 
             TrySlap(hit);
         }
+
+        _isHold = true;
     }
 
     private void OnHold()
     {
+        _isHold = false;
         _speedScale.Value = 1;
         transform.SetParent(null);
 
@@ -216,6 +230,8 @@ public class HandController : MonoBehaviour
     {
         if(hit.transform.TryGetComponent<ISlappable>(out var slappable))
         {
+            _animator.SetTrigger("Slap");
+            _isHold = false;
             slappable.Slap();
         }
     }
@@ -226,7 +242,7 @@ public class HandController : MonoBehaviour
         if (hit.transform.TryGetComponent<ItemObjectHandler>(out var itemObjectHandler))
         {
             PickupItem(itemObjectHandler.GetItemObject());
-
+            _isHold = false;
             Destroy(itemObjectHandler.gameObject);
             return true;
         }
@@ -239,6 +255,8 @@ public class HandController : MonoBehaviour
         if (hit.transform.TryGetComponent<EffortModel>(out _effortModel))
         {
             _effortModel.AddHand(this);
+            _isHold = false;
+
             return true;
         }
 
@@ -257,6 +275,7 @@ public class HandController : MonoBehaviour
 
             _currentObject.Grab(_handForce, _handler, out var speed, this);
             _speedScale.Value = speed;
+            _isHold = false;
         }
 
         return isGrabbing;

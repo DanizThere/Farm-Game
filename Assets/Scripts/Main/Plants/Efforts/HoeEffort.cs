@@ -14,13 +14,16 @@ public class HoeEffort : Effort
     [SerializeField] private HoeEffortModel _model;
 
     private List<HandController> _holdsHands = new();
-    private const float MaxProgress = 2f;
-    private float _progress = 0.0f;
+    [SerializeField] private float _breakAngle = 45f;
+    [SerializeField] private ParticleSystem _breakingFX;
+    private Quaternion _startCameraRotation;
+    private float _breakProgress;
     private Hoe _hoe;
     private Dirt _dirt;
     private bool _canEffort = true;
-    private Vector3 _direction => Vector3.Lerp(_startHoePosition, _endHoePosition, _progress / MaxProgress);
-    private Quaternion _rotation => Quaternion.Lerp(_startHoeRotation, _endHoeRotation, _progress / MaxProgress);
+    private CameraHandler _handler;
+    private Vector3 _direction => Vector3.Lerp(_startHoePosition, _endHoePosition, _breakProgress / 1);
+    private Quaternion _rotation => Quaternion.Lerp(_startHoeRotation, _endHoeRotation, _breakProgress / 1);
 
     private void Awake()
     {
@@ -61,10 +64,15 @@ public class HoeEffort : Effort
         _model.SetEffort(this);
     }
 
+    private void Start()
+    {
+        _handler = ServiceLocator.Instance.GetService<CameraHandler>();
+    }
+
     public override void ResetEffort()
     {
         _canEffort = true;
-        _progress = 0.0f;
+        _breakProgress = 0.0f;
     }
 
     public override void SetDirt(Dirt dirt)
@@ -86,6 +94,7 @@ public class HoeEffort : Effort
         if (_holdsHands.Contains(hand)) return;
 
         _holdsHands.Add(hand);
+        _startCameraRotation = _handler.Camera.transform.rotation;
     }
 
     public override void RemoveHand(HandController hand, System.Action onRemove)
@@ -100,13 +109,20 @@ public class HoeEffort : Effort
     {
         if (!_canEffort) return;
 
-        if (_progress > MaxProgress)
+        if (_breakProgress < 1f)
         {
-            OnEnd?.Invoke();
+            var angle = Quaternion.Angle(_handler.Camera.transform.rotation, _startCameraRotation);
+            if (angle > _breakAngle)
+            {
+                _breakProgress += Time.deltaTime * (angle / 90f);
+                _breakingFX?.Emit(Mathf.RoundToInt(_breakProgress * 10));
+                _model.transform.localPosition = _direction;
+
+                if (_breakProgress > 1f)
+                {
+                    OnEnd?.Invoke();
+                }
+            }
         }
-
-        _progress += Time.deltaTime / _model.PhysicObject.CurrentWeight;
-
-        _model.transform.localPosition = _direction;
     }
 }

@@ -6,4 +6,5 @@ public class InitData
     public InventorySerializable Inventory = new();
     public TimeSettings Time;
     public ChestsSerialize Chests = new();
+    public DialogueSerialize Dialogues = new();
 }

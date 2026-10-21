@@ -37,6 +37,11 @@ public class ItemSet<T> where T : class
         return result;
     }
 
+    public bool Contains(T item)
+    {
+        return _items.Contains(item);
+    }
+
     public void Remove(T item)
     {
         _items.Remove(item);

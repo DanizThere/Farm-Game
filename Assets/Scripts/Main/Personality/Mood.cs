@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class Mood : MonoBehaviour
+[CreateAssetMenu(fileName = "Mood_", menuName = "Character/Mood")]
+public class Mood : ScriptableObject
 {
     [SerializeField] private string _moodName;
     [SerializeField] private float _valueToNegativeMood;

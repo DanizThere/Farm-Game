@@ -10,8 +10,6 @@ public class Plant : MonoBehaviour, ISlappable
 
     public System.Action OnDestroy = delegate { };
 
-    public float Progress => _lifeProgress.Sum(x => x.Progress) / _lifeProgress.Count;
-
     [SerializeField] private Animator _animator;
 
     [SerializeField] private List<PlantsLifetime> _lifeProgress = new();
@@ -23,8 +21,17 @@ public class Plant : MonoBehaviour, ISlappable
     private void Start()
     {
         var timeManager = ServiceLocator.Instance.GetService<TimeManager>();
-        if(timeManager != null)
+
+        _plantHealth = GetComponent<PlantHealth>();
+        _plantEmotions = GetComponent<PlantEmotions>();
+
+        if (timeManager != null)
             timeManager.OnDayChange += Grow;
+    }
+
+    public float GetProgress()
+    {
+        return _lifeProgress.Sum(x => x.Progress) / _lifeProgress.Count;
     }
 
     private void Grow()
@@ -42,8 +49,6 @@ public class Plant : MonoBehaviour, ISlappable
 
     public void StartLife(PlantType plantType)
     {
-        _plantHealth = GetComponent<PlantHealth>();
-        _plantEmotions = GetComponent<PlantEmotions>();
         _plantHealth.Initialize();
 
         for (int i = 0; i < _lifeProgress.Count; i++)

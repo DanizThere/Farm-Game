@@ -89,7 +89,6 @@ public class PhysicObject : MonoBehaviour, ISelectable
 
     private void OnCollisionStay(Collision collision)
     {
-        print($"{gameObject.name} speed: {_rb.linearVelocity.normalized.sqrMagnitude}");
         if(_rb.linearVelocity.normalized.sqrMagnitude > .5f)
         {
             EmitOnStay(collision.contacts.FirstOrDefault().point);
@@ -120,5 +119,12 @@ public class PhysicObject : MonoBehaviour, ISelectable
         }
 
         _emitProgress += Time.deltaTime;
+    }
+
+    public bool CanSelect()
+    {
+        var hands = FindObjectsByType<HandController>();
+
+        return hands.Any(x => !x.IsEffortOrObjectBusy);
     }
 }

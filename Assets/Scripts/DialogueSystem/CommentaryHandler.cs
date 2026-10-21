@@ -4,7 +4,6 @@ using UnityEngine.Localization;
 
 public class CommentaryHandler : SLMonoBehaviour
 {
-    [SerializeField] private List<LocalizedString> _comments = new();
     private CommentaryService _commentaryService;
 
     protected override void SLStart()
@@ -13,27 +12,11 @@ public class CommentaryHandler : SLMonoBehaviour
         _commentaryService = ServiceLocator.Instance.GetService<CommentaryService>();
     }
 
-    public void Setup(List<LocalizedString> comments)
+    public void Print(Vector3 startPosition, string message)
     {
-        _comments.AddRange(comments);
-    }
-
-    public void Print(Vector3 startPosition)
-    {
-        var comment = _comments.Random();
-        if(comment != null)
+        if (!string.IsNullOrEmpty(message))
         {
-            if (comment.IsEmpty)
-            {
-                _commentaryService.Print("for what????", transform.position);
-
-                return;
-            }
-
-            var result = comment.GetLocalizedString();
-            result = string.IsNullOrEmpty(result) ? "[Not localized]" : result;
-
-            _commentaryService.Print(result, startPosition);
+            _commentaryService.Print(message, startPosition);
             return;
         }
 

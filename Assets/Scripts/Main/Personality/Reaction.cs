@@ -1,9 +1,14 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization;
 
-public class Reaction : MonoBehaviour
+[CreateAssetMenu(fileName = "_reaction", menuName = "Character/Reaction")]
+public class Reaction : ScriptableObject
 {
-    public string ReactionName;
+    [SerializeField] List<LocalizedString> _comments = new();
+
+    public ReactionTitle ReactionName;
     public float AdditionalValue;
 
     public float GetReactionValue(float value, Personality personality)
@@ -13,4 +18,23 @@ public class Reaction : MonoBehaviour
 
         return value;
     }
+
+    public string GetMessage()
+    {
+        var message = _comments.Random();
+
+        if (message is null) return string.Empty;
+
+        var localized = message.GetLocalizedString();
+        if(string.IsNullOrEmpty(localized)) return "not localized\\not exists";
+        return localized;
+    }
 }
+
+public enum ReactionTitle
+{
+    OnHit,
+    OnFeed,
+    OnShower
+}
+

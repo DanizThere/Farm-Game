@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: RightHandController
+  m_Controller: {fileID: 9100000, guid: 4f8d9e494564dde408a3458aeaee3509, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 4003827b60a2a41488676fb9d896f4fe, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e5371a7bd6273ef4b994e19397a067ba, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: c9c86c5f46393a84ea363f106e6f7c20, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 9c8d6f96379bfd24f9c9095d853b79c4, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: f3eca6226737fb04ab3034172f6b0a02, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 97dfe179850fa2e4aabfd7f0ddb4acf6, type: 2}

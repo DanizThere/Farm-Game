@@ -1,3 +1,4 @@
+using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 
 public class SaveHandler : MonoBehaviour
@@ -5,7 +6,7 @@ public class SaveHandler : MonoBehaviour
     private Inventory _playerInventory;
     private TimeManager _timeService;
     private ChestService _chestService;
-
+    private GameDbContext _dbContext;
     private JsonSaveService _saveService;
     [SerializeField] private InitData _initData;
 
@@ -35,6 +36,7 @@ public class SaveHandler : MonoBehaviour
         _playerInventory.Save(_saveService.Data.Inventory);
         _chestService.Save(ref _saveService.Data.Chests);
         _timeService.Save(ref _saveService.Data.Time);
+        _dbContext.SaveNodes(ref _saveService.Data.Dialogues.Ids);
 
         _saveService.Save();
     }
@@ -44,5 +46,7 @@ public class SaveHandler : MonoBehaviour
         _playerInventory.Load(data.Inventory);
         _chestService.Load(data.Chests);
         _timeService.Load(data.Time);
+
+        _dbContext.AddNodes(data.Dialogues.Ids);
     }
 }
