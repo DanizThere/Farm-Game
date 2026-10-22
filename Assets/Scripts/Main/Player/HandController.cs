@@ -90,7 +90,7 @@ public class HandController : MonoBehaviour
         _currentItemObject.transform.SetParent(transform);
         _currentItemObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         
-        if(fromWorld) GetComponent<HandSlot>().SetItem(_currentItemObject.ToolItem);
+        if(fromWorld) GetComponent<HandSlot>().SetItem(_currentItemObject.Item);
     }
 
     public void ClearItem()
@@ -169,8 +169,6 @@ public class HandController : MonoBehaviour
             return;
         }
 
-        print(_isHold && !IsTotalBusy);
-
         if (raycast)
         {
             if(TryGetItemObject(hit)) return;
@@ -188,14 +186,6 @@ public class HandController : MonoBehaviour
         _isHold = false;
         _speedScale.Value = 1;
         transform.SetParent(null);
-
-        if (_currentItemObject && _currentItemObject.IsSingleUse)
-        {
-            _currentItemObject?.StopUse();
-            _currentItemObject = null;
-
-            return;
-        }
 
         if (_currentItemObject)
         {

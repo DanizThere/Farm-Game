@@ -10,12 +10,12 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     [SerializeField] private CharacterController _characterController;
     [SerializeField] private Transform _body;
 
-    [SerializeField] private float _localSpeed = 1f;
-    [SerializeField] private float _runningSpeed = 3f;
-
     [SerializeField] private float _gravityForce = 9.81f;
     [SerializeField] private float _jumpForce = 1.5f;
     private Vector3 _velocity;
+
+    private float _moveSpeed;
+    private float _runSpeed;
 
     private float _currentSpeed;
     private float _speed;
@@ -29,11 +29,16 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     private List<HandController> _hands = new();
 
 
-    public void Initialize(List<HandController> handControllers)
+    public void Initialize(List<HandController> handControllers, PlayerData data)
     {
         _hands = handControllers;
         _controller = ServiceLocator.Instance.GetService<InputHandler>();
-        _speed = _localSpeed;
+
+        _runSpeed = data.RunSpeed;
+        _moveSpeed = data.MoveSpeed;
+        _jumpForce = data.JumpForce;
+
+        _speed = _currentSpeed = _moveSpeed;
 
         _controller.OnJumpEvent += Jump;
         _controller.OnSprintEvent += OnRun;
@@ -47,7 +52,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
             Move(_controller.Direction);
 
         _speed = Mathf.Lerp(_speed, _currentSpeed, Time.deltaTime * 10f);
-        _currentSpeed = _isRunning ? _runningSpeed : _localSpeed;
+        _currentSpeed = _isRunning ? _runSpeed : _moveSpeed;
     }
 
     private void FixedUpdate()
@@ -113,7 +118,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     {
         if (_characterController.isGrounded)
         {
-            _velocity.y = Mathf.Sqrt(_jumpForce * -2f * -_gravityForce * _timeScale);
+            _velocity.y = Mathf.Sqrt(_jumpForce * -2f * -_gravityForce * _timeScale * Time.deltaTime);
         }
     }
 

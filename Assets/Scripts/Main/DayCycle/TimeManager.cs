@@ -50,6 +50,7 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
     private TimeService _timeService;
 
     private float _timeScale = 1f;
+    private bool _set = true;
 
     private void Update()
     {
@@ -79,9 +80,24 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
         _volume.profile.TryGet(out _colorAdjustments);
     }
 
+    public void SetUpdateTime(bool set)
+    {
+        _set = set;
+    }
+
     public void SkipHours(float hours)
     {
         _timeService.SkipHours(hours);
+    }
+
+    public void SpeedUp(float multiplier = 2f)
+    {
+        _timeService.SpeedUp(multiplier);
+    }
+
+    public void ResetSpeed()
+    {
+        _timeService.ResetSpeed();
     }
 
     public DateTime GetDate()
@@ -102,6 +118,8 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
 
     private void UpdateTimeOfDay()
     {
+        if (!_set) return;
+
         _timeService.UpdateTime(Time.deltaTime * _timeScale, false);
     }
 

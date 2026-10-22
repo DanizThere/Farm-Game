@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 7443955400829145464}
   - component: {fileID: 8031208208754398519}
   - component: {fileID: 447724490887675106}
-  - component: {fileID: 7870494540517903360}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -159,19 +158,6 @@ MonoBehaviour:
   _topBorder: 80
   _mouseSensevity: 25
   _body: {fileID: 0}
---- !u!114 &7870494540517903360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3350191118548189846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ede8f3e61b180441a8f6edfee230491, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DrawForward
-  _distance: 5
 --- !u!1 &3391205248163462031
 GameObject:
   m_ObjectHideFlags: 0

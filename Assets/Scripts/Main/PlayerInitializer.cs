@@ -8,9 +8,11 @@ public class PlayerInitializer : MonoBehaviour
     [SerializeField] private HandController _leftHandControllerPrefab;
     [SerializeField] private HandController _rightHandControllerPrefab;
 
-    public void Initialize()
+    private PlayerController _player;
+
+    public void Initialize(PlayerData data)
     {
-        var player = Instantiate(_playerPrefab);
+        _player = Instantiate(_playerPrefab);
         var camera = Instantiate(_cameraPrefab);
 
         var leftController = Instantiate(_leftHandControllerPrefab);
@@ -21,9 +23,10 @@ public class PlayerInitializer : MonoBehaviour
         leftController.GetComponent<HandSlot>().Initialize(leftController, inventory);
         rightController.GetComponent<HandSlot>().Initialize(rightController, inventory);
 
-        camera.Initialize(player.CameraTransform, player.BodyTransform);
+        camera.Initialize(_player.CameraTransform, _player.BodyTransform);
 
-        player.Initialize(new BobbingTransforms 
+        _player.Load(data,
+        new BobbingTransforms 
         { 
             CameraHandlerTransform = camera.transform,
             CameraTransform = camera.Camera.transform
@@ -37,13 +40,18 @@ public class PlayerInitializer : MonoBehaviour
         var handControllerUI = viewController
             .Get<HandAccessibilityUI>();
 
-        leftController.Initialize(camera.LeftHandTransform, handler, player.OnGrab);
-        rightController.Initialize(camera.RightHandTransform, handler, player.OnGrab);
+        leftController.Initialize(camera.LeftHandTransform, handler, _player.OnGrab);
+        rightController.Initialize(camera.RightHandTransform, handler, _player.OnGrab);
 
         var leftHand = Instantiate(handControllerUI, viewController.HandsTransform);
         leftHand.Initialize(leftController);
 
         var rightHand = Instantiate(handControllerUI, viewController.HandsTransform);
         rightHand.Initialize(rightController);
+    }
+
+    public void Save(ref PlayerData data)
+    {
+        _player.Save(ref data);
     }
 }

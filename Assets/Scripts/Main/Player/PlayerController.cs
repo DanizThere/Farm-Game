@@ -47,16 +47,21 @@ public class PlayerController : MonoBehaviour
         return hand;
     }
 
-    public void Initialize(BobbingTransforms transforms, List<HandController> hands)
+    public void Load(PlayerData data, BobbingTransforms transforms, List<HandController> hands)
     {
         _hands = hands;
 
         _playerBobbing.Initialize(transforms);
-        _playerWallet.Initialize();
-        _playerMovement.Initialize(_hands);
-        _playerInteract.Initialize();
+        _playerWallet.Load(data);
+        _playerMovement.Initialize(_hands, data);
+        _playerInteract.Initialize(data);
 
         OnGrab += _playerMovement.SetSpeedScale;
+    }
+
+    public void Save(ref PlayerData data)
+    {
+        _playerWallet.Save(ref data);
     }
 }
 

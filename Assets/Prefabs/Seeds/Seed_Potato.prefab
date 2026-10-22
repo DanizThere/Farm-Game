@@ -9,13 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8444338185373771227}
-  - component: {fileID: 2976089293029043737}
-  - component: {fileID: 6708020892048055729}
-  - component: {fileID: 3488667331034462790}
-  - component: {fileID: 2663992391238458979}
   - component: {fileID: 7613553745554493629}
+  - component: {fileID: 3473891765951101900}
+  - component: {fileID: 7112019262932962009}
   m_Layer: 0
-  m_Name: Seed
+  m_Name: Seed_Potato
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38,67 +36,6 @@ Transform:
   - {fileID: 8482081651484672346}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2976089293029043737
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 83540198864505363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd5a4212c51e45740b19057715f18f58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlantHealth
-  _healthCharacteristics:
-  - {fileID: 11400000, guid: 3159e475daa0af24e90968b2ccd3ad5b, type: 2}
-  - {fileID: 11400000, guid: 3ced08ebe46a89c439ee897f0165e5e6, type: 2}
---- !u!114 &6708020892048055729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 83540198864505363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe3109dee8ca6cc448ff3d657332492d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlantEmotions
---- !u!114 &3488667331034462790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 83540198864505363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4db0fa1545d72ca47a3a7a2698666411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Plant
-  InitItem: {fileID: 11400000, guid: 1778aa5b430f5274a87211c9bf5c62d0, type: 2}
-  _animator: {fileID: 0}
-  _lifeProgress:
-  - {fileID: 7870862766237823896}
-  - {fileID: 4714003749161292571}
-  - {fileID: 4304789804056195488}
---- !u!114 &2663992391238458979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 83540198864505363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b651cc773ed0804b8e4ee2bb89c42bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CommentaryHandler
-  _comments: []
-  references:
-    version: 2
-    RefIds: []
 --- !u!135 &7613553745554493629
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -120,6 +57,51 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.15
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3473891765951101900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 83540198864505363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e63693ab698564abee6360b69e9eeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Seed
+  _throwForce: 5
+  _rb: {fileID: 7112019262932962009}
+  _colliders:
+  - {fileID: 7613553745554493629}
+  _item: {fileID: 11400000, guid: 1778aa5b430f5274a87211c9bf5c62d0, type: 2}
+  _plant: {fileID: 4620882749038395047, guid: a33c6ebf074d68c4fb72a6eed0160486, type: 3}
+--- !u!54 &7112019262932962009
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 83540198864505363}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 2
 --- !u!1 &126592265938585213
 GameObject:
   m_ObjectHideFlags: 0

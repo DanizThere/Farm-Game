@@ -7,4 +7,5 @@ public class InitData
     public TimeSettings Time;
     public ChestsSerialize Chests = new();
     public DialogueSerialize Dialogues = new();
+    public PlayerData Player = new();
 }

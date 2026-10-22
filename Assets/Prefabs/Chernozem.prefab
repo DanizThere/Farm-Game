@@ -50,7 +50,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7630904733490050029
 Transform:
   m_ObjectHideFlags: 0
@@ -85,6 +85,8 @@ MonoBehaviour:
   _startHoeRotation: {x: 0, y: 0, z: 0, w: 0}
   _endHoeRotation: {x: 0, y: 0, z: 0, w: 0}
   _model: {fileID: 8652992991571766639}
+  _breakAngle: 45
+  _breakingFX: {fileID: 0}
 --- !u!114 &6019585296770864426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,7 +235,7 @@ MonoBehaviour:
   _defaultWeight: 0.5
   _timeForce: 10
   _canMove: 0
-  _angleClamp: 30
+  _collideFX: {fileID: 0}
 --- !u!1 &6337293768145109836
 GameObject:
   m_ObjectHideFlags: 0
@@ -514,7 +516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DirtPlaceholder
   _dirt: {fileID: 2924834891608757212}
-  _plant: {fileID: 3488667331034462790, guid: e12b2f8b6c07a4c49a9f3ae801f3f5f1, type: 3}
+  _plant: {fileID: 4620882749038395047, guid: a33c6ebf074d68c4fb72a6eed0160486, type: 3}
 --- !u!1001 &615557146621355000
 PrefabInstance:
   m_ObjectHideFlags: 0

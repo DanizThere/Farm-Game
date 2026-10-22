@@ -11,14 +11,12 @@ public class LevelEntryPoint : AbstractEntryPoint
 
     public override IEnumerator Initialize()
     {
-        _dirtController.Generate();
-        _saveHandler.Initialize();
-
         ServiceLocator.Instance.GetService<GameStateMachine>().InitializeStates();
-
-        _playerInitializer.Initialize();
-
         ServiceLocator.Instance.GetService<ViewController>().Initialize();
+
+        _dirtController.Generate();
+        _saveHandler.Initialize(_playerInitializer);
+
         ServiceLocator.Instance.GetService<GameStateMachine>().SetState<OuterWorldGameState>();
 
         yield return null;

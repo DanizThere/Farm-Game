@@ -46,16 +46,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff1b97b025bf9f4d968658f6546ee03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Showel
-  IsSingleUse: 0
-  Efforts: []
-  _itemModels:
-  - {fileID: 4718844981652107066}
+  _throwForce: 5
   _rb: {fileID: 6971654282929934400}
-  _animator: {fileID: 0}
-  _toolItem: {fileID: 11400000, guid: 8f77fb391ad349f46b60247c13fba029, type: 2}
   _colliders:
   - {fileID: 3678175546029623368}
   - {fileID: 6760987593475963768}
+  _item: {fileID: 11400000, guid: 8f77fb391ad349f46b60247c13fba029, type: 2}
+  Efforts: []
+  _itemModels:
+  - {fileID: 4718844981652107066}
+  _animator: {fileID: 0}
 --- !u!54 &6971654282929934400
 Rigidbody:
   m_ObjectHideFlags: 0

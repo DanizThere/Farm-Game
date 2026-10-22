@@ -16,9 +16,23 @@ public class CameraHolder : MonoBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private CameraMovement _cameraMovement;
 
+    private Transform _defaultTarget;
+
     public void Initialize(Transform target, Transform body)
     {
+        _defaultTarget = target;
+
         _cameraMovement.Initialize(body);
+        _inUpdateFollower.SetTarget(_defaultTarget);
+    }
+
+    public void SetTarget(Transform target)
+    {
         _inUpdateFollower.SetTarget(target);
+    }
+
+    public void ResetTarget()
+    {
+        _inUpdateFollower.SetTarget(_defaultTarget);
     }
 }

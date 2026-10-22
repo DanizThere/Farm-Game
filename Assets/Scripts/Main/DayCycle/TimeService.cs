@@ -20,9 +20,12 @@ public class TimeService
     private readonly Observable<int> _currentHour;
     private readonly Observable<int> _currentDay;
 
+    private float _timeMultiplier;
+
     public TimeService(TimeSettings settings)
     {
         _settings = settings;
+        _timeMultiplier = settings.TimeMultiplier;
         _currentTime = _settings.StartDate.Date + TimeSpan.FromHours(_settings.StartHour);
         _sunriseTime = TimeSpan.FromHours(_settings.SunriseHour);
         _sunsetTime = TimeSpan.FromHours(_settings.SunsetHour);
@@ -42,7 +45,7 @@ public class TimeService
         {
             return;
         }
-        _currentTime = _currentTime.AddSeconds(deltaTime * _settings.TimeMultiplier);
+        _currentTime = _currentTime.AddSeconds(deltaTime * _timeMultiplier);
         _isDayTime.Value = IsDayTime();
         _currentHour.Value = _currentTime.Hour;
         _currentDay.Value = _currentTime.Day;
@@ -55,6 +58,16 @@ public class TimeService
         var randomMinutes = Random.Range(0, 45);
         _currentTime = _currentTime.AddHours(hours);
         _currentTime = _currentTime.AddMinutes(randomMinutes);
+    }
+
+    public void SpeedUp(float multiplier = 2)
+    {
+        _timeMultiplier *= multiplier;
+    }
+
+    public void ResetSpeed()
+    {
+        _timeMultiplier = _settings.TimeMultiplier;
     }
 
     public float CalculateSunAngle()

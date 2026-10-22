@@ -39,7 +39,7 @@ public class Plant : MonoBehaviour, ISlappable
         _currentLife?.Grow();
     }
 
-    public void TryEffort(ItemObject itemObject)
+    public void TryEffort(ToolItemObject itemObject)
     {
         foreach(var effort in itemObject.Efforts)
         {
@@ -49,6 +49,8 @@ public class Plant : MonoBehaviour, ISlappable
 
     public void StartLife(PlantType plantType)
     {
+        _plantHealth = GetComponent<PlantHealth>();
+        _plantEmotions = GetComponent<PlantEmotions>();
         _plantHealth.Initialize();
 
         for (int i = 0; i < _lifeProgress.Count; i++)

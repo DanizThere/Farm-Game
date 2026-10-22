@@ -7,6 +7,7 @@ public class InventoryHandler : SLMonoBehaviour
     private GameStateMachine _gameStateMachine;
 
     private float _showProgress = 0f;
+    private ProgressSlider _slider;
 
     protected override void SLStart()
     {
@@ -18,9 +19,15 @@ public class InventoryHandler : SLMonoBehaviour
         _gameStateMachine = ServiceLocator.Instance.GetService<GameStateMachine>() ??
             throw new System.NullReferenceException($"{nameof(GameStateMachine)} doesn't exist");
 
+        var go = Instantiate(ServiceLocator.Instance.GetService<ViewController>().Get<ProgressSlider>(), 
+            ServiceLocator.Instance.GetService<ViewController>().Canvas2D.transform);
+        _slider = go;
+        _slider.Setup(showText: true);
+        _slider.Hide();
+
         var outerState = _gameStateMachine.GetState<OuterWorldGameState>();
         outerState.OnUpdateEvent += OnUpdateOuter;
-        var uiState = _gameStateMachine.GetState<UIGameState>();
+        var uiState = _gameStateMachine.GetState<InventoryGameState>();
         uiState.OnUpdateEvent += OnUpdateUI; 
     }
 
@@ -28,12 +35,20 @@ public class InventoryHandler : SLMonoBehaviour
     {
         if (_cameraMovement.IsXNearBottom(10))
         {
+            _slider.Show();
             _showProgress += Time.deltaTime;
-            if(_showProgress > .9f)
+            _slider.UpdateImage(_showProgress);
+
+            if(_showProgress > 1f)
             {
                 _inventory.Show();
                 _showProgress = 0f;
             }
+        }
+        else
+        {
+            _showProgress = 0f;
+            _slider.Hide();
         }
     }
 
@@ -41,12 +56,20 @@ public class InventoryHandler : SLMonoBehaviour
     {
         if (_cameraMovement.IsXNearTop(10))
         {
+            _slider.Show();
             _showProgress += Time.deltaTime;
-            if (_showProgress > .9f)
+            _slider.UpdateImage(_showProgress);
+
+            if (_showProgress > 1f)
             {
                 _inventory.Hide();
                 _showProgress = 0f;
             }
+        }
+        else
+        {
+            _showProgress = 0f;
+            _slider.Hide();
         }
     }
 }

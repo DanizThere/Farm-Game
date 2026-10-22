@@ -8,7 +8,7 @@ public class PlayerInteract : MonoBehaviour
 {
     private CameraHandler _cameraHandler;
 
-    public void Initialize()
+    public void Initialize(PlayerData data)
     {
         _cameraHandler = ServiceLocator.Instance.GetService<CameraHandler>();
 

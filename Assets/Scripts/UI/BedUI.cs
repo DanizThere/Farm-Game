@@ -1,14 +1,26 @@
+using System;
+using TMPro;
 using UnityEngine;
 
 public class BedUI : View
 {
-    public override void Hide()
+    [SerializeField] private TextMeshProUGUI _text;
+    private Bed _bed;
+    private float _hours;
+
+    public void Setup(Bed bed)
     {
-        throw new System.NotImplementedException();
+        _bed = bed;
     }
 
-    public override void Show()
+    public void SetHours(float hours)
     {
-        throw new System.NotImplementedException();
+        _hours = hours;
+        _text.text = $"{_hours} часов.";
+    }
+
+    public void Sleep()
+    {
+        _bed.SkipHours(_hours);
     }
 }

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c766121cbef6f3448a6c31346943f3d, type: 3}
-  m_Name: Tool_seed
+  m_Name: Potato
   m_EditorClassIdentifier: Assembly-CSharp::ToolItem
-  Id: seed_item
+  Id: potato
   MaxStack: 4
   Weight: 10
-  Prefab: {fileID: 7886822823451771096, guid: 459d5312f8d2b0747925a16f29295453, type: 3}
+  Prefab: {fileID: 83540198864505363, guid: e12b2f8b6c07a4c49a9f3ae801f3f5f1, type: 3}
   Icon: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
   MaxDurability: 10
   Durability: 10

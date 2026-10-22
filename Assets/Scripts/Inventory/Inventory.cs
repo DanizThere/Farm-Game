@@ -19,6 +19,8 @@ public class Inventory : MonoBehaviour
 
     public void Save(InventorySerializable target)
     {
+        target.Slots.Clear();
+        target.HandSlots.Clear();
 
         foreach (var slot in _slots)
         {

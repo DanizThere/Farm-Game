@@ -1,4 +1,3 @@
-using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 
 public class SaveHandler : MonoBehaviour
@@ -10,17 +9,22 @@ public class SaveHandler : MonoBehaviour
     private JsonSaveService _saveService;
     [SerializeField] private InitData _initData;
 
+    private PlayerInitializer _player;
+
     private void OnApplicationQuit()
     {
         SaveData();
     }
 
-    public void Initialize()
+    public void Initialize(PlayerInitializer player)
     {
+        _player = player;
+
         _saveService = ServiceLocator.Instance.GetService<JsonSaveService>();
         _playerInventory = ServiceLocator.Instance.GetService<InventoryController>().Inventory;
         _chestService = ServiceLocator.Instance.GetService<ChestService>();
         _timeService = ServiceLocator.Instance.GetService<TimeManager>();
+        _dbContext = ServiceLocator.Instance.GetService<GameDbContext>();
 
         _saveService.OnLoaded += LoadData;
 
@@ -37,6 +41,7 @@ public class SaveHandler : MonoBehaviour
         _chestService.Save(ref _saveService.Data.Chests);
         _timeService.Save(ref _saveService.Data.Time);
         _dbContext.SaveNodes(ref _saveService.Data.Dialogues.Ids);
+        _player.Save(ref _saveService.Data.Player);
 
         _saveService.Save();
     }
@@ -46,6 +51,7 @@ public class SaveHandler : MonoBehaviour
         _playerInventory.Load(data.Inventory);
         _chestService.Load(data.Chests);
         _timeService.Load(data.Time);
+        _player.Initialize(data.Player);
 
         _dbContext.AddNodes(data.Dialogues.Ids);
     }

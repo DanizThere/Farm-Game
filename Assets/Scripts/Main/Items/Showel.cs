@@ -1,43 +1,34 @@
 using UnityEngine;
 
-public class Showel : ItemObject
+public class Showel : ToolItemObject
 {
-    [SerializeField] private Collider[] _colliders;
-    private CameraHandler _cameraHandler;
 
     protected override void SLStart()
     {
         base.SLStart();
-        _cameraHandler = ServiceLocator.Instance.GetService<CameraHandler>() ??
-            throw new System.NullReferenceException($"{nameof(CameraHandler)} doesn't exist");
         _inventory = ServiceLocator.Instance.GetService<InventoryController>().Inventory ??
             throw new System.NullReferenceException($"{nameof(InventoryController)} doesn't exist");
     }
 
     public override void HideItem()
     {
+        base.HideItem();
     }
 
     public override void OnPickup(HandController handController)
     {
-        _currentHand = handController;
-
-        _rb.useGravity = false;
-        _rb.isKinematic = true;
-
-        foreach (var collider in _colliders)
-        {
-            collider.isTrigger = true;
-        }
+        base.OnPickup(handController);
         _gameDbContext = ServiceLocator.Instance.GetService<GameDbContext>();
     }
 
     public override void OnThrow()
     {
+        base.OnThrow();
     }
 
     public override void ShowItem()
     {
+        base.ShowItem();
     }
 
     public override void StopUse()

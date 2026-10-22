@@ -47,3 +47,4 @@ MonoBehaviour:
   _gameStates:
   - {fileID: 11400000, guid: 56366bf32b60e084fa5086067b862939, type: 2}
   - {fileID: 11400000, guid: 1a7afcc4aa5ceda47912a8a3776d4def, type: 2}
+  - {fileID: 11400000, guid: 00adb99227e96f74baef9ae7e2d1392b, type: 2}

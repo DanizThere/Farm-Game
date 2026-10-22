@@ -64,7 +64,7 @@ public class Dirt : MonoBehaviour
         _canPlace = true;
     }
 
-    public void TryEffort(ItemObject item)
+    public void TryEffort(ToolItemObject item)
     {
         if(_currentPlant != null)
         {

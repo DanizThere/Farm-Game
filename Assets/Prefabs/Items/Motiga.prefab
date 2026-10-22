@@ -47,17 +47,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c8f8cdbaba862a4dbba1652ee3f148b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hoe
-  IsSingleUse: 0
+  _throwForce: 5
+  _rb: {fileID: 4783342150413352839}
+  _colliders:
+  - {fileID: 3448794071523800104}
+  - {fileID: 4831420667844454938}
+  _item: {fileID: 11400000, guid: c1f9b17d31a0ee64cbd668f669e7ef4b, type: 2}
   Efforts:
   - {fileID: 11400000, guid: c68d53eddb6b70a42b9e7993eb053a26, type: 2}
   _itemModels:
   - {fileID: 4046315077108574705}
-  _rb: {fileID: 4783342150413352839}
   _animator: {fileID: 0}
-  _toolItem: {fileID: 11400000, guid: c1f9b17d31a0ee64cbd668f669e7ef4b, type: 2}
-  _colliders:
-  - {fileID: 3448794071523800104}
-  - {fileID: 4831420667844454938}
 --- !u!65 &3433045156438437540
 BoxCollider:
   m_ObjectHideFlags: 0

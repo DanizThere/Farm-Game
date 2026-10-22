@@ -36,7 +36,9 @@ public class JsonSaveService : ISaveService
                 SunriseHour = data.Time.SunriseHour,
                 SunsetHour = data.Time.SunsetHour,
                 TimeMultiplier = data.Time.TimeMultiplier,
-            }
+            },
+            Dialogues = data.Dialogues,
+            Player = data.Player
         };
 
         OnLoaded?.Invoke(Data);

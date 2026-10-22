@@ -1,18 +1,11 @@
 using System.Linq;
 using UnityEngine;
 
-public class Hoe : ItemObject
+public class Hoe : ToolItemObject
 {
-    [SerializeField] private Collider[] _colliders;
-    private CameraHandler _handler;
-    protected override void SLStart()
-    {
-        base.SLStart();
-        _handler = ServiceLocator.Instance.GetService<CameraHandler>();
-    }
-
     public override void HideItem()
     {
+        base.HideItem();
         HideEffort();
     }
 
@@ -27,21 +20,13 @@ public class Hoe : ItemObject
 
     public override void OnPickup(HandController handController)
     {
-        _currentHand = handController;
-
-        _rb.useGravity = false;
-        _rb.isKinematic = true;
-
-        foreach (var collider in _colliders)
-        {
-            collider.isTrigger = true;
-        }
-        _gameDbContext = ServiceLocator.Instance.GetService<GameDbContext>();
+        base.OnPickup(handController);
         ShowHandle();
     }
 
     private void ShowHandle()
     {
+        _gameDbContext = ServiceLocator.Instance.GetService<GameDbContext>();
         var handlers = _gameDbContext.ItemEffortHandlers.Get(x => x is HoeHandler);
         foreach (var handler in handlers)
         {
@@ -51,13 +36,7 @@ public class Hoe : ItemObject
 
     public override void OnThrow()
     {
-        _rb.isKinematic = false;
-        _rb.useGravity = true;
-
-        foreach (var collider in _colliders)
-        {
-            collider.isTrigger = false;
-        }
+        base.OnThrow();
 
         _gameDbContext.ItemEffortHandlers.Action(x =>
         {
@@ -68,6 +47,7 @@ public class Hoe : ItemObject
 
     public override void ShowItem()
     {
+        base.ShowItem();
         ShowHandle();
     }
 
@@ -78,7 +58,7 @@ public class Hoe : ItemObject
 
     public override void Use()
     {
-        if (Physics.Raycast(_handler.Position, _handler.GetDirection(), out var hit, _currentHand.HandDistance))
+        if (Physics.Raycast(_cameraHandler.Position, _cameraHandler.GetDirection(), out var hit, _currentHand.HandDistance))
         {
             if (hit.transform.TryGetComponent<HoeHandler>(out var handler))
             {

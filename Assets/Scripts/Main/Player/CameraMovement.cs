@@ -13,6 +13,7 @@ public class CameraMovement : MonoBehaviour, IService
 
     [SerializeField] private float _bottomBorder, _topBorder;
     [SerializeField] private float _mouseSensevity = 100f;
+    [SerializeField] private float _smooth = 15f;
     [SerializeField] private Transform _body;
 
     private bool _canMove = true;
@@ -26,6 +27,7 @@ public class CameraMovement : MonoBehaviour, IService
     private Camera _camera;
 
     private InputHandler _playerController;
+    private Vector2 _previousPosition;
 
 
     public void Initialize(Transform body)
@@ -33,12 +35,12 @@ public class CameraMovement : MonoBehaviour, IService
         _body = body;
         _playerController = ServiceLocator.Instance.GetService<InputHandler>();
 
-        ServiceLocator.Instance.GetService<GameStateMachine>().GetState<UIGameState>().OnStartEvent += () => SetMove(false, () =>
+        ServiceLocator.Instance.GetService<GameStateMachine>().GetState<OuterWorldGameState>().OnExitEvent += () => SetMove(false, () =>
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         });
-        ServiceLocator.Instance.GetService<GameStateMachine>().GetState<UIGameState>().OnExitEvent += () => SetMove(true, () =>
+        ServiceLocator.Instance.GetService<GameStateMachine>().GetState<OuterWorldGameState>().OnStartEvent += () => SetMove(true, () =>
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -103,6 +105,9 @@ public class CameraMovement : MonoBehaviour, IService
 
     public void Move(Vector3 mousePosition)
     {
+        var newPosition = new Vector2(mousePosition.z, mousePosition.y);
+        //if ((newPosition - _previousPosition).magnitude == 0f) return;
+
         var mouseX = mousePosition.z * Time.deltaTime * _mouseSensevity;
         var mouseY = mousePosition.x * Time.deltaTime * _mouseSensevity;
 
@@ -115,7 +120,8 @@ public class CameraMovement : MonoBehaviour, IService
         var rotation = Quaternion.Euler(0, _yRotation, 0);
 
         var newRotation = Quaternion.Euler(_xRotation, _yRotation, 0);
-        transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * 15);
+        transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * _smooth);
+        _previousPosition = newPosition;
         _body.rotation = rotation;
     }
 }

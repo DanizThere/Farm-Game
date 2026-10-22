@@ -1,22 +1,31 @@
 using UnityEngine;
 
-public class Bucket : ItemObject
+public class Bucket : ToolItemObject
 {
-    public float VolumePercent => _volume / _toolItem.MaxDurability;
     [SerializeField] private ParticleSystem _waterVFX;
     [SerializeField] private BucketWaterbox _bucketWaterbox;
 
     private float _volume = 10f;
     private bool _allowUse;
 
+    private ToolItem _toolItem;
+
     protected override void SLStart()
     {
         base.SLStart();
         _bucketWaterbox.Initialize(this);
-        _volume = _toolItem.MaxDurability;
+
+        if(_item is ToolItem tool)
+        {
+            _toolItem = tool;
+            _volume = _toolItem.MaxDurability;
+            return;
+        }
+
+        _volume = 10f;
     }
 
-    private void Update()
+    protected override void SLUpdate()
     {
         _bucketWaterbox.AllowUse(_allowUse && _volume > 0f);
         if (!_allowUse || _volume < 0f) return;
@@ -28,11 +37,13 @@ public class Bucket : ItemObject
 
     public override void HideItem()
     {
+        base.HideItem();
         _inventory.ChangeItemWithDurability(_slotIndex, _volume);
     }
 
     public override void ShowItem()
     {
+        base.ShowItem();
     }
 
     public override void StopUse()
@@ -53,22 +64,11 @@ public class Bucket : ItemObject
 
     public override void OnThrow()
     {
-        var direction = ServiceLocator.Instance.GetService<CameraHandler>().GetDirectionForward() - transform.position;
-        _rb.isKinematic = false;
-        _rb.useGravity = true;
-
-        transform.parent = null;
-
-        _rb.AddForce(direction, ForceMode.Impulse);
+        base.OnThrow();
     }
 
     public override void OnPickup(HandController handController)
     {
-        _currentHand = handController;
-        transform.SetParent(_currentHand.transform);
-        transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-
-        _rb.isKinematic = true;
-        _rb.useGravity = false;
+        base.OnPickup(handController);
     }
 }

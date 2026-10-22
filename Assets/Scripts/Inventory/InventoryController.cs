@@ -18,8 +18,8 @@ public class InventoryController : SLMonoBehaviour, IService
         _viewController = ServiceLocator.Instance.GetService<ViewController>() ??
             throw new System.NullReferenceException($"{nameof(ViewController)} doens't exist");
 
-        _gameStateMachine.GetState<OuterWorldGameState>().OnStartEvent += HideUI;
-        _gameStateMachine.GetState<UIGameState>().OnStartEvent += ShowUI;
+        _gameStateMachine.GetState<InventoryGameState>().OnExitEvent += HideUI;
+        _gameStateMachine.GetState<InventoryGameState>().OnStartEvent += ShowUI;
     }
 
     public void AddSlot(HandSlot slot)
@@ -32,7 +32,7 @@ public class InventoryController : SLMonoBehaviour, IService
 
     public void Show()
     {
-        _gameStateMachine.SetState<UIGameState>();
+        _gameStateMachine.SetState<InventoryGameState>();
     }
 
     public void Hide()
