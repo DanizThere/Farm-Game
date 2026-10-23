@@ -17,6 +17,9 @@ public class ViewController : MonoBehaviour, IService
     [SerializeField] private Transform _handsSlotTransform;
     private Dictionary<Type, View> _views = new();
 
+    //some part should contains in controller
+    private View _currentView;
+
     public void Initialize()
     {
         var camera = ServiceLocator.Instance.GetService<CameraHandler>().Camera;
@@ -32,9 +35,23 @@ public class ViewController : MonoBehaviour, IService
     {
         if(!_views.TryGetValue(typeof(T), out var view))
         {
-            throw new NullReferenceException($"{nameof(T)} doesn't exist");
+            throw new NullReferenceException($"{typeof(T).Name} doesn't exist");
         }
 
         return (T)view;
     }
+
+    public void SetCurrentView(View view)
+    {
+        _currentView = view;
+    }
+
+    public void ClearCurrentView()
+    {
+        _currentView.Hide();
+        Destroy(_currentView.gameObject);
+        _currentView = null;
+    }
+
+    public View GetCurrentView() => _currentView;
 }

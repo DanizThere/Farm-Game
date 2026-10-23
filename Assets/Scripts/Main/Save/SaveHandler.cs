@@ -8,12 +8,14 @@ public class SaveHandler : MonoBehaviour
     private GameDbContext _dbContext;
     private JsonSaveService _saveService;
     [SerializeField] private InitData _initData;
+    [SerializeField] private bool _saveOnQuit = false;
 
     private PlayerInitializer _player;
 
     private void OnApplicationQuit()
     {
-        SaveData();
+        if(_saveOnQuit)
+            SaveData();
     }
 
     public void Initialize(PlayerInitializer player)

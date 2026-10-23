@@ -74,6 +74,8 @@ public class Chest : SLMonoBehaviour, ISlappable
 
         _inventoryUI = goInventory;
 
+        _viewController.SetCurrentView(_chestUI);
+
         _chestUI.Show();
         _inventoryUI.Show();
 
@@ -84,8 +86,7 @@ public class Chest : SLMonoBehaviour, ISlappable
     {
         _chestService.Put(GetSlots(), _id);
 
-        Destroy(_chestUI.gameObject);
-        Destroy(_inventoryUI.gameObject);
+        Destroy(_inventoryUI?.gameObject);
 
         ServiceLocator.Instance.GetService<GameStateMachine>().SetState<OuterWorldGameState>();
     }

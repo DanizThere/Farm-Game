@@ -43,7 +43,7 @@ public class ServiceLocator : MonoBehaviour
     {
         if(!_services.TryGetValue(typeof(T), out var service))
         {
-            throw new NullReferenceException($"{nameof(T)} doesn't exist");
+            throw new NullReferenceException($"{typeof(T).Name} doesn't exist");
         }
 
         return (T)service;

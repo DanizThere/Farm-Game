@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2278174012968992842
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7662996182271358153}
+  m_Layer: 0
+  m_Name: LookAtPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7662996182271358153
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2278174012968992842}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5067275594078712793}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3025672713202473288
 GameObject:
   m_ObjectHideFlags: 0
@@ -71,7 +102,7 @@ Transform:
   m_GameObject: {fileID: 3533993135203827077}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -93,6 +124,7 @@ GameObject:
   - component: {fileID: 4817086712158052413}
   - component: {fileID: 4620882749038395047}
   - component: {fileID: 4191133641898071079}
+  - component: {fileID: 6666665645605616616}
   m_Layer: 0
   m_Name: Plant_Potato
   m_TagString: Untagged
@@ -115,6 +147,7 @@ Transform:
   m_Children:
   - {fileID: 3554654247779345941}
   - {fileID: 8229838319079207999}
+  - {fileID: 7662996182271358153}
   - {fileID: 7929713372794324902}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -233,8 +266,22 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 3.88, z: 1}
-  m_Center: {x: 0, y: 2.15, z: 0}
+  m_Size: {x: 1, y: 2.7, z: 1}
+  m_Center: {x: 0, y: 1.45, z: 0}
+--- !u!114 &6666665645605616616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3607562781421499306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 765ad095fb63b4645a9ee77bf3f42f6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueHandler
+  _lookTarget: {fileID: 7662996182271358153}
+  _cameraRotateOffset: {x: 0, y: 0, z: -0.5}
 --- !u!1 &4503868577226877226
 GameObject:
   m_ObjectHideFlags: 0

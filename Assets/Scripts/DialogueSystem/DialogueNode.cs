@@ -11,4 +11,8 @@ public class DialogueNode : ScriptableObject
     public LocalizedString TextKey;
     public DialogueNode NextNode;
     public List<DialogueOption> Options = new();
+
+    [SerializeReference] public List<DialogueEvent> OnStartEvent = new();
+    [SerializeReference] public List<DialogueEvent> OnEndEvent = new();
+    public Action OnEnd = delegate { };
 }

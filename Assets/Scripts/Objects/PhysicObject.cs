@@ -12,6 +12,8 @@ public class PhysicObject : MonoBehaviour, ISelectable
     [SerializeField] protected float _timeForce = 10f;
     [SerializeField] protected bool _canMove = true;
     [SerializeField] protected ParticleSystem _collideFX;
+    [SerializeField] protected float _massMultiplier = 10f;
+    [SerializeField] protected float _maxGrabSpeed = 8f;
     protected float _currentWeight;
     protected Rigidbody _rb;
     protected CameraHandler _handler;
@@ -25,34 +27,42 @@ public class PhysicObject : MonoBehaviour, ISelectable
     {
         _currentWeight = _defaultWeight;
         _rb = GetComponent<Rigidbody>();
-        _rb.mass = _defaultWeight * 10f;
+        _rb.mass = Mathf.Max(0.1f, _defaultWeight * _massMultiplier);
+
+        //if(_defaultWeight > .8f)
+        //{
+        //    _rb.constraints = RigidbodyConstraints.FreezePositionY;
+        //}
+        _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        _rb.interpolation = RigidbodyInterpolation.Interpolate;
     }
 
     public virtual void Move(float angleHandClamp = 30)
     {
         if (!_isGrabbed) return;
         if (!_canMove) return;
-        _velocity = _handler!.GetForward(2f) + Vector3.down;
+        if (_hands.Count == 0) return;
+        if (_handler == null) return;
 
-        if (_currentWeight > .5f)
-        {
-            _velocity.y = transform.position.y - Vector3.Distance(Vector3.zero, transform.position) * .1f;
-        }
+        var targetPoint = _handler.GetForward(2f) + Vector3.down * _currentWeight;
+        var weightFactor = Mathf.Clamp01(1f - _currentWeight);
+
+        var toTarget = targetPoint - _rb.position;
+        var desiredVelocity = toTarget * _timeForce * weightFactor;
+        desiredVelocity = Vector3.ClampMagnitude(desiredVelocity, _maxGrabSpeed);
+
+        _rb.linearVelocity = Vector3.Lerp(_rb.linearVelocity, desiredVelocity, Time.fixedDeltaTime * 20f);
+        _rb.angularVelocity = Vector3.Lerp(_rb.angularVelocity, Vector3.zero, Time.fixedDeltaTime * 5f);
 
         var hand = _hands[0];
         var diff = hand.transform.rotation * Quaternion.Inverse(hand.DefaultRotation);
         var targetRotation = diff * transform.rotation * Quaternion.AngleAxis(angleHandClamp, transform.right);
-
         var angleClamp = Quaternion.Angle(transform.rotation, targetRotation);
-
-        var targetPosition = Vector3.MoveTowards(transform.position, _velocity, Time.deltaTime * (1 - _currentWeight) * _timeForce);
-
-        _rb.MovePosition(targetPosition);
-
 
         if (angleClamp > angleHandClamp)
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 5f * _currentWeight * _timeForce);
+            var targetRot = Quaternion.RotateTowards(_rb.rotation, targetRotation, Time.fixedDeltaTime * 5f * _currentWeight * _timeForce);
+            _rb.MoveRotation(targetRot);
         }
     }
 
@@ -67,8 +77,15 @@ public class PhysicObject : MonoBehaviour, ISelectable
         }
 
         _rb.useGravity = false;
-        _rb.interpolation = RigidbodyInterpolation.None;
+        _rb.interpolation = RigidbodyInterpolation.Extrapolate;
+        _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+
         _currentWeight = Mathf.Max(0.1f, _currentWeight - force);
+
+        _rb.mass = Mathf.Max(0.1f, _currentWeight * _massMultiplier);
+        _rb.linearVelocity = Vector3.zero;
+        _rb.angularVelocity = Vector3.zero;
+
         speedScale = _currentWeight / _defaultWeight;
     }
 
@@ -89,14 +106,17 @@ public class PhysicObject : MonoBehaviour, ISelectable
 
     private void OnCollisionStay(Collision collision)
     {
-        if(_rb.linearVelocity.normalized.sqrMagnitude > .5f)
+        if(_rb.linearVelocity.sqrMagnitude > .5f)
         {
-            EmitOnStay(collision.contacts.FirstOrDefault().point);
+            if (collision.contactCount > 0)
+                EmitOnStay(collision.contacts.FirstOrDefault().point);
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.contactCount == 0) return;
+
         EmitOnEnter(collision.contacts.FirstOrDefault().point);
     }
 

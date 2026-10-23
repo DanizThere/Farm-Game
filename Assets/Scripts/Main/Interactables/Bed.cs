@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bed : DefaultSelectable, ISlappable
 {
+
     [SerializeField] private Transform _cameraSleepPosition;
     private CameraHandler _cameraHandler;
     private BedUI _bedUI;
@@ -39,6 +40,9 @@ public class Bed : DefaultSelectable, ISlappable
         var go = Instantiate(prefab, viewController.Canvas2D.transform);
         _bedUI = go;
         _bedUI.Setup(this);
+        _bedUI.OnDestroyEvent += ServiceLocator.Instance.GetService<GameStateMachine>().SetState<OuterWorldGameState>;
+
+        viewController.SetCurrentView(_bedUI);
     }
 
     private IEnumerator Sleep(float hours)

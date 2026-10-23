@@ -16,6 +16,11 @@ public class ChestUI : View, IDropHandler
         _isActive.ValueChanged += _panel.SetActive;
     }
 
+    private void OnDestroy()
+    {
+        OnClose?.Invoke();
+    }
+
     public override void Hide()
     {
         base.Hide();

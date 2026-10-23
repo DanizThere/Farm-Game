@@ -40,10 +40,21 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
 
         _speed = _currentSpeed = _moveSpeed;
 
-        _controller.OnJumpEvent += Jump;
-        _controller.OnSprintEvent += OnRun;
-        _controller.OnSprintReleasedEvent += OnWalk;
-        _controller.OnSprintHoldedEvent += OnWalk;
+        ServiceLocator.Instance.GetService<GameStateMachine>().GetState<OuterWorldGameState>().OnStartEvent += () =>
+        {
+            _controller.OnJumpEvent += Jump;
+            _controller.OnSprintEvent += OnRun;
+            _controller.OnSprintReleasedEvent += OnWalk;
+            _controller.OnSprintHoldedEvent += OnWalk;
+        };
+
+        ServiceLocator.Instance.GetService<GameStateMachine>().GetState<OuterWorldGameState>().OnExitEvent += () =>
+        {
+            _controller.OnJumpEvent -= Jump;
+            _controller.OnSprintEvent -= OnRun;
+            _controller.OnSprintReleasedEvent -= OnWalk;
+            _controller.OnSprintHoldedEvent -= OnWalk;
+        };
     }
 
     private void Update()
@@ -62,7 +73,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
             _velocity.y = -2f;
         }
 
-        _velocity.y += _gravityForce * Time.deltaTime * -1 * _timeScale;
+        _velocity.y += _gravityForce * -1 * _timeScale;
 
         _characterController.Move(_velocity);
     }

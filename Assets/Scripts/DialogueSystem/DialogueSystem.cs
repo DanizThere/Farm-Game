@@ -1,28 +1,22 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
-using UnityEngine.UI;
 
 public class DialogueSystem : MonoBehaviour, IService
 {
-    [SerializeField] private TextMeshProUGUI _dialogueText, _nameText;
-    [SerializeField] private GameObject _dialoguePanel;
-    [SerializeField] private Button _nextNodeButton;
+    public Action OnEndDialogue = delegate { };
 
+    [SerializeField] private float _typingSpeed = .05f;
     private DialogueNode _currentNode;
     private DialogueNode _nextNode;
 
     private IEnumerator _currentCoroutine;
 
-    private void Awake()
-    {
-        _nextNodeButton.onClick.AddListener(TypeNextNode);
-        _nextNodeButton.gameObject.SetActive(false);
-        _dialoguePanel.SetActive(false);
-    }
+    private DialogueView _view;
+
+    private bool _isTyping = false;
 
     public void StartDialogue(DialogueNode startNode)
     {
@@ -35,58 +29,97 @@ public class DialogueSystem : MonoBehaviour, IService
         _currentCoroutine = null;
         _currentCoroutine = TypeNode(_currentNode);
 
-        StartCoroutine(_currentCoroutine);
+        var viewController = ServiceLocator.Instance.GetService<ViewController>();
+        var go = Instantiate(viewController.Get<DialogueView>(), viewController.Canvas2D.transform);
+        _view = go;
 
-        _dialoguePanel.SetActive(true);
+        StartCoroutine(_currentCoroutine);
+    }
+
+    public void SkipTyping()
+    {
+        if(_currentCoroutine != null)
+        {
+            StopCoroutine(_currentCoroutine);
+            _currentCoroutine = null;
+            _view.ResetMaxVisible();
+
+            if (_isTyping)
+            {
+                _currentNode?.OnEnd?.Invoke();
+                _isTyping = false;
+            }
+
+            foreach (var option in _currentNode.Options)
+            {
+                _view.InitButton(() => TypeNode(option.NextNode), GetLocalizedString(option.OptionKey));
+            }
+
+            return;
+        }
+
+        if (!_currentNode.Options.Any())
+            TypeNextNode();
     }
 
     private IEnumerator TypeNode(DialogueNode startNode)
     {
-        if(startNode == null)
+        if (startNode == null)
         {
             EndDialogue();
             yield break;
         }
-        if(startNode.NextNode != null)
+
+        _currentNode = startNode;
+        _nextNode = _currentNode.NextNode;
+
+        foreach (var events in _currentNode.OnStartEvent)
         {
-            _nextNode = startNode.NextNode;
+            events.Invoke();
         }
 
-        var text = GetLocalizedString(startNode.TextKey);
-        var name = GetLocalizedNameString(startNode.NameKey);
+        var text = GetLocalizedString(_currentNode.TextKey);
+        var name = GetLocalizedNameString(_currentNode.NameKey);
 
-        _dialogueText.maxVisibleCharacters = 0;
+        _view.SetData(text, name);
+        _isTyping = true;
 
-        _dialogueText.text = text;
-        _nameText.text = name;
-
-        for(int i = 0; i < text.Length; i++)
+        for (int i = 0; i < text.Length; i++)
         {
-            _dialogueText.maxVisibleCharacters = i;
-            yield return null;
+            _view.SetMaxVisible(i);
+            yield return new WaitForSeconds(_typingSpeed);
+        }
+        _isTyping = false;
+
+        foreach (var option in _currentNode.Options)
+        {
+            _view.InitButton(() => TypeNode(option.NextNode), GetLocalizedString(option.OptionKey));
         }
 
-        if (!startNode.Options.Any())
+        foreach (var events in _currentNode.OnEndEvent)
         {
-            _nextNodeButton.gameObject.SetActive(true);
-            yield break;
+            events.Invoke();
         }
+
+        _currentNode.OnEnd?.Invoke();
+        _currentCoroutine = null;
     }
 
     private void EndDialogue()
     {
-        _dialoguePanel.SetActive(false);
+        OnEndDialogue?.Invoke();
+        _view.Hide();
+        Destroy(_view.gameObject);
+        _view = null;
 
         ServiceLocator.Instance.GetService<GameStateMachine>().SetState<OuterWorldGameState>();
     }
 
     private void TypeNextNode()
     {
-        StopCoroutine(_currentCoroutine);
+        if(_currentCoroutine != null) StopCoroutine(_currentCoroutine);
 
-        _currentCoroutine = null;
         _currentCoroutine = TypeNode(_nextNode);
-
         StartCoroutine(_currentCoroutine);
     }
 

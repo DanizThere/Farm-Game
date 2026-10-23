@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BedUI : View
 {
+    public Action OnDestroyEvent = delegate { };
     [SerializeField] private TextMeshProUGUI _text;
     private Bed _bed;
     private float _hours;
@@ -22,5 +23,10 @@ public class BedUI : View
     public void Sleep()
     {
         _bed.SkipHours(_hours);
+    }
+
+    private void OnDestroy()
+    {
+        OnDestroyEvent?.Invoke();
     }
 }
