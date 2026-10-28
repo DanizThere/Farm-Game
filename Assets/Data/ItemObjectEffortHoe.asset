@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ab106659b097c7448cb1a7d98b9c89f, type: 3}
   m_Name: ItemObjectEffortHoe
   m_EditorClassIdentifier: Assembly-CSharp::ItemObjectEffortData
-  Name: {fileID: 11400000, guid: e96696a35bcdc324a82c68be0610d6f7, type: 2}
-  Value: 2
+  Name: Hoe
+  MinValue: 0
+  MaxValue: 1

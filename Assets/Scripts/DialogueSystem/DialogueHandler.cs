@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DialogueHandler : SLMonoBehaviour
@@ -27,12 +30,24 @@ public class DialogueHandler : SLMonoBehaviour
         }
     }
 
-    public void StartDialogue(DialogueNode node)
+    public void StartDialogue(DialogueNode node, Action onEndDialogue = null)
     {
         if(node != null)
         {
+            if(onEndDialogue != null)
+                _dialogueSystem.OnEndDialogue += onEndDialogue;
             _dialogueSystem.StartDialogue(node);
             _isTalking = true;
+        }
+    }
+
+    public void StartDialogue(List<DialogueNode> nodes)
+    {
+        if (nodes.Any())
+        {
+            _isTalking = true;
+            _dialogueSystem.StartDialogue(nodes);
+
         }
     }
 }

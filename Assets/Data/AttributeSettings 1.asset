@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba9558ea4245b6341838a3dc8182b852, type: 3}
   m_Name: AttributeSettings 1
   m_EditorClassIdentifier: Assembly-CSharp::AttributeSettings
-  AttributeType: 0
-  AttributeGenType: 0
-  TimeToGrow: 6
+  MaxGrowProgress: 1
   GrowMultiplier: 1

@@ -236,6 +236,8 @@ MonoBehaviour:
   _timeForce: 10
   _canMove: 0
   _collideFX: {fileID: 0}
+  _massMultiplier: 10
+  _maxGrabSpeed: 8
 --- !u!1 &6337293768145109836
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,7 +373,6 @@ GameObject:
   - component: {fileID: 187590992677984988}
   - component: {fileID: 2924834891608757212}
   - component: {fileID: -340374322097557789}
-  - component: {fileID: 2734480315940892261}
   m_Layer: 0
   m_Name: Chernozem
   m_TagString: Untagged
@@ -389,8 +390,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7630904733490050029}
   - {fileID: 8203165248221249070}
@@ -503,20 +504,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a73123767baafd4f9b81daa47b17ae6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefaultSelectable
---- !u!114 &2734480315940892261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9145616641668865923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b18ee70a5fe3eec47afd17863bea015c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DirtPlaceholder
-  _dirt: {fileID: 2924834891608757212}
-  _plant: {fileID: 4620882749038395047, guid: a33c6ebf074d68c4fb72a6eed0160486, type: 3}
 --- !u!1001 &615557146621355000
 PrefabInstance:
   m_ObjectHideFlags: 0

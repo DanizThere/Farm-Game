@@ -5,14 +5,15 @@ public class PlantHealthCharacteristic
 {
     public string Name;
     public float MaxValue;
+    public float MinValue;
     public float Value;
-    public float ValueMultiplier;
 
     public float GetEfficient()
     {
-        var efficient = Value / MaxValue;
+        if (Value < MinValue) return 0f;
 
-        Value = Mathf.Clamp(Value - Random.value, 0, MaxValue);
-        return efficient;
+        if(Value > MaxValue) return Value * 1.5f;
+
+        return Value;
     }
 }

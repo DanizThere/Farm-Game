@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class PlantHealth : MonoBehaviour
 {
-    [SerializeField] List<PlantHealthCharacteristicData> _healthCharacteristics = new();
+    [SerializeField] List<string> _healthCharacteristicsName = new();
 
     private List<PlantHealthCharacteristic> _characteristics = new();
+    private float _dirtBonus;
 
-    public void Initialize()
+    public void Initialize(float dirtBonus = 0f)
     {
+        _dirtBonus = dirtBonus;
+
         if (_characteristics.Any()) return;
 
-        foreach(var characteristic in _healthCharacteristics)
+        var characteristics = ServiceLocator.Instance.GetService<GameDbContext>()
+            .PlantHealthCharacteristics.Get(x => _healthCharacteristicsName.Any(item => item == x.Name));
+
+        foreach(var characteristic in characteristics)
         {
             AddCharacteristic(characteristic, characteristic.DefaultValue);
         }
@@ -22,10 +28,10 @@ public class PlantHealth : MonoBehaviour
     {
         var characteristic = new PlantHealthCharacteristic
         {
-            Name = characteristicData.Name.Name,
+            Name = characteristicData.Name,
             MaxValue = characteristicData.MaxValue,
+            MinValue = characteristicData.MinValue,
             Value = defaultValue,
-            ValueMultiplier = characteristicData.ValueMultiplier,
         };
 
         _characteristics.Add(characteristic);
@@ -41,12 +47,12 @@ public class PlantHealth : MonoBehaviour
             return;
         }
 
-        characteristic.Value = Mathf.Clamp(characteristic.Value + value * characteristic.ValueMultiplier, -characteristic.MaxValue, characteristic.MaxValue);
+        characteristic.Value += value; 
     }
 
     public float GetEfficient()
     {
-        var value = _characteristics.Sum(x => x.GetEfficient()) / _characteristics.Count;
+        var value = (_characteristics.Sum(x => x.GetEfficient()) / _characteristics.Count) + _dirtBonus;
 
         return value;
     }

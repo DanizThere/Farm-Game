@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -36,6 +37,32 @@ public class DialogueSystem : MonoBehaviour, IService
         StartCoroutine(_currentCoroutine);
     }
 
+    public void StartDialogue(List<DialogueNode> nodes)
+    {
+        ServiceLocator.Instance.GetService<GameStateMachine>().SetState<UIGameState>();
+        var viewController = ServiceLocator.Instance.GetService<ViewController>();
+        var go = Instantiate(viewController.Get<DialogueView>(), viewController.Canvas2D.transform);
+        _view = go;
+
+        foreach (var node in nodes)
+        {
+            var optionName = GetLocalizedString(node.OptionKey);
+            _view.InitButton(() => 
+            {
+                _currentCoroutine = TypeNode(node.NextNode);
+                StartCoroutine(_currentCoroutine);
+            }
+            , optionName);
+        }
+
+        _view.InitButton(EndDialogue, "Exit");
+
+        if (_currentCoroutine != null)
+            StopCoroutine(_currentCoroutine);
+
+        _currentCoroutine = null;
+    }
+
     public void SkipTyping()
     {
         if(_currentCoroutine != null)
@@ -52,7 +79,12 @@ public class DialogueSystem : MonoBehaviour, IService
 
             foreach (var option in _currentNode.Options)
             {
-                _view.InitButton(() => TypeNode(option.NextNode), GetLocalizedString(option.OptionKey));
+                _view.InitButton(() =>
+                {
+                    _currentCoroutine = TypeNode(option.NextNode);
+                    StartCoroutine(_currentCoroutine);
+                }, 
+                GetLocalizedString(option.OptionKey));
             }
 
             return;
@@ -93,7 +125,12 @@ public class DialogueSystem : MonoBehaviour, IService
 
         foreach (var option in _currentNode.Options)
         {
-            _view.InitButton(() => TypeNode(option.NextNode), GetLocalizedString(option.OptionKey));
+            _view.InitButton(() =>
+            {
+                _currentCoroutine = TypeNode(option.NextNode);
+                StartCoroutine(_currentCoroutine);
+            },
+            GetLocalizedString(option.OptionKey));
         }
 
         foreach (var events in _currentNode.OnEndEvent)
@@ -125,7 +162,7 @@ public class DialogueSystem : MonoBehaviour, IService
 
     private string GetLocalizedNameString(LocalizedString localizedString)
     {
-        if (localizedString.IsEmpty) return string.Empty;
+        if (localizedString == null || localizedString.IsEmpty) return string.Empty;
 
         var result = localizedString.GetLocalizedString();
         return string.IsNullOrEmpty(result) ? "[Not localized]" : result;
@@ -133,7 +170,7 @@ public class DialogueSystem : MonoBehaviour, IService
 
     private string GetLocalizedString(LocalizedString localizedString)
     {
-        if (localizedString.IsEmpty) return "[Missing]";
+        if (localizedString == null || localizedString.IsEmpty) return "[Missing]";
 
         var result = localizedString.GetLocalizedString();
         return string.IsNullOrEmpty(result) ? "[Not localized]" : result;

@@ -12,6 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df0f00f5fe6eca14eb99fb65fddc2120, type: 3}
   m_Name: DialogueNode_NewGame_1 4
   m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
+  Id: 
+  TargetId: all
+  EntityType: plant
+  OptionKey:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   NameKey:
     m_TableReference:
       m_TableCollectionName: GUID:78a0518d6721d4945890f57e88c3272f
@@ -32,6 +44,8 @@ MonoBehaviour:
     m_LocalVariables: []
   NextNode: {fileID: 11400000, guid: 02335c3fe10e10844b41a18e3dabbec8, type: 2}
   Options: []
+  OnStartEvent: []
+  OnEndEvent: []
   references:
     version: 2
     RefIds: []

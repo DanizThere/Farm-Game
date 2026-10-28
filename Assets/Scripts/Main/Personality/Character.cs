@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterModel))]
 public class Character : MonoBehaviour
 {
+    public string EntityType;
     [SerializeField] private string NameId;
     [SerializeField] private Personality _personality;
     //probaply here should be standard reaction, mood must have unique reaction;

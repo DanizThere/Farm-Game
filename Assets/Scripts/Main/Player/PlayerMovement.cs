@@ -73,7 +73,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
             _velocity.y = -2f;
         }
 
-        _velocity.y += _gravityForce * -1 * _timeScale;
+        _velocity.y += _gravityForce * -1 * _timeScale * Time.fixedDeltaTime;
 
         _characterController.Move(_velocity);
     }
@@ -129,7 +129,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     {
         if (_characterController.isGrounded)
         {
-            _velocity.y = Mathf.Sqrt(_jumpForce * -2f * -_gravityForce * _timeScale * Time.deltaTime);
+            _velocity.y = Mathf.Sqrt(_jumpForce * -1f * -_gravityForce * _timeScale);
         }
     }
 

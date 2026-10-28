@@ -1,8 +1,22 @@
+using Assets.Scripts.Extenisions;
+using System;
 using UnityEngine;
 
-public abstract class ItemObject : DefaultSelectable
+public abstract class ItemObject : DefaultSelectable, ISaveableObject
 {
-    public Item Item => _item; 
+    public Vector3Serialize Position => transform.position.ToSerializable();
+
+    public QuaternionSerialize Rotation => transform.rotation.ToSerialize();
+
+    public string TypeTag => _typeTag;
+    public string InstanceId => _instanceId;
+
+    public string _instanceId = Guid.NewGuid().ToString();
+    [SerializeField] private string _typeTag;
+
+    public Item Item => _item;
+
+
     [SerializeField] private float _throwForce = 5f;
     [SerializeField] protected Rigidbody _rb;
     [SerializeField] protected Collider[] _colliders;

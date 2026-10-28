@@ -41,7 +41,7 @@ public class Showel : ToolItemObject
         {
             if(hit.transform.TryGetComponent<Dirt>(out var dirt))
             {
-                dirt.Dig(_inventory);
+                dirt.Dig();
             }
         }
 

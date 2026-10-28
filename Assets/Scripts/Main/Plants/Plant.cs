@@ -4,15 +4,18 @@ using UnityEngine;
 
 [RequireComponent(typeof(PlantHealth))]
 [RequireComponent(typeof(PlantEmotions))]
-public class Plant : MonoBehaviour, ISlappable
+public class Plant : PhysicObject, ISlappable
 {
     public Item InitItem;
 
-    public System.Action OnDestroy = delegate { };
+    public System.Action OnDig = delegate { };
+    public System.Action OnDeath = delegate { };
+    public PlantsLifetime Life => _currentLife;
 
     [SerializeField] private Animator _animator;
-
     [SerializeField] private List<PlantsLifetime> _lifeProgress = new();
+    [SerializeField] private List<PlantRaiseMultiplier> _dirtBonus = new();
+    [SerializeField] private Seed _prefab;
 
     private PlantHealth _plantHealth;
     private PlantEmotions _plantEmotions;
@@ -25,8 +28,44 @@ public class Plant : MonoBehaviour, ISlappable
         _plantHealth = GetComponent<PlantHealth>();
         _plantEmotions = GetComponent<PlantEmotions>();
 
+        OnDeath += () =>
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                var position = transform.position + Random.insideUnitSphere;
+                if (Physics.CheckSphere(position, 1f))
+                {
+                    var instance = Instantiate(_prefab);
+                    instance.transform.position = position;
+                }
+            }
+        };
+
+        OnDig += () =>
+        {
+            _canMove = true;
+            _rb.useGravity = true;
+            _rb.interpolation = RigidbodyInterpolation.Extrapolate;
+            _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            _rb.isKinematic = false;
+        };
+
         if (timeManager != null)
             timeManager.OnDayChange += Grow;
+    }
+
+    public override void Grab(float force, CameraHandler handler, out float speedScale, HandController hand)
+    {
+        speedScale = 0f;
+        if (!_canMove) return;
+        base.Grab(force, handler, out speedScale, hand);
+    }
+
+    public override void UnGrab(HandController hand, out float speedScale)
+    {
+        speedScale = 1f;
+        if (!_canMove) return;
+        base.UnGrab(hand, out speedScale);
     }
 
     public float GetProgress()
@@ -43,7 +82,7 @@ public class Plant : MonoBehaviour, ISlappable
     {
         foreach(var effort in itemObject.Efforts)
         {
-            _plantHealth.UpdateCharacteristic(effort.Name.Name, effort.GetValue());
+            _plantHealth.UpdateCharacteristic(effort.Name, effort.GetValue());
         }
     }
 
@@ -51,17 +90,21 @@ public class Plant : MonoBehaviour, ISlappable
     {
         _plantHealth = GetComponent<PlantHealth>();
         _plantEmotions = GetComponent<PlantEmotions>();
-        _plantHealth.Initialize();
+
+        var dirtBonus = _dirtBonus.FirstOrDefault(x => x.PlantType == plantType).Bonus;
+
+        _plantHealth.Initialize(dirtBonus);
 
         for (int i = 0; i < _lifeProgress.Count; i++)
         {
-            if(i == _lifeProgress.Count - 1)
+            int currentIndex = i;
+            _lifeProgress[currentIndex].OnGrown += _plantEmotions.GrowEmote;
+            if (i == _lifeProgress.Count - 1)
             {
-                _lifeProgress[i].OnGrown += () => OnDestroy.Invoke();
+                _lifeProgress[currentIndex].OnGrown += () => OnDeath?.Invoke();
                 break;
             }
-
-            _lifeProgress[i].OnGrown += () => ChangeLifePeriod(_lifeProgress[i + 1]);
+            _lifeProgress[currentIndex].OnGrown += () => ChangeLifePeriod(_lifeProgress[currentIndex + 1]);
         }
 
         ChangeLifePeriod(_currentLife ?? _lifeProgress[0]);
@@ -70,7 +113,6 @@ public class Plant : MonoBehaviour, ISlappable
     private void ChangeLifePeriod(PlantsLifetime lifetime)
     {
         _currentLife = lifetime;
-        //_animator.runtimeAnimatorController = _currentLife.AnimatorOverrideController;
         _currentLife.Setup(_plantHealth);
     }
 
@@ -84,5 +126,5 @@ public class Plant : MonoBehaviour, ISlappable
 public class PlantRaiseMultiplier
 {
     public PlantType PlantType;
-    public float RaiseMultiplier = 1f;
+    public float Bonus = 100f;
 }

@@ -7,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Inventory))]
 public class Chest : SLMonoBehaviour, ISlappable
 {
+    public string Id => _id;
     [SerializeField] private string _id = Guid.NewGuid().ToString();
     private Inventory _chestInventory;
     private ChestService _chestService;
@@ -20,18 +21,6 @@ public class Chest : SLMonoBehaviour, ISlappable
         _chestInventory = GetComponent<Inventory>();
         _chestService = ServiceLocator.Instance.GetService<ChestService>();
         _viewController = ServiceLocator.Instance.GetService<ViewController>();
-        var chest = _chestService?.GetChest(_id);
-        var db = ServiceLocator.Instance.GetService<GameDbContext>();
-
-        if(chest != null && db != null)
-        {
-            foreach(var item in chest.Items)
-            {
-                var itemDb = db.Items.Get(x => x.Id == item.Id).FirstOrDefault();
-                if (itemDb == null) continue;
-                _chestInventory.AddItem(itemDb, item.Position.ToVector());
-            }
-        }
     }
 
     public InventorySlot GetSlot(int index)
@@ -43,7 +32,7 @@ public class Chest : SLMonoBehaviour, ISlappable
     {
         if(_chestInventory.AddItem(item, position))
         {
-            _chestService.Put(GetSlots(), _id);
+            _chestService.Put(GetSlots(), _id, transform.position, transform.rotation);
 
             return true;
         }
@@ -84,10 +73,15 @@ public class Chest : SLMonoBehaviour, ISlappable
 
     private void Close()
     {
-        _chestService.Put(GetSlots(), _id);
+        _chestService.Put(GetSlots(), _id, transform.position, transform.rotation);
 
         Destroy(_inventoryUI?.gameObject);
 
         ServiceLocator.Instance.GetService<GameStateMachine>().SetState<OuterWorldGameState>();
+    }
+
+    public void LoadItems(ChestSerialize info)
+    {
+        throw new NotImplementedException();
     }
 }

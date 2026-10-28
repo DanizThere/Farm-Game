@@ -47,12 +47,12 @@ public class HoeEffort : Effort
             {
                 var hoe = ServiceLocator.Instance
                 .GetService<GameDbContext>().KeyItemObjectValue
-                .Get(x => x.Type is Hoe)
+                .Get(x => x is Hoe)
                 .FirstOrDefault();
 
                 if (hoe != null) 
                 {
-                    var itemObject = Instantiate(hoe.Handler.GetItemObject());
+                    var itemObject = Instantiate(hoe);
                     itemObject.transform.position = transform.position + Vector3.up;
                     itemObject.OnThrow();
                 }

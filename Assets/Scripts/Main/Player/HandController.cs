@@ -82,9 +82,8 @@ public class HandController : MonoBehaviour
     {
         if (item == null) return;
 
-        var go = Instantiate(item);
-        go.gameObject.SetActive(true);
-        _currentItemObject = go;
+        _currentItemObject = item;
+        _currentItemObject.gameObject.SetActive(true);
         _currentItemObject.OnPickup(this);
         //_currentItemObject.GetComponent<Collider>().enabled = false;
         _currentItemObject.transform.SetParent(transform);
@@ -124,7 +123,7 @@ public class HandController : MonoBehaviour
         _animator.SetBool("IsHold", _isHold && !IsTotalBusy);
 
         _canInteract = Physics.Raycast(_handler.Position, _handler.GetDirection(), out var hit, _handDistance)
-            && hit.transform.TryGetComponent<ISelectable>(out var sel) && sel.CanSelect();
+            && ((hit.transform.TryGetComponent<ISelectable>(out var sel) && sel.CanSelect()) || hit.transform.TryGetComponent<ISlappable>(out _));
     }
 
     private void SetupOuter(InputHandler inputHandler)
@@ -171,11 +170,9 @@ public class HandController : MonoBehaviour
 
         if (raycast)
         {
-            if(TryGetItemObject(hit)) return;
+            if (TryGetItemObject(hit)) return;
             if(TryGetEffortObject(hit)) return;
             if(TryGetPhysicObject(hit)) return;
-
-            TrySlap(hit);
         }
 
         _isHold = true;
@@ -229,11 +226,10 @@ public class HandController : MonoBehaviour
 
     private bool TryGetItemObject(RaycastHit hit)
     {
-        if (hit.transform.TryGetComponent<ItemObjectHandler>(out var itemObjectHandler))
+        if (hit.transform.TryGetComponent<ItemObject>(out var itemObject))
         {
-            PickupItem(itemObjectHandler.GetItemObject());
+            PickupItem(itemObject);
             _isHold = false;
-            Destroy(itemObjectHandler.gameObject);
             return true;
         }
 
@@ -266,6 +262,11 @@ public class HandController : MonoBehaviour
             _currentObject.Grab(_handForce, _handler, out var speed, this);
             _speedScale.Value = speed;
             _isHold = false;
+        }
+        else
+        {
+            TrySlap(hit);
+            _inUpdateFollower.enabled = true;
         }
 
         return isGrabbing;

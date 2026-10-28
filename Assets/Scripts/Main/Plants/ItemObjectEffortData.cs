@@ -3,7 +3,7 @@
 [CreateAssetMenu(fileName = "ItemObjectEffort", menuName = "Plant/Effort")]
 public class ItemObjectEffortData : ScriptableObject
 {
-    public PlantHealthCharacteristicNameData Name;
+    public string Name;
     [Range(-2f, 0f)]
     public float MinValue = 0f;
     [Range(0f, 2f)]

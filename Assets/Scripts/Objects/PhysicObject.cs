@@ -3,9 +3,14 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PhysicObject : MonoBehaviour, ISelectable
+public class PhysicObject : MonoBehaviour, ISelectable, ICartLoadable
 {
     public float CurrentWeight => _currentWeight;
+
+    public Rigidbody Body => _rb;
+
+    public Transform Root => transform;
+    public bool CanMove => _canMove;
 
     [Range(0.1f, 1f)]
     [SerializeField] protected float _defaultWeight = .5f;
@@ -22,6 +27,7 @@ public class PhysicObject : MonoBehaviour, ISelectable
     protected bool _isGrabbed = false;
     protected List<HandController> _hands = new();
     private float _emitProgress = 1f;
+    protected bool _isLoaded = false;
 
     private void Awake()
     {
@@ -35,6 +41,14 @@ public class PhysicObject : MonoBehaviour, ISelectable
         //}
         _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         _rb.interpolation = RigidbodyInterpolation.Interpolate;
+
+        if (!_canMove)
+        {
+            _rb.useGravity = false;
+            _rb.interpolation = RigidbodyInterpolation.Extrapolate;
+            _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            _rb.isKinematic = true;
+        }
     }
 
     public virtual void Move(float angleHandClamp = 30)
@@ -146,5 +160,28 @@ public class PhysicObject : MonoBehaviour, ISelectable
         var hands = FindObjectsByType<HandController>();
 
         return hands.Any(x => !x.IsEffortOrObjectBusy);
+    }
+
+    public virtual void OnLoaded(CartObject cart)
+    {
+        if (_isLoaded) return;
+        _isLoaded = true;
+
+        if (_rb != null)
+        {
+            _rb.useGravity = false;
+            _rb.interpolation = RigidbodyInterpolation.Interpolate;
+            _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        }
+        _canMove = false;
+    }
+
+    public virtual void OnUnloaded(CartObject cart)
+    {
+        if (!_isLoaded) return;
+        _isLoaded = false;
+
+        if (_rb != null) _rb.useGravity = true;
+        _canMove = true;
     }
 }

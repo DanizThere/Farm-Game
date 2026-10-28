@@ -8,61 +8,37 @@ public class Door : MonoBehaviour
     [SerializeField] private float _openAngle = 90f;
     [SerializeField] private Transform _doorTransform;
     private bool _isOpen = false;
-    private IEnumerator _coroutine;
+    private Coroutine _coroutine;
     private float _currentAngle;
 
     public void Open(float dot)
     {
-        if(_coroutine != null) StopCoroutine(_coroutine);
-        _coroutine = OpenAsync(dot);
+        var targetAngle = dot < 0f ? -_openAngle : _openAngle;
+        if (_isOpen)
+            targetAngle = 0f;
 
-        StartCoroutine(_coroutine);
+        if (_coroutine != null) StopCoroutine(_coroutine);
+
+        _coroutine = StartCoroutine(RotateTo(targetAngle));
         _isOpen = !_isOpen;
     }
 
-    private IEnumerator OpenAsync(float value)
+    private IEnumerator RotateTo(float targetAngle)
     {
-        var angle = 0f;
-
-        if (_isOpen)
+        while (Mathf.Abs(_currentAngle - targetAngle) > 0.01f)
         {
-            angle = _currentAngle;
+            _currentAngle = Mathf.Lerp(
+                _currentAngle,
+                targetAngle,
+                1f - Mathf.Exp(-_openSmooth * Time.deltaTime)
+            );
 
-            while (!Mathf.Approximately(angle, 0f))
-            {
-                yield return null;
-
-                angle = Mathf.Lerp(angle, 0, Time.deltaTime * _openSmooth);
-                var rotation = Quaternion.Euler(0, angle, 0);
-                _doorTransform.rotation = rotation;
-            }
-            yield break;
+            _doorTransform.localRotation = Quaternion.Euler(0f, _currentAngle, 0f);
+            yield return null;
         }
 
-
-        if (value < 0)
-        {
-            while(angle >= -_openAngle)
-            {
-                yield return null;
-
-                angle = Mathf.Lerp(angle, -_openAngle, Time.deltaTime * _openSmooth);
-                _currentAngle = angle;
-                var rotation = Quaternion.Euler(0, angle, 0);
-                _doorTransform.rotation = rotation;
-            }
-        }
-        else if(value > 0)
-        {
-            while (angle <= _openAngle)
-            {
-                yield return null;
-
-                angle = Mathf.Lerp(angle, _openAngle, Time.deltaTime * _openSmooth);
-                _currentAngle = angle;
-                var rotation = Quaternion.Euler(0, angle, 0);
-                _doorTransform.rotation = rotation;
-            }
-        }
+        _currentAngle = targetAngle;
+        _doorTransform.localRotation = Quaternion.Euler(0f, _currentAngle, 0f);
+        _coroutine = null;
     }
 }

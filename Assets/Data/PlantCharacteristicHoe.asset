@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1955fe23deed19844b30d4415870e818, type: 3}
   m_Name: PlantCharacteristicHoe
   m_EditorClassIdentifier: Assembly-CSharp::PlantHealthCharacteristicData
-  Name: {fileID: 11400000, guid: e96696a35bcdc324a82c68be0610d6f7, type: 2}
+  Name: Hoe
   MaxValue: 25
+  DefaultValue: 2
+  MinValue: 0

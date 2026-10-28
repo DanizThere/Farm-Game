@@ -75,7 +75,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ff6237d07186df4d90bc242308eef6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlantsLifetime
-  AnimatorOverrideController: {fileID: 0}
   _attributeSettingsData: {fileID: 11400000, guid: c19b5ca81f9a25449a62d63d53a18201, type: 2}
 --- !u!1 &3533993135203827077
 GameObject:
@@ -125,6 +124,7 @@ GameObject:
   - component: {fileID: 4620882749038395047}
   - component: {fileID: 4191133641898071079}
   - component: {fileID: 6666665645605616616}
+  - component: {fileID: 8471554427090698083}
   m_Layer: 0
   m_Name: Plant_Potato
   m_TagString: Untagged
@@ -145,6 +145,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7761080182278600400}
   - {fileID: 3554654247779345941}
   - {fileID: 8229838319079207999}
   - {fileID: 7662996182271358153}
@@ -163,9 +164,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd5a4212c51e45740b19057715f18f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlantHealth
-  _healthCharacteristics:
-  - {fileID: 11400000, guid: 3159e475daa0af24e90968b2ccd3ad5b, type: 2}
-  - {fileID: 11400000, guid: 3ced08ebe46a89c439ee897f0165e5e6, type: 2}
+  _healthCharacteristicsName:
+  - Waterbox
+  - Hoe
 --- !u!114 &5301891269674674004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,6 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01bd9c04ce3c0074ba68709b17613705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Character
+  EntityType: plant
   NameId: Potato
   _personality:
     Sensevity: 0.5
@@ -241,12 +243,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4db0fa1545d72ca47a3a7a2698666411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Plant
+  _defaultWeight: 1
+  _timeForce: 10
+  _canMove: 0
+  _collideFX: {fileID: 4167839650961677924}
+  _massMultiplier: 10
+  _maxGrabSpeed: 8
   InitItem: {fileID: 11400000, guid: 1778aa5b430f5274a87211c9bf5c62d0, type: 2}
   _animator: {fileID: 8865202813330012076}
   _lifeProgress:
   - {fileID: 1522454753718749889}
   - {fileID: 732407360279782191}
   - {fileID: 1129520272883338050}
+  _dirtBonus:
+  - PlantType: 0
+    Bonus: 1
+  - PlantType: 1
+    Bonus: 1
+  _prefab: {fileID: 7635221121510238747, guid: 8ba27784ca9a84745b33ee62c21d99a1, type: 3}
 --- !u!65 &4191133641898071079
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -267,7 +281,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 2.7, z: 1}
-  m_Center: {x: 0, y: 1.45, z: 0}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!114 &6666665645605616616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -282,6 +296,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueHandler
   _lookTarget: {fileID: 7662996182271358153}
   _cameraRotateOffset: {x: 0, y: 0, z: -0.5}
+--- !u!54 &8471554427090698083
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3607562781421499306}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &4503868577226877226
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,7 +399,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ff6237d07186df4d90bc242308eef6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlantsLifetime
-  AnimatorOverrideController: {fileID: 0}
   _attributeSettingsData: {fileID: 11400000, guid: 388d71b2850416b4f812366606db7d38, type: 2}
 --- !u!1 &8563106991047575256
 GameObject:
@@ -438,7 +478,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ff6237d07186df4d90bc242308eef6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlantsLifetime
-  AnimatorOverrideController: {fileID: 0}
   _attributeSettingsData: {fileID: 11400000, guid: 7cce8bec667aca643b85a9c8201fb41e, type: 2}
 --- !u!1001 &1503363074162725323
 PrefabInstance:
@@ -507,7 +546,7 @@ PrefabInstance:
     - target: {fileID: 5359404622355111528, guid: 8faa232715e01e948b4f647b7c401099, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+      objectReference: {fileID: 2100000, guid: c5ee300a7dd8580439e0cebb5a6d3d10, type: 2}
     - target: {fileID: 5359404622355111528, guid: 8faa232715e01e948b4f647b7c401099, type: 3}
       propertyPath: 'm_BlendShapeWeights.Array.data[0]'
       value: 100
@@ -539,4 +578,71 @@ SkinnedMeshRenderer:
 Animator:
   m_CorrespondingSourceObject: {fileID: 8059897682002224743, guid: 8faa232715e01e948b4f647b7c401099, type: 3}
   m_PrefabInstance: {fileID: 1503363074162725323}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3442503352366414718
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5067275594078712793}
+    m_Modifications:
+    - target: {fileID: 3014957053718647513, guid: 41050119d8c97c347aab53d53cef068f, type: 3}
+      propertyPath: m_Name
+      value: CollideFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 4932250562045283758, guid: 41050119d8c97c347aab53d53cef068f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4932250562045283758, guid: 41050119d8c97c347aab53d53cef068f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4932250562045283758, guid: 41050119d8c97c347aab53d53cef068f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4932250562045283758, guid: 41050119d8c97c347aab53d53cef068f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4932250562045283758, guid: 41050119d8c97c347aab53d53cef068f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4932250562045283758, guid: 41050119d8c97c347aab53d53cef068f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4932250562045283758, guid: 41050119d8c97c347aab53d53cef068f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4932250562045283758, guid: 41050119d8c97c347aab53d53cef068f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4932250562045283758, guid: 41050119d8c97c347aab53d53cef068f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4932250562045283758, guid: 41050119d8c97c347aab53d53cef068f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 41050119d8c97c347aab53d53cef068f, type: 3}
+--- !u!198 &4167839650961677924 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1590085798194046234, guid: 41050119d8c97c347aab53d53cef068f, type: 3}
+  m_PrefabInstance: {fileID: 3442503352366414718}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7761080182278600400 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4932250562045283758, guid: 41050119d8c97c347aab53d53cef068f, type: 3}
+  m_PrefabInstance: {fileID: 3442503352366414718}
   m_PrefabAsset: {fileID: 0}

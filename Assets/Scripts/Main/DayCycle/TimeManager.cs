@@ -41,8 +41,7 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
     [SerializeField] private float _maxSunIntensity = 1f;
     [SerializeField] private float _maxMoonIntensity = .5f;
 
-    [SerializeField] private Color _dayAmbientLight;
-    [SerializeField] private Color _nightAmbientLight;
+    [SerializeField] private Gradient _color;
     [SerializeField] private Volume _volume;
 
     private ColorAdjustments _colorAdjustments;
@@ -108,12 +107,13 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
     private void UpdateLightSettings()
     {
         var dotProduct = Vector3.Dot(_sun.transform.forward, Vector3.down);
+
         _sun.intensity = Mathf.Lerp(0, _maxSunIntensity, _lightIntensityCurve.Evaluate(dotProduct));
         _moon.intensity = Mathf.Lerp(_maxMoonIntensity, 0, _lightIntensityCurve.Evaluate(dotProduct));
 
         if (_colorAdjustments == null) return;
 
-        _colorAdjustments.colorFilter.value = Color.Lerp(_nightAmbientLight, _dayAmbientLight, _lightIntensityCurve.Evaluate(dotProduct));
+        _colorAdjustments.colorFilter.value = _color.Evaluate(_lightIntensityCurve.Evaluate(dotProduct));
     }
 
     private void UpdateTimeOfDay()

@@ -9,6 +9,7 @@ public class InventorySlot
     public float Durability;
     public bool IsEmpty => Item == null;
     public Vector2 Position;
+    public string InstanceId;
 
     public InventorySlot()
     {

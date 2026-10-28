@@ -7,6 +7,9 @@ using UnityEngine.Localization;
 public class DialogueNode : ScriptableObject
 {
     public string Id;
+    public string TargetId = "all";
+    public string EntityType;
+    public LocalizedString OptionKey;
     public LocalizedString NameKey;
     public LocalizedString TextKey;
     public DialogueNode NextNode;

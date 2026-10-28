@@ -11649,6 +11649,8 @@ MonoBehaviour:
   _timeForce: 10
   _canMove: 1
   _collideFX: {fileID: 1091964278}
+  _massMultiplier: 10
+  _maxGrabSpeed: 8
   _breakAngle: 45
   _breakingFX: {fileID: 1091964278}
 --- !u!54 &739352911
@@ -17516,6 +17518,8 @@ MonoBehaviour:
   _timeForce: 10
   _canMove: 1
   _collideFX: {fileID: 8235462777676904425}
+  _massMultiplier: 10
+  _maxGrabSpeed: 8
   _breakAngle: 45
   _breakingFX: {fileID: 8235462777676904425}
 --- !u!54 &1055856876
@@ -21105,8 +21109,36 @@ MonoBehaviour:
     m_RotationOrder: 4
   _maxSunIntensity: 1
   _maxMoonIntensity: 0.5
-  _dayAmbientLight: {r: 1, g: 0.9681984, b: 0.8962264, a: 1}
-  _nightAmbientLight: {r: 0.24047697, g: 0.28199396, b: 0.7283019, a: 1}
+  _color:
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
   _volume: {fileID: 832575518}
 --- !u!4 &1247717362
 Transform:
@@ -22059,6 +22091,8 @@ MonoBehaviour:
   _timeForce: 10
   _canMove: 1
   _collideFX: {fileID: 417384762}
+  _massMultiplier: 10
+  _maxGrabSpeed: 8
 --- !u!54 &1348130373
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -29523,6 +29557,7 @@ MonoBehaviour:
         - {fileID: 11400000, guid: c1f9b17d31a0ee64cbd668f669e7ef4b, type: 2}
         - {fileID: 11400000, guid: 1778aa5b430f5274a87211c9bf5c62d0, type: 2}
         - {fileID: 11400000, guid: 8f77fb391ad349f46b60247c13fba029, type: 2}
+        _characteristics: []
     - rid: 5509596947928580177
       type: {class: ViewControllerBootstraper, ns: , asm: Assembly-CSharp}
       data:
@@ -34092,6 +34127,8 @@ MonoBehaviour:
   _timeForce: 10
   _canMove: 1
   _collideFX: {fileID: 1972721757}
+  _massMultiplier: 10
+  _maxGrabSpeed: 8
 --- !u!54 &2033019727
 Rigidbody:
   m_ObjectHideFlags: 0

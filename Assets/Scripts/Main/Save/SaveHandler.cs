@@ -8,13 +8,16 @@ public class SaveHandler : MonoBehaviour
     private GameDbContext _dbContext;
     private JsonSaveService _saveService;
     [SerializeField] private InitData _initData;
+    [SerializeField] private ItemObjectSave _items;
     [SerializeField] private bool _saveOnQuit = false;
 
     private PlayerInitializer _player;
 
     private void OnApplicationQuit()
     {
-        if(_saveOnQuit)
+        _items.Save();
+
+        if (_saveOnQuit)
             SaveData();
     }
 
@@ -27,7 +30,6 @@ public class SaveHandler : MonoBehaviour
         _chestService = ServiceLocator.Instance.GetService<ChestService>();
         _timeService = ServiceLocator.Instance.GetService<TimeManager>();
         _dbContext = ServiceLocator.Instance.GetService<GameDbContext>();
-
         _saveService.OnLoaded += LoadData;
 
         if (_saveService.HasSave) _saveService.Load();

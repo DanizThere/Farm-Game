@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1955fe23deed19844b30d4415870e818, type: 3}
   m_Name: PlantCharacteristicWaterbox
   m_EditorClassIdentifier: Assembly-CSharp::PlantHealthCharacteristicData
-  Name: {fileID: 11400000, guid: 48eafa954df7e9140b4d0c2e7051ecbd, type: 2}
+  Name: Waterbox
   MaxValue: 100
+  DefaultValue: 2
+  MinValue: 0

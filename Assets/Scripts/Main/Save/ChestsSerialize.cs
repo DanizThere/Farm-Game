@@ -11,5 +11,7 @@ public class ChestsSerialize
 public class ChestSerialize
 {
     public string Id;
+    public Vector3Serialize Position;
+    public QuaternionSerialize Rotation;
     public List<InventoryItemSerialize> Items = new();
 }

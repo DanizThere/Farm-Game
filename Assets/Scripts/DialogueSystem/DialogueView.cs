@@ -28,8 +28,11 @@ public class DialogueView : View
     public void InitButton(Action onClick, string optionName)
     {
         var instance = Instantiate(_prefab, _buttonPanel);
-        instance.GetComponentInChildren<TextMeshPro>().text = optionName;
-        instance.onClick.AddListener(() => onClick.Invoke());
+        instance.GetComponentInChildren<TextMeshProUGUI>().text = optionName;
+        instance.onClick.AddListener(onClick.Invoke);
+        instance.transform.SetAsLastSibling();
+
+        _buttons.Add(instance);
     }
 
     public void SetMaxVisible(int i)
