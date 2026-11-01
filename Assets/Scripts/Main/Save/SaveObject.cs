@@ -9,4 +9,5 @@ public class SaveObject
     public QuaternionSerialize Rotation;
     public string InstanceId;
     public string TypeTag;
+    public string ExtraData;
 }

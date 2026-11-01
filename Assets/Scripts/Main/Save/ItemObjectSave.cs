@@ -7,19 +7,33 @@ using UnityEngine;
 public class ItemObjectSave : MonoBehaviour
 {
     private List<SaveObject> _objects = new();
-    public void Save()
+    public void Save(ref List<SaveObject> list)
     {
         var objects = FindObjectsByType<MonoBehaviour>().OfType<ISaveableObject>().ToList();
-        print(objects.Count);
         _objects = objects.Select(x => new SaveObject
         {
             InstanceId = x.InstanceId,
             Position = x.Position,
             Rotation = x.Rotation,
-            TypeTag = x.TypeTag
+            TypeTag = x.TypeTag,
+            ExtraData = x.ExtraData
         }).ToList();
+        list = _objects;
+    }
 
-        var data = JsonConvert.SerializeObject(_objects);
-        Debug.Log(data);
+    public void Load(List<SaveObject> objects)
+    {
+        var go = FindObjectsByType<MonoBehaviour>().OfType<ISaveableObject>().ToList();
+        foreach(var obj in objects)
+        {
+            var existObj = go.FirstOrDefault(x => x.InstanceId == obj.InstanceId);
+            if(existObj != null)
+            {
+                existObj.Load(obj);
+                continue;
+            }
+
+            print($"{obj.InstanceId} doesn't exist, skipped...");
+        }
     }
 }

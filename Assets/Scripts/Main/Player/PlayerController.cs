@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public Transform CameraTransform => _cameraPosition;
 
     public Transform BodyTransform => _playerMovement.Body;
+    public Transform ModelTransform => _playerMovement.Model;
 
     public System.Action<float> OnGrab = delegate { };
 

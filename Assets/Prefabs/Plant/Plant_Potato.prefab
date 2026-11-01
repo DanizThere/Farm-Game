@@ -31,51 +31,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5067275594078712793}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3025672713202473288
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8403080316638585831}
-  - component: {fileID: 732407360279782191}
-  m_Layer: 0
-  m_Name: teen
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8403080316638585831
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3025672713202473288}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7929713372794324902}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &732407360279782191
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3025672713202473288}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ff6237d07186df4d90bc242308eef6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlantsLifetime
-  _attributeSettingsData: {fileID: 11400000, guid: c19b5ca81f9a25449a62d63d53a18201, type: 2}
 --- !u!1 &3533993135203827077
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,7 +104,6 @@ Transform:
   - {fileID: 3554654247779345941}
   - {fileID: 8229838319079207999}
   - {fileID: 7662996182271358153}
-  - {fileID: 7929713372794324902}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1382390835910675912
@@ -164,9 +118,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd5a4212c51e45740b19057715f18f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlantHealth
-  _healthCharacteristicsName:
-  - Waterbox
-  - Hoe
+  PlantAttributes: []
+  Health: 100
+  MaxHealth: 100
+  Immunity: 100
+  MaxImmunity: 100
+  _defaultAttributes:
+  - {fileID: 11400000, guid: a8cd8ca78432aa443b41a9a9bcdf3330, type: 2}
+  - {fileID: 11400000, guid: 81a720839ec9979489c407ebe73d7d40, type: 2}
+  - {fileID: 11400000, guid: b04c16901ce9b6a4c9d07d52234a7698, type: 2}
+  - {fileID: 11400000, guid: dad95b01f9d2c954dbe8d49fae903cc1, type: 2}
+  _naturalHealthRegen: 0.2
+  _naturalImmunityRegen: 0.5
 --- !u!114 &5301891269674674004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,18 +212,48 @@ MonoBehaviour:
   _collideFX: {fileID: 4167839650961677924}
   _massMultiplier: 10
   _maxGrabSpeed: 8
-  InitItem: {fileID: 11400000, guid: 1778aa5b430f5274a87211c9bf5c62d0, type: 2}
-  _animator: {fileID: 8865202813330012076}
-  _lifeProgress:
-  - {fileID: 1522454753718749889}
-  - {fileID: 732407360279782191}
-  - {fileID: 1129520272883338050}
+  PlantId: Potato
+  _stageChangeEvents: []
+  _stageConfigs:
+  - {fileID: 11400000, guid: 9d135138fa3d6d947a53c29a9115902f, type: 2}
+  - {fileID: 11400000, guid: 9acfc3ef81d5a4544b21a03afd1572ef, type: 2}
+  - {fileID: 11400000, guid: 5e18a8321f70f2f4788927809fc440f6, type: 2}
+  - {fileID: 11400000, guid: 9bb2f69746395a14aa818792c2b3d653, type: 2}
+  - {fileID: 11400000, guid: 7cce8bec667aca643b85a9c8201fb41e, type: 2}
+  - {fileID: 11400000, guid: 388d71b2850416b4f812366606db7d38, type: 2}
+  - {fileID: 11400000, guid: c19b5ca81f9a25449a62d63d53a18201, type: 2}
+  - {fileID: 11400000, guid: 0266f31fc0c2f5e4086e9bb6bd12701e, type: 2}
+  - {fileID: 11400000, guid: 045c705ddc6c2a740ab2b307071ee3e3, type: 2}
   _dirtBonus:
   - PlantType: 0
-    Bonus: 1
+    Bonus: 0
   - PlantType: 1
     Bonus: 1
-  _prefab: {fileID: 7635221121510238747, guid: 8ba27784ca9a84745b33ee62c21d99a1, type: 3}
+  _prefab: {fileID: 3473891765951101900, guid: e12b2f8b6c07a4c49a9f3ae801f3f5f1, type: 3}
+  _seedsEvaluation:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 100
+      value: 10
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!65 &4191133641898071079
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -355,130 +348,6 @@ Transform:
   - {fileID: 3307799547134733782}
   m_Father: {fileID: 5067275594078712793}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7313819520172715305
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8179907401225399369}
-  - component: {fileID: 1522454753718749889}
-  m_Layer: 0
-  m_Name: baby
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8179907401225399369
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7313819520172715305}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7929713372794324902}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1522454753718749889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7313819520172715305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ff6237d07186df4d90bc242308eef6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlantsLifetime
-  _attributeSettingsData: {fileID: 11400000, guid: 388d71b2850416b4f812366606db7d38, type: 2}
---- !u!1 &8563106991047575256
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7929713372794324902}
-  m_Layer: 0
-  m_Name: Lifetime
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7929713372794324902
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8563106991047575256}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8179907401225399369}
-  - {fileID: 8403080316638585831}
-  - {fileID: 5626263764084322565}
-  m_Father: {fileID: 5067275594078712793}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8695068770094072930
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5626263764084322565}
-  - component: {fileID: 1129520272883338050}
-  m_Layer: 0
-  m_Name: adult
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5626263764084322565
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8695068770094072930}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7929713372794324902}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1129520272883338050
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8695068770094072930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ff6237d07186df4d90bc242308eef6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlantsLifetime
-  _attributeSettingsData: {fileID: 11400000, guid: 7cce8bec667aca643b85a9c8201fb41e, type: 2}
 --- !u!1001 &1503363074162725323
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -572,11 +441,6 @@ Transform:
 --- !u!137 &6826730102768308131 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 5359404622355111528, guid: 8faa232715e01e948b4f647b7c401099, type: 3}
-  m_PrefabInstance: {fileID: 1503363074162725323}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &8865202813330012076 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 8059897682002224743, guid: 8faa232715e01e948b4f647b7c401099, type: 3}
   m_PrefabInstance: {fileID: 1503363074162725323}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3442503352366414718

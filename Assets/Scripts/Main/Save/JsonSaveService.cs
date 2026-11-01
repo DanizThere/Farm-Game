@@ -2,6 +2,9 @@ using System;
 using System.IO;
 using UnityEngine;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts.Extenisions;
 
 public class JsonSaveService : ISaveService
 {
@@ -27,8 +30,18 @@ public class JsonSaveService : ISaveService
     {
         Data = new GameData
         {
-            Chests = data.Chests,
-            Inventory = data.Inventory,
+            Objects = data.Objects,
+            Inventory = new InventorySerializable 
+            { 
+                Slots = data.Inventory.Select(x => new InventoryItemSerialize
+                    {
+                        Durability = x.Durability,
+                        Id = x.Item.Id,
+                        InstanceId = x.Id,
+                        Position = x.Position.ToSerializable(),
+                        Weight = x.Item.Weight
+                    }).ToList() 
+            },
             Time = new TimeSerialize
             {
                 CurrentDate = data.Time.StartDate,
@@ -37,7 +50,7 @@ public class JsonSaveService : ISaveService
                 SunsetHour = data.Time.SunsetHour,
                 TimeMultiplier = data.Time.TimeMultiplier,
             },
-            Dialogues = data.Dialogues,
+            Dialogues = new DialogueSerialize { Ids = data.Dialogues.Select(x => x.Id).ToList() },
             Player = data.Player
         };
 
@@ -112,7 +125,9 @@ public class JsonSaveService : ISaveService
 
             data.Inventory ??= new InventorySerializable();
             data.Time ??= new TimeSerialize();
-            data.Chests ??= new ChestsSerialize();
+            data.Objects ??= new List<SaveObject>();
+            data.Player ??= new PlayerData();
+            data.Dialogues ??= new DialogueSerialize();
             return true;
         }
         catch (Exception e)

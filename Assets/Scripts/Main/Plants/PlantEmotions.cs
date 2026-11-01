@@ -32,7 +32,7 @@ public class PlantEmotions : MonoBehaviour
 
         var node = ServiceLocator.Instance.GetService<GameDbContext>().CurrentNodes
             .Get(x => x.EntityType == _character.EntityType &&
-                (x.TargetId == _plant.InitItem.Id || x.TargetId == "all"));
+                (x.TargetId == _plant.PlantId || x.TargetId == "all"));
         if(node != null)
         {
             _dialogueHandler.StartDialogue(node);

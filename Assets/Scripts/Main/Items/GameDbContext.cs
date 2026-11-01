@@ -11,7 +11,6 @@ public class GameDbContext : IService
     public ItemSet<ItemObject> KeyItemObjectValue = new();
     public ItemSet<Item> Items = new();
     public ItemSet<DialogueNode> DialogueNodes = new();
-    public ItemSet<PlantHealthCharacteristicData> PlantHealthCharacteristics = new();
 
     public ItemSet<DialogueNode> CurrentNodes = new();
     public void AddNodes(List<string> nodes)

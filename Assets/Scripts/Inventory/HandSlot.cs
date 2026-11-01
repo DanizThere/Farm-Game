@@ -23,11 +23,18 @@ public class HandSlot : SLMonoBehaviour
     {
         if (item == null)
         {
-            _inventory.Inventory.RemoveItemFromHand(_handType.ToString());
+            print("Item is null");
             return;
         }
         _currentItem = item;
         _inventory.Inventory.AddItemToHandSlot(_currentItem, _handType.ToString());   
+    }
+
+    public void ClearItem()
+    {
+        _currentItem = null;
+        _inventory.Inventory.RemoveItemFromHand(_handType.ToString());
+        _hand.DeleteItem();
     }
 
     public void SetItemObject(ItemObject itemObject)
@@ -38,14 +45,5 @@ public class HandSlot : SLMonoBehaviour
         }
 
         _hand.PickupItem(itemObject, fromWorld: false);
-    }
-
-    public void TryClearItem(string hand)
-    {
-        if(hand == _handType.ToString())
-        {
-            _currentItem = null;
-            _hand.DeleteItem();
-        }   
     }
 }

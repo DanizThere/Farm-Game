@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class InventorySlotUI : View, ISelectable, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
+    public Inventory InventorySource => _inventory;
     public int SlotIndex => _slotIndex;
     [SerializeField] private Image iconImage;
     [SerializeField] private CanvasGroup _canvasGroup;
@@ -30,7 +31,15 @@ public class InventorySlotUI : View, ISelectable, IBeginDragHandler, IEndDragHan
     public void UpdateSlot()
     {
         var slot = _inventory.GetSlot(_slotIndex);
-        _imageRect.anchoredPosition = slot.Position;
+
+        var screenPoint = slot.Position;
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                _imageRect.parent as RectTransform, screenPoint,
+                null, out var local))
+        {
+            _imageRect.anchoredPosition = local;
+        }
+
         if (slot.IsEmpty)
         {
             iconImage.sprite = null;
@@ -67,6 +76,13 @@ public class InventorySlotUI : View, ISelectable, IBeginDragHandler, IEndDragHan
     {
         _canvasGroup.alpha = .6f;
         _canvasGroup.blocksRaycasts = false;
+
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            _imageRect.parent as RectTransform, eventData.position,
+            eventData.pressEventCamera, out var localPointer))
+        {
+            _imageRect.anchoredPosition = localPointer;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -77,6 +93,18 @@ public class InventorySlotUI : View, ISelectable, IBeginDragHandler, IEndDragHan
 
     public void OnDrag(PointerEventData eventData)
     {
-        _imageRect.anchoredPosition += eventData.delta;
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            _imageRect.parent as RectTransform, eventData.position,
+            eventData.pressEventCamera, out var localPointer))
+        {
+            _imageRect.anchoredPosition = localPointer;
+        }
+    }
+
+    public Vector2 ScreenToLocal(RectTransform rect, Vector2 screenPoint, Camera cam)
+    {
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(
+            rect, screenPoint, cam, out var local);
+        return local;
     }
 }

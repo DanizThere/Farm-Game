@@ -9,9 +9,15 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
     public QuaternionSerialize Rotation => transform.rotation.ToSerialize();
 
     public string TypeTag => _typeTag;
-    public string InstanceId => _instanceId;
+    public string InstanceId
+    {
+        get { return _instanceId; }
+        set { _instanceId = value; }
+    }
+    public string ExtraData => GetExtraData();
 
-    public string _instanceId = Guid.NewGuid().ToString();
+    [SerializeField] private string _instanceId;
+
     [SerializeField] private string _typeTag;
 
     public Item Item => _item;
@@ -35,6 +41,11 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
         _gameDbContext = ServiceLocator.Instance.GetService<GameDbContext>() ??
             throw new System.NullReferenceException();
         _cameraHandler = ServiceLocator.Instance.GetService<CameraHandler>();
+    }
+
+    protected virtual string GetExtraData()
+    {
+        return string.Empty;
     }
 
     public virtual void ShowItem()
@@ -72,6 +83,12 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
         _rb.isKinematic = true;
     }
 
+    protected virtual void LoadData(SaveObject data)
+    {
+        transform.position = data.Position.ToVector();
+        transform.rotation = data.Rotation.Deserialize();
+    }
+
     protected virtual void SetTrigger()
     {
         foreach(var collider in _colliders)
@@ -86,5 +103,10 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
         {
             collider.isTrigger = false;
         }
+    }
+
+    public void Load(SaveObject data)
+    {
+        LoadData(data);
     }
 }

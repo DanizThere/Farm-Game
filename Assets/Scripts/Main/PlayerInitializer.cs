@@ -23,7 +23,7 @@ public class PlayerInitializer : MonoBehaviour
         leftController.GetComponent<HandSlot>().Initialize(leftController, inventory);
         rightController.GetComponent<HandSlot>().Initialize(rightController, inventory);
 
-        camera.Initialize(_player.CameraTransform, _player.BodyTransform);
+        camera.Initialize(_player.CameraTransform, _player.BodyTransform, _player.ModelTransform);
 
         _player.Load(data,
         new BobbingTransforms 

@@ -35,6 +35,10 @@ public class HandSlotUI : View, IBeginDragHandler, IEndDragHandler, IDragHandler
         _hand = hand;
     }
 
+    public void ClearItem()
+    {
+        _hand.ClearItem();
+    }
     public InventoryHandSlot GetSlot()
     {
         return _inventory.GetHandSlot(_hand.GetHand());
@@ -72,6 +76,19 @@ public class HandSlotUI : View, IBeginDragHandler, IEndDragHandler, IDragHandler
                 _inventory.RemoveItem(ui.SlotIndex);
 
                 _hand.SetItemObject(slot.Item.Prefab.GetComponent<ItemObject>());
+            }
+
+            if (eventData.pointerDrag.TryGetComponent<HandSlotUI>(out var slotUI))
+            {
+                var slot = slotUI.GetSlot();
+
+                if (slotUI._hand != _hand && slotUI.IsSlotNotExist())
+                {
+                    _inventory.AddItemToHandSlot(slot.Item, _hand.GetHand());
+                    _hand.ClearItem();
+
+                    _hand.SetItemObject(slot.Item.Prefab.GetComponent<ItemObject>());
+                }
             }
         }
     }

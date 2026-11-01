@@ -17,9 +17,10 @@ public class InventorySlot
         Durability = 0;
     }
 
-    public InventorySlot(Item data, Vector2 position, float dur = -1)
+    public InventorySlot(Item data, Vector2 position, string instanceId = null, float dur = -1)
     {
         Item = data;
+        InstanceId = instanceId;
         Weight = Item.Weight;
         SetPosition(position);
         if (data is ToolItem toolData)

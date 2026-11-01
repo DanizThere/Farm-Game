@@ -25,6 +25,7 @@ public class PhysicObject : MonoBehaviour, ISelectable, ICartLoadable
 
     protected Vector3 _velocity;
     protected bool _isGrabbed = false;
+    protected bool _canGrab = true;
     protected List<HandController> _hands = new();
     private float _emitProgress = 1f;
     protected bool _isLoaded = false;
@@ -35,10 +36,6 @@ public class PhysicObject : MonoBehaviour, ISelectable, ICartLoadable
         _rb = GetComponent<Rigidbody>();
         _rb.mass = Mathf.Max(0.1f, _defaultWeight * _massMultiplier);
 
-        //if(_defaultWeight > .8f)
-        //{
-        //    _rb.constraints = RigidbodyConstraints.FreezePositionY;
-        //}
         _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         _rb.interpolation = RigidbodyInterpolation.Interpolate;
 
@@ -53,6 +50,7 @@ public class PhysicObject : MonoBehaviour, ISelectable, ICartLoadable
 
     public virtual void Move(float angleHandClamp = 30)
     {
+        if (!_canGrab) return;
         if (!_isGrabbed) return;
         if (!_canMove) return;
         if (_hands.Count == 0) return;
@@ -160,6 +158,11 @@ public class PhysicObject : MonoBehaviour, ISelectable, ICartLoadable
         var hands = FindObjectsByType<HandController>();
 
         return hands.Any(x => !x.IsEffortOrObjectBusy);
+    }
+
+    public bool CanGrab()
+    {
+        return _canGrab;
     }
 
     public virtual void OnLoaded(CartObject cart)

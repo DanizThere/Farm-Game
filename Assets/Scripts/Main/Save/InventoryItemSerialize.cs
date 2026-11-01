@@ -8,6 +8,7 @@ public class InventoryItemSerialize
     public float Weight;
     public float Durability;
     public Vector2Serialize Position;
+    public string InstanceId;
 }
 
 [Serializable]

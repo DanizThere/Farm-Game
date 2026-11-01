@@ -39,6 +39,10 @@ public class HandController : MonoBehaviour
 
     private Quaternion _defaultRotation;
 
+    private string slapNameAnim = "slap";
+    private string grabNameAnim = "grab";
+    private string watchNameAnim = "showWatch";
+
     private void FixedUpdate()
     {
         _currentObject?.Move(_angleClamp);
@@ -82,20 +86,25 @@ public class HandController : MonoBehaviour
     {
         if (item == null) return;
 
-        _currentItemObject = item;
+        if (fromWorld)
+            _currentItemObject = item;
+        else
+            _currentItemObject = Instantiate(item);
+
         _currentItemObject.gameObject.SetActive(true);
         _currentItemObject.OnPickup(this);
         //_currentItemObject.GetComponent<Collider>().enabled = false;
         _currentItemObject.transform.SetParent(transform);
         _currentItemObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         
+        //TODO: add instanceId to slot;
         if(fromWorld) GetComponent<HandSlot>().SetItem(_currentItemObject.Item);
     }
 
     public void ClearItem()
     {
-        _currentItemObject = null;
-        GetComponent<HandSlot>().SetItem(null);
+        //_currentItemObject = null;
+        GetComponent<HandSlot>().ClearItem();
     }
 
     public void DeleteItem()
@@ -120,7 +129,7 @@ public class HandController : MonoBehaviour
     {
         _effortModel?.Effort();
 
-        _animator.SetBool("IsHold", _isHold && !IsTotalBusy);
+        _animator.SetBool(grabNameAnim, _isHold && !IsTotalBusy);
 
         _canInteract = Physics.Raycast(_handler.Position, _handler.GetDirection(), out var hit, _handDistance)
             && ((hit.transform.TryGetComponent<ISelectable>(out var sel) && sel.CanSelect()) || hit.transform.TryGetComponent<ISlappable>(out _));
@@ -133,6 +142,14 @@ public class HandController : MonoBehaviour
             inputHandler.OnClickEvent += OnClick;
             inputHandler.OnClickHoldedEvent += OnHold;
             inputHandler.OnClickReleased += OnRelease;
+            inputHandler.OnWatchEvent += () =>
+            {
+                _animator.SetBool(watchNameAnim, true);
+            };
+            inputHandler.OnWatchReleasedEvent += () =>
+            {
+                _animator.SetBool(watchNameAnim, false);
+            };
         }
         else
         {
@@ -217,7 +234,7 @@ public class HandController : MonoBehaviour
     {
         if(hit.transform.TryGetComponent<ISlappable>(out var slappable))
         {
-            _animator.SetTrigger("Slap");
+            _animator.SetTrigger(slapNameAnim);
             _isHold = false;
             slappable.Slap();
         }
@@ -254,7 +271,7 @@ public class HandController : MonoBehaviour
         var isGrabbing = hit.transform.TryGetComponent<PhysicObject>(out _currentObject);
         _inUpdateFollower.enabled = !isGrabbing;
 
-        if (_currentObject != null)
+        if (_currentObject != null && _currentObject.CanGrab())
         {
             transform.position = hit.point;
             transform.SetParent(_currentObject.transform);

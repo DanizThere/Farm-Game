@@ -6,4 +6,5 @@ public class InventorySlotItemSerialize
     public string Id;
     public float Durability;
     public string Hand;
+    public string InstanceId;
 }

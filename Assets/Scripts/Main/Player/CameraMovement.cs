@@ -15,6 +15,7 @@ public class CameraMovement : MonoBehaviour, IService
     [SerializeField] private float _mouseSensevity = 100f;
     [SerializeField] private float _smooth = 15f;
     [SerializeField] private Transform _body;
+    [SerializeField] private Transform _model;
 
     private bool _canMove = true;
 
@@ -28,11 +29,13 @@ public class CameraMovement : MonoBehaviour, IService
 
     private InputHandler _playerController;
     private Vector2 _previousPosition;
+    private Quaternion _newRotation;
 
 
-    public void Initialize(Transform body)
+    public void Initialize(Transform body, Transform model)
     {
         _body = body;
+        _model = model;
         _playerController = ServiceLocator.Instance.GetService<InputHandler>();
 
         ServiceLocator.Instance.GetService<GameStateMachine>().GetState<OuterWorldGameState>().OnExitEvent += () => SetMove(false, () =>
@@ -57,6 +60,7 @@ public class CameraMovement : MonoBehaviour, IService
     private void Update()
     {
         Move(_playerController.LookDirection);
+        transform.rotation = Quaternion.Lerp(transform.rotation, _newRotation, Time.deltaTime * _smooth);
     }
 
     public void SetForwardLook()
@@ -118,10 +122,11 @@ public class CameraMovement : MonoBehaviour, IService
 
         if (!_canMove) return;
         var rotation = Quaternion.Euler(0, _yRotation, 0);
+        var modelrotation = Quaternion.Euler(0, _yRotation + 180, 0);
 
-        var newRotation = Quaternion.Euler(_xRotation, _yRotation, 0);
-        transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * _smooth);
+        _newRotation = Quaternion.Euler(_xRotation, _yRotation, 0);
         _previousPosition = newPosition;
         _body.rotation = rotation;
+        _model.rotation = modelrotation;
     }
 }

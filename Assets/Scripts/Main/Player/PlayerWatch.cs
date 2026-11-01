@@ -4,8 +4,6 @@ public class PlayerWatch : SLMonoBehaviour
 {
     [SerializeField] private PlayerWatchUI _watch;
     [SerializeField] private HandController _hand;
-
-    private Transform _handTransform;
     private TimeManager _timeManager;
     private CameraHolder _cameraHolder;
     private InputHandler _inputHandler;
@@ -23,8 +21,6 @@ public class PlayerWatch : SLMonoBehaviour
 
         _inputHandler.OnWatchEvent += ShowTime;
         _inputHandler.OnWatchReleasedEvent += HideTime;
-
-        _handTransform = _cameraHolder?.WatchPosition;
     }
 
     protected override void SLUpdate()
@@ -37,13 +33,11 @@ public class PlayerWatch : SLMonoBehaviour
 
     public void ShowTime()
     {
-        _hand.SetTarget(_handTransform);
         _watch.Show();
     }
 
     public void HideTime()
     {
-        _hand.ResetTarget();
         _watch.Hide();
     }
 }

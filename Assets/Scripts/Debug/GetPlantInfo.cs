@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 public class GetPlantInfo : SLMonoBehaviour
@@ -26,7 +28,10 @@ public class GetPlantInfo : SLMonoBehaviour
     {
         if (_plant)
         {
-            GUI.TextField(new Rect(10, 10, 200, 20), $"{_plant.Life.name}: {_plant.Life.Progress} progress to 1", 25);
+            var textBuilder = new StringBuilder($"{_plant.CurrentConfig.Stage}: {_plant.Progress} progress to 1");
+            textBuilder.Append(string.Join("\n", _plant.Health.PlantAttributes.Select(x => $"{x.Id}: {x.CurrentValue} value")));
+
+            GUI.TextField(new Rect(10, 10, 1000, 500), textBuilder.ToString());
         }
     }
 }

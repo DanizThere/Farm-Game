@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 [Serializable]
 public class InitData
 {
-    public InventorySerializable Inventory = new();
+    public List<InventoryStart> Inventory = new();
     public TimeSettings Time;
-    public ChestsSerialize Chests = new();
-    public DialogueSerialize Dialogues = new();
+    public List<SaveObject> Objects = new();
+    public List<DialogueNode> Dialogues = new();
     public PlayerData Player = new();
 }

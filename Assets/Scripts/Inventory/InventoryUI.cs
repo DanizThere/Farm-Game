@@ -72,12 +72,13 @@ public class InventoryUI : View, IDropHandler
     {
         if (eventData.pointerDrag != null)
         {
+
             if (eventData.pointerDrag.TryGetComponent<HandSlotUI>(out var slot))
             {
                 var slotItem = slot.GetSlot();
                 if (slotItem == null) return;
-                if(_inventory.AddItem(slotItem.Item, eventData.position))
-                    _inventory.RemoveItemFromHand(slotItem.Hand);
+                if (_inventory.AddItem(slotItem.Item, eventData.position))
+                    slot.ClearItem();
             }
 
             if (eventData.pointerDrag.TryGetComponent<InventorySlotUI>(out var ui))
@@ -85,7 +86,17 @@ public class InventoryUI : View, IDropHandler
                 var slotItem = ui.GetSlotByIndex();
                 if (slotItem == null) return;
 
-                slotItem.SetPosition(eventData.position);
+                var point = ui.ScreenToLocal(_panel.transform as RectTransform, eventData.position, eventData.pressEventCamera);
+
+                if (ui.InventorySource != _inventory)
+                {
+                    _inventory.AddItem(slotItem.Item, point);
+                    ui.InventorySource.RemoveItem(ui.SlotIndex);
+                }
+                else
+                {
+                    slotItem.SetPosition(point);
+                }
             }
         }
     }

@@ -10,6 +10,7 @@ public class StuckedObject : PhysicObject
     private void Start()
     {
         _canMove = false;
+        _canGrab = false;
         _rb.isKinematic = true;
         _rb.useGravity = false;
     }

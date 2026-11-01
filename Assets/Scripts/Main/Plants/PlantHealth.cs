@@ -1,59 +1,79 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class PlantHealth : MonoBehaviour
 {
-    [SerializeField] List<string> _healthCharacteristicsName = new();
+    public event Action OnDeath = delegate { };
+    public bool IsAlive => Health > 0f;
 
-    private List<PlantHealthCharacteristic> _characteristics = new();
-    private float _dirtBonus;
+    [HideInInspector]
+    public List<CurrentPlantAttribute> PlantAttributes = new(); 
 
-    public void Initialize(float dirtBonus = 0f)
+    public float Health = 100f;
+    public float MaxHealth = 100f;
+    [Space]
+    public float Immunity = 100f;
+    public float MaxImmunity = 100f;
+
+    [SerializeField] private List<PlantAttribute> _defaultAttributes = new();
+    [SerializeField] private float _naturalHealthRegen = .2f;
+    [SerializeField] private float _naturalImmunityRegen = .5f;
+
+    private void Awake()
     {
-        _dirtBonus = dirtBonus;
-
-        if (_characteristics.Any()) return;
-
-        var characteristics = ServiceLocator.Instance.GetService<GameDbContext>()
-            .PlantHealthCharacteristics.Get(x => _healthCharacteristicsName.Any(item => item == x.Name));
-
-        foreach(var characteristic in characteristics)
+        PlantAttributes = _defaultAttributes.Select(x => new CurrentPlantAttribute
         {
-            AddCharacteristic(characteristic, characteristic.DefaultValue);
+            CurrentValue = 100,
+            DecayValue = x.DecayValue,
+            Id = x.Id,
+            TopBorder = x.TopBorder,
+        }).ToList();
+    }
+
+    public void Tick(float deltaTime, PlantStageConfig stage)
+    {
+        if (!IsAlive) return;
+
+        ModifyImmunity(_naturalImmunityRegen);
+
+        foreach(var attribute in PlantAttributes)
+        {
+            attribute.CurrentValue -= attribute.DecayValue * deltaTime;
         }
-    }
 
-    public void AddCharacteristic(PlantHealthCharacteristicData characteristicData, float defaultValue = 0)
-    {
-        var characteristic = new PlantHealthCharacteristic
+        var isAttributeBelowZero = PlantAttributes.Any(x => x.CurrentValue < 0f);
+        if (isAttributeBelowZero)
         {
-            Name = characteristicData.Name,
-            MaxValue = characteristicData.MaxValue,
-            MinValue = characteristicData.MinValue,
-            Value = defaultValue,
-        };
-
-        _characteristics.Add(characteristic);
-    }
-
-    public void UpdateCharacteristic(string name, float value)
-    {
-        var characteristic = _characteristics.FirstOrDefault(x => x.Name == name);
-
-        if(characteristic is null)
-        {
-            Debug.LogWarning($"Characteristic with {name} name doesnt exist");
+            ModifyHealth(-(stage.HealthDecayValue * deltaTime * (MaxImmunity / Immunity)));
             return;
         }
 
-        characteristic.Value += value; 
+        ModifyHealth(_naturalHealthRegen);
     }
 
-    public float GetEfficient()
+    public void ModifyAttribute(string name, float value)
     {
-        var value = (_characteristics.Sum(x => x.GetEfficient()) / _characteristics.Count) + _dirtBonus;
+        var attribute = PlantAttributes.FirstOrDefault(x => x.Id == name);
+        if (attribute != null)
+        {
+            attribute.CurrentValue = Mathf.Max(0, attribute.CurrentValue + value);
+        }
+    }
 
-        return value;
+    public void ModifyHealth(float value)
+    {
+        Health = Mathf.Clamp(Health + value, 0, MaxHealth);
+        if (Health <= 0f)
+        {
+            print("plant is dead");
+            OnDeath?.Invoke();
+        }
+    }
+
+    public void ModifyImmunity(float value)
+    {
+        Immunity = Mathf.Clamp(Immunity + value, 0, MaxImmunity);
     }
 }

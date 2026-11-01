@@ -67,11 +67,46 @@ public class ChestUI : View, IDropHandler
             var slotItem = ui.GetSlotByIndex();
             if (slotItem == null) return;
 
-            var invSlot = _inventory.GetSlot(ui.SlotIndex);
-            if(invSlot != slotItem)
-                _inventory.AddItem(slotItem.Item, eventData.position);
+            var point = ui.ScreenToLocal(_panel.transform as RectTransform, eventData.position, eventData.pressEventCamera);
+
+            if (eventData.pointerDrag.TryGetComponent<HandSlotUI>(out var slot))
+            {
+                var slotHandItem = slot.GetSlot();
+                if (slotItem == null) return;
+                if (_inventory.AddItem(slotHandItem.Item, eventData.position))
+                    slot.ClearItem();
+            }
+            if (ui.InventorySource != _inventory)
+            {
+                _inventory.AddItem(slotItem.Item, point);
+                ui.InventorySource.RemoveItem(ui.SlotIndex);
+            }
             else
-                slotItem.SetPosition(eventData.position);
+            {
+                slotItem.SetPosition(point);
+            }
+
+            RefreshUI();
+        }
+    }
+
+    private void RefreshUI()
+    {
+        foreach (var slot in _slotsUI)
+        {
+            Destroy(slot.gameObject);
+        }
+
+        _slotsUI.Clear();
+        var invSlotUI = ServiceLocator.Instance.GetService<ViewController>().Get<InventorySlotUI>();
+
+        for (int i = 0; i < _inventory.SlotsCount; i++)
+        {
+            var slot = Instantiate(invSlotUI, _panel.transform);
+            slot.Initialize(_inventory, i);
+            _slotsUI.Add(slot);
+
+            slot.UpdateSlot();
         }
     }
 }

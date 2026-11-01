@@ -22,6 +22,17 @@ public class InventoryController : SLMonoBehaviour, IService
         _gameStateMachine.GetState<InventoryGameState>().OnStartEvent += ShowUI;
     }
 
+    public void OpenChest(ChestUI chestUI, InventoryUI inventoryUI)
+    {
+        _viewController.SetCurrentView(chestUI);
+
+        chestUI.Show();
+        inventoryUI.Setup(_inventory, _slots);
+        inventoryUI.Show();
+
+        ServiceLocator.Instance.GetService<GameStateMachine>().SetState<UIGameState>();
+    }
+
     public void AddSlot(HandSlot slot)
     {
         if (!_slots.Contains(slot))

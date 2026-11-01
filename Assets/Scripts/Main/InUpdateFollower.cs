@@ -20,15 +20,25 @@ public class InUpdateFollower : SLMonoBehaviour
         _rotationSpeed.SetupDiff();
     }
 
-    protected override void SLUpdate()
+    //protected override void SLUpdate()
+    //{
+    //    if (_target == null) return;
+
+    //    transform.position = Vector3.Lerp(transform.position, _target.position, _followSpeed.CurrentValue * Time.deltaTime);
+    //    if (ShouldLookAsCamera)
+    //    {
+    //        transform.rotation = Quaternion.Slerp(transform.rotation, _cameraTransform.rotation, _rotationSpeed.CurrentValue * Time.deltaTime);
+    //    }
+    //}
+
+    private void LateUpdate()
     {
         if (_target == null) return;
 
         transform.position = Vector3.Lerp(transform.position, _target.position, _followSpeed.CurrentValue * Time.deltaTime);
         if (ShouldLookAsCamera)
         {
-            var targetRotation = _cameraTransform.rotation;
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed.CurrentValue * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, _cameraTransform.rotation, _rotationSpeed.CurrentValue * Time.deltaTime);
         }
     }
 

@@ -4,7 +4,6 @@ public class SaveHandler : MonoBehaviour
 {
     private Inventory _playerInventory;
     private TimeManager _timeService;
-    private ChestService _chestService;
     private GameDbContext _dbContext;
     private JsonSaveService _saveService;
     [SerializeField] private InitData _initData;
@@ -15,7 +14,6 @@ public class SaveHandler : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        _items.Save();
 
         if (_saveOnQuit)
             SaveData();
@@ -27,7 +25,6 @@ public class SaveHandler : MonoBehaviour
 
         _saveService = ServiceLocator.Instance.GetService<JsonSaveService>();
         _playerInventory = ServiceLocator.Instance.GetService<InventoryController>().Inventory;
-        _chestService = ServiceLocator.Instance.GetService<ChestService>();
         _timeService = ServiceLocator.Instance.GetService<TimeManager>();
         _dbContext = ServiceLocator.Instance.GetService<GameDbContext>();
         _saveService.OnLoaded += LoadData;
@@ -42,10 +39,10 @@ public class SaveHandler : MonoBehaviour
     public void SaveData()
     {
         _playerInventory.Save(_saveService.Data.Inventory);
-        _chestService.Save(ref _saveService.Data.Chests);
         _timeService.Save(ref _saveService.Data.Time);
         _dbContext.SaveNodes(ref _saveService.Data.Dialogues.Ids);
         _player.Save(ref _saveService.Data.Player);
+        _items.Save(ref _saveService.Data.Objects);
 
         _saveService.Save();
     }
@@ -53,9 +50,9 @@ public class SaveHandler : MonoBehaviour
     private void LoadData(GameData data)
     {
         _playerInventory.Load(data.Inventory);
-        _chestService.Load(data.Chests);
         _timeService.Load(data.Time);
         _player.Initialize(data.Player);
+        _items.Load(data.Objects);
 
         _dbContext.AddNodes(data.Dialogues.Ids);
     }

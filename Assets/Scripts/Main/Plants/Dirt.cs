@@ -33,9 +33,9 @@ public class Dirt : MonoBehaviour
         _currentPlant.transform.SetParent(_plantTransform);
         _currentPlant.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 
-        _currentPlant.OnDig += ClearPlant;
+        _currentPlant.OnExcavation += ClearPlant;
         _currentPlant.OnDeath += DestroyPlant;
-        _currentPlant.StartLife(_plantType);
+        _currentPlant.SetBonus(_plantType);
 
         _canPlace = false;
         _mesh.SetBlendShapeWeight(_meshIndex, 0);
@@ -62,7 +62,7 @@ public class Dirt : MonoBehaviour
 
         if (_currentPlant != null)
         {
-            _currentPlant.OnDig?.Invoke();
+            _currentPlant.OnExcavation?.Invoke();
         }
 
         _canPlace = true;
@@ -80,6 +80,7 @@ public class Dirt : MonoBehaviour
 
 public enum PlantType
 {
+    Default,
     Chernozems,
     Podzolic,
     Tundra

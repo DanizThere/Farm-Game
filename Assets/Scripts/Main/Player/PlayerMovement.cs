@@ -7,8 +7,11 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
 {
     public Transform Body => _body;
+    public Transform Model => _model;
     [SerializeField] private CharacterController _characterController;
     [SerializeField] private Transform _body;
+    [SerializeField] private Transform _model;
+    [SerializeField] private Animator _modelAnimator;
 
     [SerializeField] private float _gravityForce = 9.81f;
     [SerializeField] private float _jumpForce = 1.5f;
@@ -27,6 +30,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     private float _speedScale = 1f;
 
     private List<HandController> _hands = new();
+    private bool _moveBool = false;
 
 
     public void Initialize(List<HandController> handControllers, PlayerData data)
@@ -59,7 +63,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
 
     private void Update()
     {
-        if(_controller)
+        if (_controller)
             Move(_controller.Direction);
 
         _speed = Mathf.Lerp(_speed, _currentSpeed, Time.deltaTime * 10f);
@@ -107,6 +111,10 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
         var delta = _currentSpeed * Time.deltaTime * direction * _speedScale;
         var newPosition = _body.position + delta;
 
+        _moveBool = (newPosition - _body.position).magnitude > 0f;
+        _modelAnimator.SetBool("Move", _moveBool);
+
+
         if (anyHold.Any())
         {
             var hand = anyHold[0];
@@ -130,6 +138,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
         if (_characterController.isGrounded)
         {
             _velocity.y = Mathf.Sqrt(_jumpForce * -1f * -_gravityForce * _timeScale);
+            _modelAnimator.SetTrigger("Jump");
         }
     }
 

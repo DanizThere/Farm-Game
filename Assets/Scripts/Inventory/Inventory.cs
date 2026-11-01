@@ -56,14 +56,14 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public bool AddItem(Item item, Vector2 position)
+    public bool AddItem(Item item, Vector2 position, string instanceId = null)
     {
         if (item == null) return false;
 
         var newWeight = _currentWeight + item.Weight;
         if (newWeight > _maxWeight) return false;
 
-        var slot = new InventorySlot(item, position);
+        var slot = new InventorySlot(item, position, instanceId);
         _slots.Add(slot);
         _currentWeight = newWeight;
 
@@ -86,11 +86,6 @@ public class Inventory : MonoBehaviour
         var slot = _handSlots.FirstOrDefault(x => x.Hand == hand);
         if (slot != null)
         {
-            var handSlot = FindObjectsByType<HandSlot>();
-            foreach(var slotObject in handSlot)
-            {
-                slotObject.TryClearItem(hand);
-            }
             _handSlots.Remove(slot);
 
             OnInventoryChanged?.Invoke();
@@ -143,7 +138,7 @@ public class Inventory : MonoBehaviour
                 if(item != null)
                 {
                     var vector2 = new Vector2(slotData.Position.X, slotData.Position.Y);
-                    _slots[i] = new InventorySlot(item, vector2, slotData.Durability);
+                    _slots[i] = new InventorySlot(item, vector2, slotData.InstanceId, slotData.Durability);
                     _currentWeight += slotData.Weight;
                 }
                 else

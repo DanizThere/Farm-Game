@@ -18,11 +18,11 @@ public class CameraHolder : MonoBehaviour
 
     private Transform _defaultTarget;
 
-    public void Initialize(Transform target, Transform body)
+    public void Initialize(Transform target, Transform body, Transform model)
     {
         _defaultTarget = target;
 
-        _cameraMovement.Initialize(body);
+        _cameraMovement.Initialize(body, model);
         _inUpdateFollower.SetTarget(_defaultTarget);
     }
 
