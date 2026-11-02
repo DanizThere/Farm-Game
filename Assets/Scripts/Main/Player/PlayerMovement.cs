@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
@@ -13,6 +14,14 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     [SerializeField] private Transform _model;
     [SerializeField] private Animator _modelAnimator;
 
+    [Space]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private float _footstepFrequency = 1f;
+    [SerializeField] private AudioClip _footstepSound;
+    [SerializeField] private AudioClip _jumpSound;
+    [SerializeField] private AudioClip _landSound;
+
+    [Space]
     [SerializeField] private float _gravityForce = 9.81f;
     [SerializeField] private float _jumpForce = 1.5f;
     private Vector3 _velocity;
@@ -31,6 +40,8 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
 
     private List<HandController> _hands = new();
     private bool _moveBool = false;
+    private float _footstepTimer = 0f;
+    private bool _wasGrounded;
 
 
     public void Initialize(List<HandController> handControllers, PlayerData data)
@@ -68,6 +79,34 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
 
         _speed = Mathf.Lerp(_speed, _currentSpeed, Time.deltaTime * 10f);
         _currentSpeed = _isRunning ? _runSpeed : _moveSpeed;
+        PlayFootstepSound();
+
+        var isGrounded = Physics.Raycast(transform.position, Vector3.down, _characterController.height * .5f + .1f);
+        if (isGrounded && !_wasGrounded)
+        {
+            _audioSource.PlayOneShot(_landSound);
+        }
+
+        _wasGrounded = isGrounded;
+    }
+
+    private void PlayFootstepSound()
+    {
+        if (_footstepTimer >= _footstepFrequency)
+        {
+            _audioSource.PlayOneShot(_footstepSound);
+            _footstepTimer = 0f;
+            return;
+        }
+
+        var isGrounded = Physics.Raycast(transform.position, Vector3.down, _characterController.height * .5f + .1f);
+        if (isGrounded && _characterController.velocity.magnitude > .1f)
+        {
+            _footstepTimer += Time.deltaTime;
+            return;
+        }
+
+        _footstepTimer = 0f;
     }
 
     private void FixedUpdate()
@@ -139,6 +178,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
         {
             _velocity.y = Mathf.Sqrt(_jumpForce * -1f * -_gravityForce * _timeScale);
             _modelAnimator.SetTrigger("Jump");
+            _audioSource.PlayOneShot(_jumpSound);
         }
     }
 

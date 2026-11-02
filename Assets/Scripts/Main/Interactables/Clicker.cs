@@ -3,6 +3,7 @@ using UnityEngine;
 public class Clicker : Switcher
 {
     [SerializeField] private SkinnedMeshRenderer _mesh;
+    [SerializeField] private AudioSource _audioSource;
     private int _meshIndex;
 
     private void Awake()
@@ -13,10 +14,12 @@ public class Clicker : Switcher
     public override void Activate()
     {
         _mesh.SetBlendShapeWeight(_meshIndex, 100);
+        _audioSource.Play();
     }
 
     public override void Deactivate()
     {
         _mesh.SetBlendShapeWeight(_meshIndex, 0);
+        _audioSource.Play();
     }
 }

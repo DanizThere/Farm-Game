@@ -73,12 +73,12 @@ public class ChestUI : View, IDropHandler
             {
                 var slotHandItem = slot.GetSlot();
                 if (slotItem == null) return;
-                if (_inventory.AddItem(slotHandItem.Item, eventData.position))
+                if (_inventory.AddItem(slotHandItem.Item, eventData.position, slotHandItem.InstanceId))
                     slot.ClearItem();
             }
             if (ui.InventorySource != _inventory)
             {
-                _inventory.AddItem(slotItem.Item, point);
+                _inventory.AddItem(slotItem.Item, point, slotItem.InstanceId);
                 ui.InventorySource.RemoveItem(ui.SlotIndex);
             }
             else

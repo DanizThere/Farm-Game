@@ -71,11 +71,11 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
-    public void AddItemToHandSlot(Item item, string hand, float durability = -1)
+    public void AddItemToHandSlot(Item item, string hand, string instanceId = null, float durability = -1)
     {
         if(item == null) return;
 
-        var slot = new InventoryHandSlot(item, hand, durability);
+        var slot = new InventoryHandSlot(item, hand, instanceId, durability);
         _handSlots.Add(slot);
 
         OnInventoryChanged?.Invoke();

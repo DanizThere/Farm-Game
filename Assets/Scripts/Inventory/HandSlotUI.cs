@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class HandSlotUI : View, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
 {
+    public string InstanceId;
     [SerializeField] private Image _image;
     [SerializeField] private CanvasGroup _canvasGroup;
     private Inventory _inventory;
@@ -33,6 +34,7 @@ public class HandSlotUI : View, IBeginDragHandler, IEndDragHandler, IDragHandler
     {
         _inventory = inventory;
         _hand = hand;
+        InstanceId = _hand.InstanceId;
     }
 
     public void ClearItem()

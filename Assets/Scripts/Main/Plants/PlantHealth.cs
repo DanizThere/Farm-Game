@@ -34,8 +34,6 @@ public class PlantHealth : MonoBehaviour
 
     public void Tick(float deltaTime, PlantStageConfig stage)
     {
-        if (!IsAlive) return;
-
         ModifyImmunity(_naturalImmunityRegen);
 
         foreach(var attribute in PlantAttributes)

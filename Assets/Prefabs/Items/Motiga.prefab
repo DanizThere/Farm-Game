@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5318626986107528376}
   - component: {fileID: 3433045156438437540}
   - component: {fileID: 4783342150413352839}
+  - component: {fileID: 4275760750420022908}
   m_Layer: 0
   m_Name: Motiga
   m_TagString: Untagged
@@ -47,12 +48,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c8f8cdbaba862a4dbba1652ee3f148b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hoe
+  _instanceId: 53cd9c91-b0c4-4458-8068-c9946ebd8897
+  _typeTag: tool
   _throwForce: 5
   _rb: {fileID: 4783342150413352839}
   _colliders:
   - {fileID: 3448794071523800104}
   - {fileID: 4831420667844454938}
   _item: {fileID: 11400000, guid: c1f9b17d31a0ee64cbd668f669e7ef4b, type: 2}
+  _audioSource: {fileID: 4275760750420022908}
+  _onHitSound: {fileID: 8300000, guid: 934e873dab58ccb4491059e71bc7e6bf, type: 3}
   Efforts:
   - {fileID: 11400000, guid: c68d53eddb6b70a42b9e7993eb053a26, type: 2}
   _itemModels:
@@ -106,6 +111,103 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!82 &4275760750420022908
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3758497154970267100}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 4357295305495220057, guid: 230490d49d37a9546841774a39fb36a4, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &8807201939719768935
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -116,7 +218,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1521859303611886714, guid: 27f3f812fa3f3be498000b444fd86f33, type: 3}
       propertyPath: m_VersionIndex
-      value: 520
+      value: 532
       objectReference: {fileID: 0}
     - target: {fileID: 4764264833597956758, guid: 27f3f812fa3f3be498000b444fd86f33, type: 3}
       propertyPath: m_Name
@@ -164,7 +266,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8955557933213277652, guid: 27f3f812fa3f3be498000b444fd86f33, type: 3}
       propertyPath: m_VersionIndex
-      value: 411
+      value: 423
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

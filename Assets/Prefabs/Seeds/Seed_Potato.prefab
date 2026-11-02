@@ -69,13 +69,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Seed
   _instanceId: 
-  _typeTag: 
+  _typeTag: seed
   _throwForce: 5
   _rb: {fileID: 7112019262932962009}
   _colliders:
   - {fileID: 7613553745554493629}
   _item: {fileID: 11400000, guid: 1778aa5b430f5274a87211c9bf5c62d0, type: 2}
   _plant: {fileID: 4620882749038395047, guid: a33c6ebf074d68c4fb72a6eed0160486, type: 3}
+  Heritables:
+    MaxHealth: 100
+    MaxImmunity: 100
 --- !u!54 &7112019262932962009
 Rigidbody:
   m_ObjectHideFlags: 0

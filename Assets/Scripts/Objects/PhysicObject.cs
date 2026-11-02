@@ -32,6 +32,11 @@ public class PhysicObject : MonoBehaviour, ISelectable, ICartLoadable
 
     private void Awake()
     {
+        OnAwake();
+    }
+
+    protected virtual void OnAwake()
+    {
         _currentWeight = _defaultWeight;
         _rb = GetComponent<Rigidbody>();
         _rb.mass = Mathf.Max(0.1f, _defaultWeight * _massMultiplier);
@@ -65,17 +70,6 @@ public class PhysicObject : MonoBehaviour, ISelectable, ICartLoadable
 
         _rb.linearVelocity = Vector3.Lerp(_rb.linearVelocity, desiredVelocity, Time.fixedDeltaTime * 20f);
         _rb.angularVelocity = Vector3.Lerp(_rb.angularVelocity, Vector3.zero, Time.fixedDeltaTime * 5f);
-
-        var hand = _hands[0];
-        var diff = hand.transform.rotation * Quaternion.Inverse(hand.DefaultRotation);
-        var targetRotation = diff * transform.rotation * Quaternion.AngleAxis(angleHandClamp, transform.right);
-        var angleClamp = Quaternion.Angle(transform.rotation, targetRotation);
-
-        if (angleClamp > angleHandClamp)
-        {
-            var targetRot = Quaternion.RotateTowards(_rb.rotation, targetRotation, Time.fixedDeltaTime * 5f * _currentWeight * _timeForce);
-            _rb.MoveRotation(targetRot);
-        }
     }
 
     public virtual void Grab(float force, CameraHandler handler, out float speedScale, HandController hand)
@@ -129,11 +123,14 @@ public class PhysicObject : MonoBehaviour, ISelectable, ICartLoadable
     {
         if (collision.contactCount == 0) return;
 
-        EmitOnEnter(collision.contacts.FirstOrDefault().point);
+        var point = collision.contacts.FirstOrDefault().point;
+
+        EmitOnEnter(point);
     }
 
     private void EmitOnEnter(Vector3 point)
     {
+        ServiceLocator.Instance.GetService<SFXManager>().Play(point, "OnHit");
         _collideFX.transform.position = point;
 
         _collideFX?.Play();
@@ -145,6 +142,8 @@ public class PhysicObject : MonoBehaviour, ISelectable, ICartLoadable
 
         if (_emitProgress > 1f)
         {
+            ServiceLocator.Instance.GetService<SFXManager>().Play(point, "OnHit");
+
             _collideFX?.Play();
             _emitProgress = 0f;
             return;

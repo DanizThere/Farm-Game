@@ -9,9 +9,13 @@ public class Dirt : MonoBehaviour
     [SerializeField] private PlantType _plantType;
     [SerializeField] private Transform _plantTransform;
     [SerializeField] private ParticleSystem _digParticles;
+    [Space]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _digSound;
+    [SerializeField] private AudioClip _plantSound;
     private Vector2Int _dirtPosition;
     private Plant _currentPlant;
-    private bool _canPlace = true;
+    private bool _canPlace = false;
     private int _meshIndex;
 
     public void InitializePosition(int x, int y)
@@ -22,7 +26,7 @@ public class Dirt : MonoBehaviour
         _meshIndex = _mesh.sharedMesh.GetBlendShapeIndex("Digged");
     }
 
-    public void PlacePlant(Plant plant, System.Action onSuccess = null)
+    public void PlacePlant(Plant plant, System.Action onSuccess = null, Heritables heritables = null)
     {
         if (!_canPlace) return;
         if (_currentPlant != null) return;
@@ -30,6 +34,14 @@ public class Dirt : MonoBehaviour
 
         var go = Instantiate(plant);
         _currentPlant = go;
+
+
+        if (heritables != null)
+        {
+            _currentPlant.Health.MaxHealth = heritables.MaxHealth;
+            _currentPlant.Health.MaxImmunity = heritables.MaxImmunity;
+        }
+
         _currentPlant.transform.SetParent(_plantTransform);
         _currentPlant.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 
@@ -39,6 +51,7 @@ public class Dirt : MonoBehaviour
 
         _canPlace = false;
         _mesh.SetBlendShapeWeight(_meshIndex, 0);
+        _audioSource.PlayOneShot(_plantSound);
 
         onSuccess?.Invoke();
     }
@@ -59,6 +72,7 @@ public class Dirt : MonoBehaviour
         //here another plants should react
 
         _digParticles.Play();
+        _audioSource.PlayOneShot(_digSound);
 
         if (_currentPlant != null)
         {

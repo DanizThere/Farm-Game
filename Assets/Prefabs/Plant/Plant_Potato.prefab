@@ -194,6 +194,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlantEmotions
   _startTransform: {fileID: 8229838319079207999}
+  _attributes:
+  - {fileID: 11400000, guid: 15a6e1cc3644b5e41b2671b1e3faae20, type: 2}
+  - {fileID: 11400000, guid: 93b2f286ebdc0bd49821e7f75e248ab4, type: 2}
+  - {fileID: 11400000, guid: af38c829b8ca114428a21eb504686a46, type: 2}
+  - {fileID: 11400000, guid: 28c1710479f26c1468d7dda34867d640, type: 2}
+  _checkHealth: {fileID: 11400000, guid: 7399e942f2d0c8844a3d9469af9e25aa, type: 2}
 --- !u!114 &4620882749038395047
 MonoBehaviour:
   m_ObjectHideFlags: 0

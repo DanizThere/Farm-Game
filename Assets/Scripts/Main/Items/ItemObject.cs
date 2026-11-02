@@ -27,6 +27,8 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
     [SerializeField] protected Rigidbody _rb;
     [SerializeField] protected Collider[] _colliders;
     [SerializeField] protected Item _item;
+    [SerializeField] protected AudioSource _audioSource;
+    [SerializeField] protected AudioClip _onHitSound;
 
     protected Inventory _inventory;
     protected int _slotIndex;
@@ -85,6 +87,7 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
 
     protected virtual void LoadData(SaveObject data)
     {
+        InstanceId = data.InstanceId;
         transform.position = data.Position.ToVector();
         transform.rotation = data.Rotation.Deserialize();
     }
@@ -108,5 +111,10 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
     public void Load(SaveObject data)
     {
         LoadData(data);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        _audioSource.PlayOneShot(_onHitSound);
     }
 }

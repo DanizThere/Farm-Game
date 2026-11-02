@@ -47,7 +47,6 @@ public class DialogueHandler : SLMonoBehaviour
         {
             _isTalking = true;
             _dialogueSystem.StartDialogue(nodes);
-
         }
     }
 }

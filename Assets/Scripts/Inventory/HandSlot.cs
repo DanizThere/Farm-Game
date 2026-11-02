@@ -2,6 +2,7 @@
 
 public class HandSlot : SLMonoBehaviour
 {
+    public string InstanceId;
     private HandController _hand;
     private InventoryController _inventory;
     private Item _currentItem;
@@ -9,25 +10,26 @@ public class HandSlot : SLMonoBehaviour
 
     public string GetHand() => _handType.ToString();
 
-    public void Initialize(HandController hand, InventoryController inventory, Item item = null)
+    public void Initialize(HandController hand, InventoryController inventory, Item item = null, string instanceId = null)
     {
         _hand = hand;
         _handType = _hand.CurrentHandType;
         _inventory = inventory;
 
         _inventory.AddSlot(this);
-        SetItem(item);
+        SetItem(item, instanceId);
     }
 
-    public void SetItem(Item item)
+    public void SetItem(Item item, string instanceId = null)
     {
         if (item == null)
         {
             print("Item is null");
             return;
         }
+        InstanceId = instanceId;
         _currentItem = item;
-        _inventory.Inventory.AddItemToHandSlot(_currentItem, _handType.ToString());   
+        _inventory.Inventory.AddItemToHandSlot(_currentItem, _handType.ToString(), instanceId);   
     }
 
     public void ClearItem()

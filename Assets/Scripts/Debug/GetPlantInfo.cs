@@ -28,10 +28,12 @@ public class GetPlantInfo : SLMonoBehaviour
     {
         if (_plant)
         {
-            var textBuilder = new StringBuilder($"{_plant.CurrentConfig.Stage}: {_plant.Progress} progress to 1");
-            textBuilder.Append(string.Join("\n", _plant.Health.PlantAttributes.Select(x => $"{x.Id}: {x.CurrentValue} value")));
-
-            GUI.TextField(new Rect(10, 10, 1000, 500), textBuilder.ToString());
+            var textBuilder = new StringBuilder($"{_plant.CurrentConfig.Stage}: {_plant.Progress} progress to 1\n");
+            textBuilder.Append("Attributes:\n\t");
+            textBuilder.Append(string.Join("\n\t", _plant.Health.PlantAttributes.Select(x => $"{x.Id}: {x.CurrentValue} value")));
+            textBuilder.Append($"\nHealth: {_plant.Health.Health}/{_plant.Health.MaxHealth}");
+            textBuilder.Append($"\nImmunity: {_plant.Health.Immunity}/{_plant.Health.MaxImmunity}");
+            GUI.TextField(new Rect(10, 10, 1000, 500), textBuilder.ToString(), new GUIStyle { fontSize = 40 });
         }
     }
 }

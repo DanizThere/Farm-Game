@@ -22,6 +22,11 @@ public class HandController : MonoBehaviour
     [SerializeField] private Transform _modelTransform;
     [SerializeField] private float _angleClamp = 30f;
     [SerializeField] private Animator _animator;
+    [Space]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _pickupSound;
+    [SerializeField] private AudioClip _swingSound;
+    [SerializeField] private AudioClip _hideSound;
     private InUpdateFollower _inUpdateFollower;
     private bool _canInteract;
     private bool _isHold = false;
@@ -98,12 +103,14 @@ public class HandController : MonoBehaviour
         _currentItemObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         
         //TODO: add instanceId to slot;
-        if(fromWorld) GetComponent<HandSlot>().SetItem(_currentItemObject.Item);
+        if(fromWorld) GetComponent<HandSlot>().SetItem(_currentItemObject.Item, item.InstanceId);
+        else _audioSource.PlayOneShot(_hideSound);
     }
 
     public void ClearItem()
     {
         //_currentItemObject = null;
+        _audioSource.PlayOneShot(_hideSound);
         GetComponent<HandSlot>().ClearItem();
     }
 
@@ -232,9 +239,11 @@ public class HandController : MonoBehaviour
 
     private void TrySlap(RaycastHit hit)
     {
-        if(hit.transform.TryGetComponent<ISlappable>(out var slappable))
+        _animator.SetTrigger(slapNameAnim);
+        _audioSource.PlayOneShot(_swingSound);
+
+        if (hit.transform.TryGetComponent<ISlappable>(out var slappable))
         {
-            _animator.SetTrigger(slapNameAnim);
             _isHold = false;
             slappable.Slap();
         }
@@ -245,6 +254,8 @@ public class HandController : MonoBehaviour
     {
         if (hit.transform.TryGetComponent<ItemObject>(out var itemObject))
         {
+            _audioSource.PlayOneShot(_pickupSound);
+
             PickupItem(itemObject);
             _isHold = false;
             return true;

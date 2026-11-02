@@ -77,7 +77,7 @@ public class InventoryUI : View, IDropHandler
             {
                 var slotItem = slot.GetSlot();
                 if (slotItem == null) return;
-                if (_inventory.AddItem(slotItem.Item, eventData.position))
+                if (_inventory.AddItem(slotItem.Item, eventData.position, slot.InstanceId))
                     slot.ClearItem();
             }
 
@@ -90,7 +90,7 @@ public class InventoryUI : View, IDropHandler
 
                 if (ui.InventorySource != _inventory)
                 {
-                    _inventory.AddItem(slotItem.Item, point);
+                    _inventory.AddItem(slotItem.Item, point, slotItem.InstanceId);
                     ui.InventorySource.RemoveItem(ui.SlotIndex);
                 }
                 else

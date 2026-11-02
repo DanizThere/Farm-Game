@@ -7,6 +7,7 @@ public class Door : MonoBehaviour
     [SerializeField] private float _openSmooth = 10f;
     [SerializeField] private float _openAngle = 90f;
     [SerializeField] private Transform _doorTransform;
+    [SerializeField] private AudioSource _audioSource;
     private bool _isOpen = false;
     private Coroutine _coroutine;
     private float _currentAngle;
@@ -21,6 +22,7 @@ public class Door : MonoBehaviour
 
         _coroutine = StartCoroutine(RotateTo(targetAngle));
         _isOpen = !_isOpen;
+        _audioSource.Play();
     }
 
     private IEnumerator RotateTo(float targetAngle)

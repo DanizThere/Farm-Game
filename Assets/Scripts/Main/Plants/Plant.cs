@@ -29,8 +29,9 @@ public class Plant : PhysicObject, ISlappable
 
     private float _stageProgress;
 
-    private void Start()
+    protected override void OnAwake()
     {
+        base.OnAwake();
         _canGrab = false;
         var timeManager = ServiceLocator.Instance.GetService<TimeManager>();
         _stageConfigs = _stageConfigs.OrderBy(x => x.Stage).ToList();
@@ -56,6 +57,9 @@ public class Plant : PhysicObject, ISlappable
     {
         if (_plantHealth.IsAlive && !_canGrab)
             _plantHealth.Tick(Time.deltaTime, _currentConfig);
+
+        if (_plantHealth.IsAlive)
+            _plantEmotions.Tick(Time.deltaTime, _plantHealth);
     }
 
     public override void Grab(float force, CameraHandler handler, out float speedScale, HandController hand)
@@ -140,11 +144,7 @@ public class Plant : PhysicObject, ISlappable
         _currentConfig = newStage;
         _stageProgress = 0f;
 
-        var onChangeStage = _stageChangeEvents.FirstOrDefault(x => x.RequiredStage == _currentConfig.Stage);
-        if (onChangeStage != null)
-        {
-            onChangeStage.Invoke(this);
-        }
+        HandleStageChange();
     }
 
     private void HandleDeath()
@@ -164,8 +164,22 @@ public class Plant : PhysicObject, ISlappable
             {
                 var instance = Instantiate(_prefab);
                 instance.InstanceId = Guid.NewGuid().ToString();
+                instance.Heritables = new Heritables
+                {
+                    MaxImmunity = _plantHealth.MaxImmunity,
+                    MaxHealth = _plantHealth.MaxHealth,
+                };
                 instance.transform.position = position;
             }
+        }
+    }
+
+    private void HandleStageChange()
+    {
+        var onChangeStage = _stageChangeEvents.FirstOrDefault(x => x.RequiredStage == _currentConfig.Stage);
+        if (onChangeStage != null)
+        {
+            onChangeStage.Invoke(this);
         }
     }
 

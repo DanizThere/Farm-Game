@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class InventoryHandler : SLMonoBehaviour
 {
+    [SerializeField] private AudioSource _audioSource;
+
     private InventoryController _inventory;
     private CameraMovement _cameraMovement;
     private GameStateMachine _gameStateMachine;
@@ -35,18 +37,27 @@ public class InventoryHandler : SLMonoBehaviour
     {
         if (_cameraMovement.IsXNearBottom(10))
         {
+            if (!_audioSource.isPlaying)
+            {
+                _audioSource.Play();
+            }
+
             _slider.Show();
             _showProgress += Time.deltaTime;
             _slider.UpdateImage(_showProgress);
 
             if(_showProgress > 1f)
             {
+                _audioSource.Stop();
+
                 _inventory.Show();
                 _showProgress = 0f;
             }
         }
         else
         {
+            _audioSource.Stop();
+
             _showProgress = 0f;
             _slider.Hide();
         }
@@ -56,18 +67,27 @@ public class InventoryHandler : SLMonoBehaviour
     {
         if (_cameraMovement.IsXNearTop(10))
         {
+            if (!_audioSource.isPlaying)
+            {
+                _audioSource.Play();
+            }
+
             _slider.Show();
             _showProgress += Time.deltaTime;
             _slider.UpdateImage(_showProgress);
 
             if (_showProgress > 1f)
             {
+                _audioSource.Stop();
+
                 _inventory.Hide();
                 _showProgress = 0f;
             }
         }
         else
         {
+            _audioSource.Stop();
+
             _showProgress = 0f;
             _slider.Hide();
         }

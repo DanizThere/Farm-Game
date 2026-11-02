@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: PlantAttribute_Aroma
   m_EditorClassIdentifier: Assembly-CSharp::PlantAttribute
   Id: Aroma
-  DecayValue: 0.1
+  DecayValue: 0.5
   TopBorder: 100

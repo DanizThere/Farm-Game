@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc7e642172b8bc941b0731548f8403ee, type: 3}
+  m_Name: SFX_OnHit
+  m_EditorClassIdentifier: Assembly-CSharp::SFX
+  Id: OnHit
+  Clips:
+  - {fileID: 8300000, guid: 8af168b477ed66b47ad62ed9c5672473, type: 3}

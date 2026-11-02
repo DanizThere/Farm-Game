@@ -36,9 +36,9 @@ public class Chest : SLMonoBehaviour, ISlappable, ISaveableObject
         return _chestInventory.GetSlot(index);
     }
 
-    public bool AddItem(Item item, Vector2 position)
+    public bool AddItem(Item item, Vector2 position, string instanceId = null)
     {
-        if(_chestInventory.AddItem(item, position))
+        if(_chestInventory.AddItem(item, position, instanceId))
         {
             return true;
         }
@@ -97,7 +97,7 @@ public class Chest : SLMonoBehaviour, ISlappable, ISaveableObject
             var dbItem = dbContext.Items.Get(x => x.Id == item.Id).FirstOrDefault();
             if(dbItem != null)
             {
-                AddItem(dbItem, item.Position.ToVector());
+                AddItem(dbItem, item.Position.ToVector(), item.InstanceId);
                 continue;
             }
 

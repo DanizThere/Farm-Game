@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1336730396402785988}
   - component: {fileID: 8323503387230230642}
   - component: {fileID: 6971654282929934400}
+  - component: {fileID: 8350624418718850169}
   m_Layer: 0
   m_Name: Showel
   m_TagString: Untagged
@@ -46,12 +47,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff1b97b025bf9f4d968658f6546ee03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Showel
+  _instanceId: 6649a301-8250-43f5-aea9-de7045292367
+  _typeTag: tool
   _throwForce: 5
   _rb: {fileID: 6971654282929934400}
   _colliders:
   - {fileID: 3678175546029623368}
   - {fileID: 6760987593475963768}
   _item: {fileID: 11400000, guid: 8f77fb391ad349f46b60247c13fba029, type: 2}
+  _audioSource: {fileID: 8350624418718850169}
+  _onHitSound: {fileID: 8300000, guid: 934e873dab58ccb4491059e71bc7e6bf, type: 3}
   Efforts: []
   _itemModels:
   - {fileID: 4718844981652107066}
@@ -83,6 +88,103 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!82 &8350624418718850169
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3565305390140017693}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 4357295305495220057, guid: 230490d49d37a9546841774a39fb36a4, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &2358828879526777806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -93,7 +195,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 583619050316283307, guid: df24841e79143094ca56557ba634b85e, type: 3}
       propertyPath: m_VersionIndex
-      value: 1415
+      value: 1427
       objectReference: {fileID: 0}
     - target: {fileID: 5158892180614389816, guid: df24841e79143094ca56557ba634b85e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -137,7 +239,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6056818880546897598, guid: df24841e79143094ca56557ba634b85e, type: 3}
       propertyPath: m_VersionIndex
-      value: 557
+      value: 569
       objectReference: {fileID: 0}
     - target: {fileID: 7043782495436963060, guid: df24841e79143094ca56557ba634b85e, type: 3}
       propertyPath: m_Name

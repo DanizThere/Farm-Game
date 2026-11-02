@@ -6,6 +6,7 @@ public class Bed : DefaultSelectable, ISlappable
 {
 
     [SerializeField] private Transform _cameraSleepPosition;
+    [SerializeField] private AudioSource _audioSource;
     private CameraHandler _cameraHandler;
     private BedUI _bedUI;
     private TimeManager _timeManager;
@@ -34,6 +35,7 @@ public class Bed : DefaultSelectable, ISlappable
 
     public void Show()
     {
+        _audioSource.Play();
         var viewController = ServiceLocator.Instance.GetService<ViewController>();
 
         var prefab = viewController.Get<BedUI>();
