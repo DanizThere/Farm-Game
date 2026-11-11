@@ -13,11 +13,11 @@ public class LevelEntryPoint : AbstractEntryPoint
     public override IEnumerator Initialize()
     {
         ServiceLocator.Instance.GetService<GameStateMachine>().InitializeStates();
-        ServiceLocator.Instance.GetService<ViewController>().Initialize();
         if(_toggleToDependingMusic) ServiceLocator.Instance.GetService<MusicManager>().ToggleMusic();
 
         _dirtController.Generate();
         _saveHandler.Initialize(_playerInitializer);
+        ServiceLocator.Instance.GetService<ViewController>().Initialize();
 
         ServiceLocator.Instance.GetService<GameStateMachine>().SetState<OuterWorldGameState>();
 

@@ -51,7 +51,8 @@ public class JsonSaveService : ISaveService
                 TimeMultiplier = data.Time.TimeMultiplier,
             },
             Dialogues = new DialogueSerialize { Ids = data.Dialogues.Select(x => x.Id).ToList() },
-            Player = data.Player
+            Player = data.Player,
+            PlayerPosition = data.PlayerStartPosition.ToSerializable()
         };
 
         OnLoaded?.Invoke(Data);

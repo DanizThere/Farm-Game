@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,55 +7,95 @@ using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(PlantHealth))]
 [RequireComponent(typeof(PlantEmotions))]
-public class Plant : PhysicObject, ISlappable
+[RequireComponent(typeof(PlantsAnimator))]
+[RequireComponent(typeof(PlantMover))]
+[RequireComponent(typeof(PlantsRagdoll))]
+[RequireComponent(typeof(PlantSensor))]
+public class Plant : PhysicObject
 {
     public string PlantId;
+    public bool IsSleeping = false;
     public System.Action OnExcavation = delegate { };
     public System.Action OnDeath = delegate { };
     public float Progress => _stageProgress / _currentConfig.Duration;
     public PlantStageConfig CurrentConfig => _currentConfig;
     public PlantHealth Health => _plantHealth;
+    public PlantsAnimator Animator => _plantAnimator;
+    public PlantMover Mover => _plantMover;
+    public PlantsRagdoll Ragdoll => _plantsRagdoll;
+    public PlantEmotions Emotion => _plantEmotions;
+    public PlantSensor Sensor => _plantSensor;
 
     [SerializeField] private List<OnChangeStageEvent> _stageChangeEvents = new();
     [SerializeField] private List<PlantStageConfig> _stageConfigs = new();
     [SerializeField] private List<PlantRaiseMultiplier> _dirtBonus = new();
     [SerializeField] private Seed _prefab;
 
+    [SerializeField] private AudioSource _onSlapSound;
+
     [SerializeField] private AnimationCurve _seedsEvaluation;
+
+    [SerializeField] private float _defaultScale = .3f;
+    [SerializeField] private bool _isTick;
 
     private PlantHealth _plantHealth;
     private PlantEmotions _plantEmotions;
+    private PlantsAnimator _plantAnimator;
+    private PlantMover _plantMover;
+    private PlantsRagdoll _plantsRagdoll;
+    private PlantSensor _plantSensor;
     private PlantStageConfig _currentConfig;
     private PlantRaiseMultiplier _currentBonus;
 
     private float _stageProgress;
+    private Coroutine _slapCoroutine;
+    private Vector3 _currentScale;
+
+    private bool _isViolatedDeath;
+
+    private void Start()
+    {
+        _currentScale = Vector3.one * _defaultScale;
+        var timeManager = ServiceLocator.Instance.GetService<TimeManager>();
+        if (timeManager != null)
+            timeManager.OnDayChange += Grow;
+    }
 
     protected override void OnAwake()
     {
         base.OnAwake();
         _canGrab = false;
-        var timeManager = ServiceLocator.Instance.GetService<TimeManager>();
         _stageConfigs = _stageConfigs.OrderBy(x => x.Stage).ToList();
 
         _plantHealth = GetComponent<PlantHealth>();
         _plantEmotions = GetComponent<PlantEmotions>();
+        _plantAnimator = GetComponent<PlantsAnimator>();
+        _plantMover = GetComponent<PlantMover>();
+        _plantsRagdoll = GetComponent<PlantsRagdoll>();
+        _plantSensor = GetComponent<PlantSensor>();
+
+        SetBonus(PlantType.Default);
+
+        _plantsRagdoll.Initialize(this);
+        _plantSensor.Initialize(this);
 
         if (_currentConfig == null)
         {
             _currentConfig = _stageConfigs[0];
         }
 
-        _plantHealth.OnDeath += OnDeath;
+        _plantHealth.OnDeath += HandleDeath;
 
         OnDeath += HandleDeath;
         OnExcavation += HandleExcavation;
-
-        if (timeManager != null)
-            timeManager.OnDayChange += Grow;
     }
 
     private void Update()
     {
+        transform.localScale = Vector3.Lerp(transform.localScale, _currentScale, Time.deltaTime);
+
+        if (!_isTick) return;
+
         if (_plantHealth.IsAlive && !_canGrab)
             _plantHealth.Tick(Time.deltaTime, _currentConfig);
 
@@ -76,6 +117,12 @@ public class Plant : PhysicObject, ISlappable
         base.UnGrab(hand, out speedScale);
     }
 
+    public void Kill()
+    {
+        _isViolatedDeath = true;
+        _plantHealth.ModifyHealth(-100);
+    }
+
     public void ApplyDamage(float damage)
     {
         _plantHealth.ModifyHealth(-damage);
@@ -88,7 +135,8 @@ public class Plant : PhysicObject, ISlappable
 
     public void ApplyHealth(float value)
     {
-        _plantHealth.ModifyHealth(value);
+        if(_plantHealth.IsAlive)
+            _plantHealth.ModifyHealth(value);
     }
 
     public void ApplyImmunity(float value)
@@ -110,9 +158,18 @@ public class Plant : PhysicObject, ISlappable
         _currentBonus = _dirtBonus.FirstOrDefault(x => x.PlantType == plantType);
     }
 
-    public void Slap()
+    public void AllowMove()
     {
-        _plantEmotions.Emote();
+        _plantMover.Enable();
+    }
+
+    public void Slap(RagdollPart part, float hitForce)
+    {
+        if (_plantHealth.IsAlive) _onSlapSound.Play();
+        if (_slapCoroutine != null)
+            StopCoroutine(_slapCoroutine);
+
+        _slapCoroutine = StartCoroutine(SlapEnumerator());
     }
 
     public void TryEffort(ToolItemObject itemObject)
@@ -125,15 +182,22 @@ public class Plant : PhysicObject, ISlappable
 
     private void Grow()
     {
+        if (!_plantHealth.IsAlive) return;
+
         _stageProgress += 1 + _currentBonus!.Bonus;
+        if(_currentConfig.Stage == PlantStage.Seed)
+        {
+            _currentScale = Vector3.one * (_stageProgress / _currentConfig.Duration);
+        }
         if (_stageProgress >= _currentConfig.Duration)
         {
             UpdateNextStage();
         }
     }
 
-    private void UpdateNextStage()
+    public void UpdateNextStage()
     {
+        _currentScale = Vector3.one;
         var index = _stageConfigs.IndexOf(_currentConfig) + 1;
         if (index >= _stageConfigs.Count)
         {
@@ -149,6 +213,20 @@ public class Plant : PhysicObject, ISlappable
 
     private void HandleDeath()
     {
+        if (_isViolatedDeath)
+        {
+            _plantSensor.SignalizeOnViolatedDeath();
+        }
+        else
+        {
+            _plantSensor.SignalizeOnPhysicDeath();
+        }
+
+        _plantsRagdoll.EnableRagdoll();
+        _plantAnimator.DisableAnimator();
+        _plantMover.Disable();
+
+
         var fertility = _plantHealth.PlantAttributes.FirstOrDefault(x => x.Id == "Fertility");
         var seedsCount = 5;
 
@@ -191,6 +269,19 @@ public class Plant : PhysicObject, ISlappable
         _rb.interpolation = RigidbodyInterpolation.Extrapolate;
         _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         _rb.isKinematic = false;
+    }
+
+    private IEnumerator SlapEnumerator()
+    {
+        _plantsRagdoll.EnableRagdoll();
+        _plantAnimator.DisableAnimator();
+
+        if (!_plantHealth.IsAlive) yield break;
+
+        yield return new WaitForSeconds(.3f);
+
+        _plantsRagdoll.DisableRagdoll();
+        _plantAnimator.EnableAnimator();
     }
 }
 

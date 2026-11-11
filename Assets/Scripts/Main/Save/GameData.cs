@@ -9,4 +9,5 @@ public class GameData
     public List<SaveObject> Objects = new();
     public DialogueSerialize Dialogues = new();
     public PlayerData Player = new();
+    public Vector3Serialize PlayerPosition = new();
 }

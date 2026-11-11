@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: PlantAttribute_Fertility
   m_EditorClassIdentifier: Assembly-CSharp::PlantAttribute
   Id: Fertility
-  DecayValue: 0.5
+  DecayValue: 0.2
   TopBorder: 100

@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: 3116721866386683039}
   - component: {fileID: 8653209756455517970}
   - component: {fileID: 5268980012323425509}
+  - component: {fileID: 7874262807903846514}
   m_Layer: 6
   m_Name: '[Player]'
   m_TagString: Untagged
@@ -338,6 +339,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a478ac6767b0d394e931482df9e07e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEscapeHandler
+--- !u!114 &7874262807903846514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4639566974258648255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8371f8f5ee505d0469cd2e699be4d375, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CheckAccesibilities
+  _maxRadius: 5
+  _slappableInteractPrefab: {fileID: 5726535591219554498, guid: bf596eb709fc472468fae1e27b438bb3, type: 3}
+  _physicObjectInteractPrefab: {fileID: 7159850294173554696, guid: a5e038d773348114d8fae021fd0af0cb, type: 3}
+  _body: {fileID: 7798955910022750267}
 --- !u!1 &8602033189519112821
 GameObject:
   m_ObjectHideFlags: 0

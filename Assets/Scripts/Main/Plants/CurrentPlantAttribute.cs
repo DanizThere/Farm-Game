@@ -9,4 +9,5 @@ public class CurrentPlantAttribute
     public float CurrentValue = 100;
     public float TopBorder = 120;
     public float DecayValue = .5f;
+    public List<CurrentConsumableEffect> Effects = new();
 }

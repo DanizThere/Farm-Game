@@ -64,6 +64,11 @@ public class PlayerController : MonoBehaviour
     {
         _playerWallet.Save(ref data);
     }
+
+    public void SetPosition(Vector3 position)
+    {
+        _playerMovement.SetPosition(position);
+    }
 }
 
 public class BobbingTransforms

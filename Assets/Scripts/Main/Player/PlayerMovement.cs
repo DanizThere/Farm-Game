@@ -74,7 +74,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
 
     private void Update()
     {
-        if (_controller)
+        if (_controller && _characterController.enabled)
             Move(_controller.Direction);
 
         _speed = Mathf.Lerp(_speed, _currentSpeed, Time.deltaTime * 10f);
@@ -118,7 +118,8 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
 
         _velocity.y += _gravityForce * -1 * _timeScale * Time.fixedDeltaTime;
 
-        _characterController.Move(_velocity);
+        if(_characterController.enabled)
+            _characterController.Move(_velocity);
     }
 
     private void OnDestroy()
@@ -130,7 +131,9 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
 
     private void OnRun()
     {
-        _isRunning = true;
+        var isGrounded = Physics.Raycast(transform.position, Vector3.down, _characterController.height * .5f + .1f);
+        if(isGrounded)
+            _isRunning = true;
     }
     private void OnWalk()
     {
@@ -140,6 +143,13 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     public void SetTimeScale(float timeScale)
     {
         _timeScale = timeScale;
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        _characterController.enabled = false;
+        transform.position = position;
+        _characterController.enabled = true;
     }
 
     public void Move(Vector3 move)
@@ -176,6 +186,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     {
         if (_characterController.isGrounded)
         {
+            _isRunning = false;
             _velocity.y = Mathf.Sqrt(_jumpForce * -1f * -_gravityForce * _timeScale);
             _modelAnimator.SetTrigger("Jump");
             _audioSource.PlayOneShot(_jumpSound);

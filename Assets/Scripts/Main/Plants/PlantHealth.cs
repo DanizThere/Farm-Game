@@ -39,6 +39,17 @@ public class PlantHealth : MonoBehaviour
         foreach(var attribute in PlantAttributes)
         {
             attribute.CurrentValue -= attribute.DecayValue * deltaTime;
+            attribute.Effects = attribute.Effects.Where(x => x.Duration < x.CurrentTime).ToList();
+
+            foreach(var effect in attribute.Effects)
+            {
+                effect.CurrentTime += deltaTime;
+                if(effect.CurrentTime <= effect.Duration)
+                {
+                    attribute.CurrentValue += effect.EffectValue * deltaTime;
+                    continue;
+                }                
+            }
         }
 
         var isAttributeBelowZero = PlantAttributes.Any(x => x.CurrentValue < 0f);
@@ -49,6 +60,39 @@ public class PlantHealth : MonoBehaviour
         }
 
         ModifyHealth(_naturalHealthRegen);
+    }
+
+    public void AddEffect(ConsumableEffect effect)
+    {
+        if (effect.IsInstantEffect)
+        {
+            switch(effect.EffectType)
+            {
+                case ConsumableEffectType.Health:
+                    ModifyHealth(effect.EffectValue);
+                    break;
+                case ConsumableEffectType.Immunity:
+                    ModifyImmunity(effect.EffectValue);
+                    break;
+                case ConsumableEffectType.Attribute:
+                    ModifyAttribute(effect.RequiredAttribute.Id, effect.EffectValue);
+                    break;
+            }
+        }
+
+        var currentEffect = new CurrentConsumableEffect
+        {
+            Duration = effect.Duration,
+            EffectValue = effect.EffectValue,
+            EffectType = effect.EffectType,
+            CurrentTime = 0f
+        };
+
+        var attribute = PlantAttributes.FirstOrDefault(x => x.Id == effect.RequiredAttribute.Id);
+        if(attribute != null)
+        {
+            attribute.Effects.Add(currentEffect);
+        }
     }
 
     public void ModifyAttribute(string name, float value)

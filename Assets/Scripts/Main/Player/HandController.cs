@@ -139,7 +139,7 @@ public class HandController : MonoBehaviour
         _animator.SetBool(grabNameAnim, _isHold && !IsTotalBusy);
 
         _canInteract = Physics.Raycast(_handler.Position, _handler.GetDirection(), out var hit, _handDistance)
-            && ((hit.transform.TryGetComponent<ISelectable>(out var sel) && sel.CanSelect()) || hit.transform.TryGetComponent<ISlappable>(out _));
+            && ((hit.transform.TryGetComponent<ISelectable>(out var sel) && sel.CanSelect()) || hit.transform.TryGetComponent<IInteractable>(out _));
     }
 
     private void SetupOuter(InputHandler inputHandler)

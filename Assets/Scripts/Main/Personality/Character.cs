@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterModel))]
 public class Character : MonoBehaviour
 {
     public string EntityType;
@@ -14,14 +13,11 @@ public class Character : MonoBehaviour
 
     [SerializeField] private Mood _currentMood;
 
-    private CharacterModel _characterModel;
-
     private Action<Mood> _onChange = delegate { };
 
     private void Awake()
     {
         _onChange += ChangeMood;
-        _characterModel = GetComponent<CharacterModel>();
     }
 
 

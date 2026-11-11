@@ -15,6 +15,7 @@ public class Chest : SLMonoBehaviour, ISlappable, ISaveableObject
     public string ExtraData { get => JsonConvert.SerializeObject(GetSlotsSerializable()); }
 
     [SerializeField] private string _id;
+    [SerializeField] private AudioSource _audioSource;
     private Inventory _chestInventory;
     private ViewController _viewController;
 
@@ -72,6 +73,8 @@ public class Chest : SLMonoBehaviour, ISlappable, ISaveableObject
         _chestUI = goChest;
         _chestUI.Init(_chestInventory);
         _chestUI.OnClose += Close;
+
+        _audioSource.Play();
 
         _inventoryUI = goInventory;
 

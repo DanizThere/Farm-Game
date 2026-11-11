@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class PlantEmotions : MonoBehaviour
     [SerializeField] private Transform _startTransform;
     [SerializeField] private List<PlantAttributeEmotion> _attributes = new();
     [SerializeField] private DialogueNode _checkHealth;
+    [SerializeField] private List<Plant> _plantsRelationships = new();
 
     private List<CurrentPlantAttributeEmotion> _currentAtttributes = new();
     private Plant _plant;
@@ -74,5 +76,29 @@ public class PlantEmotions : MonoBehaviour
         }
 
         _commentaryHandler.Print(_startTransform.position, message);
+    }
+
+    public void ReactOnPhysicDeath(Plant plant)
+    {
+        var relationship = _plantsRelationships.Any(x => x == plant);
+        if (!relationship)
+        {
+            _commentaryHandler.Print(_startTransform.position, "Вот и прошла вся жизнь этого растения...");
+            return;
+        }
+
+        _commentaryHandler.Print(_startTransform.position, "Вот и мою подругу постигла погибель. Я буду тебя помнить...");
+    }
+
+    public void ReactOnViolatedDeath(Plant plant)
+    {
+        var relationship = _plantsRelationships.Any(x => x == plant);
+        if (!relationship)
+        {
+            _commentaryHandler.Print(_startTransform.position, "Какой ужас, за что?!");
+            return;
+        }
+
+        _commentaryHandler.Print(_startTransform.position, "Ах ты! Чтоб тебя настигло правосудие, убийца!");
     }
 }

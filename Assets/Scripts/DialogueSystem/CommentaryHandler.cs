@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Localization;
 
 public class CommentaryHandler : SLMonoBehaviour
 {

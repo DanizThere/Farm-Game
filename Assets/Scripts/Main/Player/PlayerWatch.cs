@@ -34,10 +34,12 @@ public class PlayerWatch : SLMonoBehaviour
     public void ShowTime()
     {
         _watch.Show();
+        _hand.SetTarget(_cameraHolder.WatchPosition);
     }
 
     public void HideTime()
     {
         _watch.Hide();
+        _hand.ResetTarget();
     }
 }

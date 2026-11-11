@@ -12,4 +12,11 @@ public abstract class ToolItemObject : ItemObject
     {
         CurrentModel = new(_itemModels[0]);
     }
+
+    protected bool Raycast(out RaycastHit hitResult)
+    {
+        var result = Physics.Raycast(_cameraHandler.Position, _cameraHandler.GetDirection(), out var hit, _currentHand.HandDistance);
+        hitResult = hit;
+        return result;
+    }
 }

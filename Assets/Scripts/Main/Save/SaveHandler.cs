@@ -1,3 +1,4 @@
+using Assets.Scripts.Extenisions;
 using UnityEngine;
 
 public class SaveHandler : MonoBehaviour
@@ -41,7 +42,7 @@ public class SaveHandler : MonoBehaviour
         _playerInventory.Save(_saveService.Data.Inventory);
         _timeService.Save(ref _saveService.Data.Time);
         _dbContext.SaveNodes(ref _saveService.Data.Dialogues.Ids);
-        _player.Save(ref _saveService.Data.Player);
+        _player.Save(ref _saveService.Data.Player, ref _saveService.Data.PlayerPosition);
         _items.Save(ref _saveService.Data.Objects);
 
         _saveService.Save();
@@ -51,7 +52,7 @@ public class SaveHandler : MonoBehaviour
     {
         _playerInventory.Load(data.Inventory);
         _timeService.Load(data.Time);
-        _player.Initialize(data.Player);
+        _player.Initialize(data.Player, data.PlayerPosition.ToVector());
         _items.Load(data.Objects);
 
         _dbContext.AddNodes(data.Dialogues.Ids);
