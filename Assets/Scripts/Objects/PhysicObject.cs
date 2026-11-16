@@ -72,7 +72,7 @@ public class PhysicObject : MonoBehaviour, ISelectable, ICartLoadable
         _rb.angularVelocity = Vector3.Lerp(_rb.angularVelocity, Vector3.zero, Time.fixedDeltaTime * 5f);
     }
 
-    public virtual void Grab(float force, CameraHandler handler, out float speedScale, HandController hand)
+    public virtual void Grab(float force, CameraHandler handler, HandController hand)
     {
         if (!_hands.Contains(hand)) _hands.Add(hand);
         _isGrabbed = true;
@@ -91,18 +91,15 @@ public class PhysicObject : MonoBehaviour, ISelectable, ICartLoadable
         _rb.mass = Mathf.Max(0.1f, _currentWeight * _massMultiplier);
         _rb.linearVelocity = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;
-
-        speedScale = _currentWeight / _defaultWeight;
     }
 
-    public virtual void UnGrab(HandController hand, out float speedScale)
+    public virtual void UnGrab(HandController hand)
     {
         if (_hands.Contains(hand)) _hands.Remove(hand);
 
         _isGrabbed = _hands.Any();
 
         _currentWeight = _defaultWeight;
-        speedScale = _currentWeight / _defaultWeight;
         if (!_isGrabbed)
         {
             _rb.useGravity = true;

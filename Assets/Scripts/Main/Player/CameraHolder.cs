@@ -7,11 +7,13 @@ public class CameraHolder : MonoBehaviour
     public Transform LeftHandTransform => _leftHandTransform;
     public Transform RightHandTransform => _rightHandTransform;
     public Camera Camera => _camera;
+    public Fading Fading => _fading;
 
     [SerializeField] private Transform _watchPosition;
     [SerializeField] private Transform _leftHandTransform;
     [SerializeField] private Transform _rightHandTransform;
     [SerializeField] private InUpdateFollower _inUpdateFollower;
+    [SerializeField] private Fading _fading;
 
     [SerializeField] private Camera _camera;
     [SerializeField] private CameraMovement _cameraMovement;
@@ -24,6 +26,7 @@ public class CameraHolder : MonoBehaviour
 
         _cameraMovement.Initialize(body, model);
         _inUpdateFollower.SetTarget(_defaultTarget);
+        _fading.UnFade();
     }
 
     public void SetTarget(Transform target)

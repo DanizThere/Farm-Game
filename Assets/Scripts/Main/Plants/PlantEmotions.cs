@@ -33,6 +33,11 @@ public class PlantEmotions : MonoBehaviour
             Periodicity = x.Periodicity,
             Timer = 0f
         }));
+
+        foreach(var plant in _plantsRelationships)
+        {
+            _character.PutRelationship(plant.Character.Id);
+        }
     }
 
     public void Tick(float deltaTime, PlantHealth health)
@@ -80,7 +85,7 @@ public class PlantEmotions : MonoBehaviour
 
     public void ReactOnPhysicDeath(Plant plant)
     {
-        var relationship = _plantsRelationships.Any(x => x == plant);
+        var relationship = _plant.Character.Relationships.Any(x => x.Related == plant.Character.Id);
         if (!relationship)
         {
             _commentaryHandler.Print(_startTransform.position, "Вот и прошла вся жизнь этого растения...");
@@ -92,7 +97,7 @@ public class PlantEmotions : MonoBehaviour
 
     public void ReactOnViolatedDeath(Plant plant)
     {
-        var relationship = _plantsRelationships.Any(x => x == plant);
+        var relationship = _plant.Character.Relationships.Any(x => x.Related == plant.Character.Id);
         if (!relationship)
         {
             _commentaryHandler.Print(_startTransform.position, "Какой ужас, за что?!");

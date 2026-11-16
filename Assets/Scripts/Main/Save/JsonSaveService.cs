@@ -49,6 +49,7 @@ public class JsonSaveService : ISaveService
                 SunriseHour = data.Time.SunriseHour,
                 SunsetHour = data.Time.SunsetHour,
                 TimeMultiplier = data.Time.TimeMultiplier,
+                SunStayHour = data.Time.SunStayHour
             },
             Dialogues = new DialogueSerialize { Ids = data.Dialogues.Select(x => x.Id).ToList() },
             Player = data.Player,

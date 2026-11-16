@@ -6,7 +6,15 @@ using UnityEngine.Rendering.Universal;
 
 public class TimeManager : MonoBehaviour, IService, IFreezeable
 {
+    public float DayProgress => (float)_timeService.CurrentTime.TimeOfDay.TotalSeconds / 86400f;
     public DateTime CurrentTime => _timeService.CurrentTime;
+    public DayStage CurrentStage => _timeService.CurrentDayStage;
+
+    public event Action OnDay
+    {
+        add => _timeService.OnDay += value;
+        remove => _timeService.OnDay -= value;
+    }
 
     public event Action OnSunrise
     {
@@ -70,6 +78,7 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
         {
             timeSettings.TimeMultiplier = timeSerialize.TimeMultiplier;
             timeSettings.SunsetHour = timeSerialize.SunsetHour;
+            timeSettings.SunStayHour = timeSerialize.SunStayHour;
             timeSettings.SunriseHour = timeSerialize.SunriseHour;
             timeSettings.StartHour = timeSerialize.StartHour;
             timeSettings.StartDate = timeSerialize.CurrentDate;
@@ -137,7 +146,8 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
             SunsetHour = _timeSettings.SunsetHour,
             TimeMultiplier = _timeSettings.TimeMultiplier,
             CurrentDate = _timeService.CurrentTime.Date,
-            StartHour = _timeService.CurrentTime.Hour
+            StartHour = _timeService.CurrentTime.Hour,
+            SunStayHour = _timeSettings.SunStayHour
         };
 
         timeSerialize = dataTime;

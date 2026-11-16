@@ -37,9 +37,9 @@ public class StuckedObject : PhysicObject
             base.Move(angleHandClamp);
     }
 
-    public override void Grab(float force, CameraHandler handler, out float speedScale, HandController hand)
+    public override void Grab(float force, CameraHandler handler, HandController hand)
     {
-        base.Grab(force, handler, out speedScale, hand);
+        base.Grab(force, handler, hand);
 
         _startCameraRotation = _handler.Camera.transform.rotation;
     }

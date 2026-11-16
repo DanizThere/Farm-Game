@@ -15,7 +15,6 @@ public class SaveHandler : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-
         if (_saveOnQuit)
             SaveData();
     }

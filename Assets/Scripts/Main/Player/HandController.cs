@@ -149,14 +149,6 @@ public class HandController : MonoBehaviour
             inputHandler.OnClickEvent += OnClick;
             inputHandler.OnClickHoldedEvent += OnHold;
             inputHandler.OnClickReleased += OnRelease;
-            inputHandler.OnWatchEvent += () =>
-            {
-                _animator.SetBool(watchNameAnim, true);
-            };
-            inputHandler.OnWatchReleasedEvent += () =>
-            {
-                _animator.SetBool(watchNameAnim, false);
-            };
         }
         else
         {
@@ -216,8 +208,7 @@ public class HandController : MonoBehaviour
 
         if (_currentObject)
         {
-            _currentObject.UnGrab(this, out var speed);
-            _speedScale.Value = speed;
+            _currentObject.UnGrab(this);
             _currentObject = null;
 
             _inUpdateFollower.enabled = true;
@@ -280,15 +271,10 @@ public class HandController : MonoBehaviour
     private bool TryGetPhysicObject(RaycastHit hit)
     {
         var isGrabbing = hit.transform.TryGetComponent<PhysicObject>(out _currentObject);
-        _inUpdateFollower.enabled = !isGrabbing;
 
         if (_currentObject != null && _currentObject.CanGrab())
         {
-            transform.position = hit.point;
-            transform.SetParent(_currentObject.transform);
-
-            _currentObject.Grab(_handForce, _handler, out var speed, this);
-            _speedScale.Value = speed;
+            _currentObject.Grab(_handForce, _handler, this);
             _isHold = false;
         }
         else

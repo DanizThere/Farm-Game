@@ -35,6 +35,7 @@ public enum ReactionTitle
 {
     OnHit,
     OnFeed,
-    OnShower
+    OnShower,
+    OnTalking
 }
 

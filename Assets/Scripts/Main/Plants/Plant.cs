@@ -11,7 +11,7 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(PlantMover))]
 [RequireComponent(typeof(PlantsRagdoll))]
 [RequireComponent(typeof(PlantSensor))]
-public class Plant : PhysicObject
+public class Plant : NPC
 {
     public string PlantId;
     public bool IsSleeping = false;
@@ -21,10 +21,9 @@ public class Plant : PhysicObject
     public PlantStageConfig CurrentConfig => _currentConfig;
     public PlantHealth Health => _plantHealth;
     public PlantsAnimator Animator => _plantAnimator;
-    public PlantMover Mover => _plantMover;
     public PlantsRagdoll Ragdoll => _plantsRagdoll;
     public PlantEmotions Emotion => _plantEmotions;
-    public PlantSensor Sensor => _plantSensor;
+    public PlantSensor PlantSensor => _plantSensor;
 
     [SerializeField] private List<OnChangeStageEvent> _stageChangeEvents = new();
     [SerializeField] private List<PlantStageConfig> _stageConfigs = new();
@@ -41,7 +40,6 @@ public class Plant : PhysicObject
     private PlantHealth _plantHealth;
     private PlantEmotions _plantEmotions;
     private PlantsAnimator _plantAnimator;
-    private PlantMover _plantMover;
     private PlantsRagdoll _plantsRagdoll;
     private PlantSensor _plantSensor;
     private PlantStageConfig _currentConfig;
@@ -53,24 +51,40 @@ public class Plant : PhysicObject
 
     private bool _isViolatedDeath;
 
-    private void Start()
+    private void Update()
     {
-        _currentScale = Vector3.one * _defaultScale;
-        var timeManager = ServiceLocator.Instance.GetService<TimeManager>();
-        if (timeManager != null)
-            timeManager.OnDayChange += Grow;
+        transform.localScale = Vector3.Lerp(transform.localScale, _currentScale, Time.deltaTime);
+
+        if (!_isTick) return;
+        if (!_plantHealth.IsAlive) return;
+
+        _plantHealth.Tick(Time.deltaTime, _currentConfig);
+        _plantEmotions.Tick(Time.deltaTime, _plantHealth);
+
+        if (_currentConfig.Stage <= PlantStage.Vegetative) return;
+
+        NPCUpdate();
     }
 
-    protected override void OnAwake()
+    protected override void NPCStart()
     {
-        base.OnAwake();
-        _canGrab = false;
+        _timeManager = ServiceLocator.Instance.GetService<TimeManager>();
+        _timeManager.OnDayChange += Grow;
+
+        _currentScale = Vector3.one * _defaultScale;
+
+        if (_currentConfig.Stage <= PlantStage.Vegetative) return;
+        InitializeActivity();
+    }
+
+    protected override void NPCAwake()
+    {
+        base.NPCAwake();
         _stageConfigs = _stageConfigs.OrderBy(x => x.Stage).ToList();
 
         _plantHealth = GetComponent<PlantHealth>();
         _plantEmotions = GetComponent<PlantEmotions>();
         _plantAnimator = GetComponent<PlantsAnimator>();
-        _plantMover = GetComponent<PlantMover>();
         _plantsRagdoll = GetComponent<PlantsRagdoll>();
         _plantSensor = GetComponent<PlantSensor>();
 
@@ -88,33 +102,6 @@ public class Plant : PhysicObject
 
         OnDeath += HandleDeath;
         OnExcavation += HandleExcavation;
-    }
-
-    private void Update()
-    {
-        transform.localScale = Vector3.Lerp(transform.localScale, _currentScale, Time.deltaTime);
-
-        if (!_isTick) return;
-
-        if (_plantHealth.IsAlive && !_canGrab)
-            _plantHealth.Tick(Time.deltaTime, _currentConfig);
-
-        if (_plantHealth.IsAlive)
-            _plantEmotions.Tick(Time.deltaTime, _plantHealth);
-    }
-
-    public override void Grab(float force, CameraHandler handler, out float speedScale, HandController hand)
-    {
-        speedScale = 1f;
-        if (!_canMove) return;
-        base.Grab(force, handler, out speedScale, hand);
-    }
-
-    public override void UnGrab(HandController hand, out float speedScale)
-    {
-        speedScale = 1f;
-        if (!_canMove) return;
-        base.UnGrab(hand, out speedScale);
     }
 
     public void Kill()
@@ -160,7 +147,7 @@ public class Plant : PhysicObject
 
     public void AllowMove()
     {
-        _plantMover.Enable();
+        //_plantMover.Enable();
     }
 
     public void Slap(RagdollPart part, float hitForce)
@@ -224,7 +211,6 @@ public class Plant : PhysicObject
 
         _plantsRagdoll.EnableRagdoll();
         _plantAnimator.DisableAnimator();
-        _plantMover.Disable();
 
 
         var fertility = _plantHealth.PlantAttributes.FirstOrDefault(x => x.Id == "Fertility");
@@ -263,12 +249,6 @@ public class Plant : PhysicObject
 
     private void HandleExcavation()
     {
-        _canGrab = true;
-        _canMove = true;
-        _rb.useGravity = true;
-        _rb.interpolation = RigidbodyInterpolation.Extrapolate;
-        _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-        _rb.isKinematic = false;
     }
 
     private IEnumerator SlapEnumerator()
