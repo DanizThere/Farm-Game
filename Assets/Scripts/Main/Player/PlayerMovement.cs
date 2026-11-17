@@ -43,6 +43,8 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     private float _footstepTimer = 0f;
     private bool _wasGrounded;
 
+    private bool _isGrounded;
+
 
     public void Initialize(List<HandController> handControllers, PlayerData data)
     {
@@ -74,20 +76,23 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
 
     private void Update()
     {
+        _isGrounded = Physics.Raycast(transform.position, Vector3.down, _characterController.height * .5f + .1f);
         if (_controller && _characterController.enabled)
             Move(_controller.Direction);
 
-        _speed = Mathf.Lerp(_speed, _currentSpeed, Time.deltaTime * 10f);
+        if (_isGrounded)
+            _speed = Mathf.Lerp(_speed, _currentSpeed, Time.deltaTime * 10f);
+        else _speed = _moveSpeed;
         _currentSpeed = _isRunning ? _runSpeed : _moveSpeed;
         PlayFootstepSound();
 
-        var isGrounded = Physics.Raycast(transform.position, Vector3.down, _characterController.height * .5f + .1f);
-        if (isGrounded && !_wasGrounded)
+       
+        if (_isGrounded && !_wasGrounded)
         {
             _audioSource.PlayOneShot(_landSound);
         }
 
-        _wasGrounded = isGrounded;
+        _wasGrounded = _isGrounded;
     }
 
     private void PlayFootstepSound()
@@ -99,8 +104,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
             return;
         }
 
-        var isGrounded = Physics.Raycast(transform.position, Vector3.down, _characterController.height * .5f + .1f);
-        if (isGrounded && _characterController.velocity.magnitude > .1f)
+        if (_isGrounded && _characterController.velocity.magnitude > .1f)
         {
             _footstepTimer += Time.deltaTime;
             return;
@@ -131,9 +135,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
 
     private void OnRun()
     {
-        var isGrounded = Physics.Raycast(transform.position, Vector3.down, _characterController.height * .5f + .1f);
-        if(isGrounded)
-            _isRunning = true;
+        _isRunning = true;
     }
     private void OnWalk()
     {
@@ -186,7 +188,6 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     {
         if (_characterController.isGrounded)
         {
-            _isRunning = false;
             _velocity.y = Mathf.Sqrt(_jumpForce * -1f * -_gravityForce * _timeScale);
             _modelAnimator.SetTrigger("Jump");
             _audioSource.PlayOneShot(_jumpSound);
