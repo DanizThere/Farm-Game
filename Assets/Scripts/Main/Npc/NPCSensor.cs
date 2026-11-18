@@ -4,18 +4,38 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(Animator))]
 public class NPCSensor : MonoBehaviour
 {
     public bool IsBusy = false;
+    public float TalkRadius => _talkRadius;
 
-    [SerializeField] private float _maxRadius = 5f;
+    [SerializeField] private WorkType _workType;
+    [SerializeField] private float _sensorRadius = 30f;
+    [SerializeField] private float _talkRadius = 1f;
     private NPC _npc;
     public NavMeshAgent Agent { get; private set; }
+    public Animator Animator { get; private set; }
 
     public void Initialize(NPC npc)
     {
         _npc = npc;
         Agent = GetComponent<NavMeshAgent>();
+        Animator = GetComponent<Animator>();
+    }
+
+    public AbstractWork GetWorkNearby()
+    {
+        var allWorks = GetTNear<AbstractWork>();
+        AbstractWork nearWork = null;
+        foreach(var work in allWorks)
+        {
+            if (work.IsEngaged || (work.WorkType != _workType && work.WorkType != WorkType.Default)) continue;
+            nearWork = work;
+            break;
+        }
+
+        return nearWork;
     }
 
     public NPC GetNPCNearly()
@@ -41,7 +61,7 @@ public class NPCSensor : MonoBehaviour
     public List<T> GetTNear<T>() where T : Component
     {
         var allNpc = FindObjectsByType<T>().ToList();
-        allNpc = allNpc.Where(x => Vector3.Distance(x.transform.position, transform.position) <= _maxRadius).ToList();
+        allNpc = allNpc.Where(x => Vector3.Distance(x.transform.position, transform.position) <= _sensorRadius).ToList();
 
         return allNpc;
     }

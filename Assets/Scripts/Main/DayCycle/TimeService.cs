@@ -88,16 +88,27 @@ public class TimeService
 
     public float CalculateSunAngle()
     {
-        var isDay = CurrentDayStage == DayStage.Day || CurrentDayStage == DayStage.Morning;
+        var isDay = CurrentDayStage != DayStage.Night;
         var startDegree = isDay ? 0 : 180;
         var start = isDay ? _sunriseTime : _sunsetTime;
-        var end = isDay ? + _sunsetTime : _sunriseTime;
+        var end = isDay ? _sunsetTime : _sunriseTime;
 
         var totalTime = CalculateDifference(start, end);
         var elapsedTime = CalculateDifference(start, _currentTime.TimeOfDay);
 
         var percentage = elapsedTime.TotalMinutes / totalTime.TotalMinutes;
         return Mathf.Lerp(startDegree, startDegree + 180, (float)percentage);
+    }
+
+    public Vector3 CalculateSunPosition(float radius)
+    {
+        float angleDeg = CalculateSunAngle();
+        float angleRad = angleDeg * Mathf.Deg2Rad;
+
+        float x = Mathf.Cos(angleRad) * radius;
+        float y = Mathf.Sin(angleRad) * radius;
+
+        return new Vector3(x, y, 0f);
     }
 
     private DayStage GetStage()

@@ -1,21 +1,38 @@
 using System;
 using System.Collections.Generic;
+using TMPEffects.Components;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DialogueView : View
 {
-    [SerializeField] private TextMeshProUGUI _dialogueText, _nameText;
+    public Action OnFinish = delegate { };
+    public Action OnCancel = delegate { };
+    public Action OnStart = delegate { };
+
+    public bool IsWriting => _dialogueText.IsWriting;
+
+    [SerializeField] private TMPWriter _dialogueText;
+    [SerializeField] private TextMeshProUGUI _nameText;
     [SerializeField] private Transform _buttonPanel;
     [SerializeField] private Button _prefab;
 
     private List<Button> _buttons = new();
+    private string _text;
 
-    public void SetData(string text, string name)
+    private void Start()
     {
-        _dialogueText.maxVisibleCharacters = 0;
-        _dialogueText.text = text;
+        _dialogueText.OnFinishWriter.AddListener(_ => OnFinish?.Invoke());
+        _dialogueText.OnStopWriter.AddListener(_ => OnCancel?.Invoke());
+        _dialogueText.OnStartWriter.AddListener(_ => OnStart?.Invoke());
+    }
+
+    public void SetData(string text, string name, float timeDelay = .05f)
+    {
+        _text = text;
+        _dialogueText.CurrentDelays.SetDelay(timeDelay);
+        _dialogueText.SetText(_text);
         _nameText.text = name;
 
         foreach(var button in _buttons)
@@ -23,6 +40,12 @@ public class DialogueView : View
             Destroy(button.gameObject);
         }
         _buttons.Clear();
+    }
+
+    public void Stop()
+    {
+        _dialogueText.SkipWriter();
+        _dialogueText.Show(0, _text.Length);
     }
 
     public void InitButton(Action onClick, string optionName)
@@ -33,15 +56,5 @@ public class DialogueView : View
         instance.transform.SetAsLastSibling();
 
         _buttons.Add(instance);
-    }
-
-    public void SetMaxVisible(int i)
-    {
-        _dialogueText.maxVisibleCharacters = i;
-    }
-
-    public void ResetMaxVisible()
-    {
-        _dialogueText.maxVisibleCharacters = int.MaxValue;
     }
 }

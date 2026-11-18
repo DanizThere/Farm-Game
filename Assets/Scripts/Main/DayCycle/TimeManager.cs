@@ -52,7 +52,10 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
     [SerializeField] private Gradient _color;
     [SerializeField] private Volume _volume;
 
+    [SerializeField] private float _radius = 100f;
+
     private ColorAdjustments _colorAdjustments;
+    private Light _currentLight;
 
     private TimeService _timeService;
 
@@ -135,7 +138,9 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
     private void RotateSun()
     {
         var rotation = _timeService.CalculateSunAngle();
+        var position = _timeService.CalculateSunPosition(_radius);
         _sun.transform.rotation = Quaternion.AngleAxis(rotation, Vector3.right);
+        _sun.transform.position = position;
     }
 
     public void Save(ref TimeSerialize timeSerialize)

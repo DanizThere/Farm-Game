@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Character : MonoBehaviour, IUser
 {
-    public string EntityType;
+    public EntityType EntityType;
     [SerializeField] private Personality _personality;
     //probaply here should be standard reaction, mood must have unique reaction;
     [SerializeField] private List<Reaction> _reaction = new();
@@ -98,4 +98,12 @@ public class Character : MonoBehaviour, IUser
         _currentMood.UpdateMood(value, _onChange);
         return message;
     }
+}
+
+public enum EntityType
+{
+    Player,
+    Human,
+    Vegetable,
+    Default
 }

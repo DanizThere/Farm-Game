@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCSchedule
   Schedules:
   - StartStage: 1
-    ActivityType: 0
-  - StartStage: 2
     ActivityType: 1
+  - StartStage: 2
+    ActivityType: 2
   - StartStage: 12
     ActivityType: 3

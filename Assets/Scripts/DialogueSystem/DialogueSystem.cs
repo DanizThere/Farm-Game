@@ -8,85 +8,103 @@ using UnityEngine.Localization;
 public class DialogueSystem : MonoBehaviour, IService
 {
     public Action OnEndDialogue = delegate { };
-
-    [SerializeField] private float _typingSpeed = .05f;
     private DialogueNode _currentNode;
     private DialogueNode _nextNode;
 
-    private IEnumerator _currentCoroutine;
-
     private DialogueView _view;
-
-    private bool _isTyping = false;
 
     public void StartDialogue(DialogueNode startNode)
     {
+        if(_view != null)
+        {
+            Destroy(_view.gameObject);
+            _view = null;
+        }
+
         ServiceLocator.Instance.GetService<GameStateMachine>().SetState<UIGameState>();
         _currentNode = startNode;
-
-        if(_currentCoroutine != null)
-            StopCoroutine(_currentCoroutine);
-
-        _currentCoroutine = null;
-        _currentCoroutine = TypeNode(_currentNode);
 
         var viewController = ServiceLocator.Instance.GetService<ViewController>();
         var go = Instantiate(viewController.Get<DialogueView>(), viewController.Canvas2D.transform);
         _view = go;
 
-        StartCoroutine(_currentCoroutine);
+        _view.OnCancel += () =>
+        {
+            foreach (var e in _currentNode.OnEndEvent)
+            {
+                e.Invoke();
+            }
+            _currentNode.OnEnd?.Invoke();
+            InitButtons(_currentNode.Options);
+
+        };
+        _view.OnFinish += () =>
+        {
+            foreach (var e in _currentNode.OnEndEvent)
+            {
+                e.Invoke();
+            }
+            _currentNode.OnEnd?.Invoke();
+            InitButtons(_currentNode.Options);
+
+        };
+        _view.OnStart += () =>
+        {
+            foreach (var e in _currentNode.OnStartEvent)
+            {
+                e.Invoke();
+            }
+        };
+
+        TypeNode(_currentNode);
     }
 
     public void StartDialogue(List<DialogueNode> nodes)
     {
+        if (_view != null)
+        {
+            Destroy(_view.gameObject);
+            _view = null;
+        }
         ServiceLocator.Instance.GetService<GameStateMachine>().SetState<UIGameState>();
         var viewController = ServiceLocator.Instance.GetService<ViewController>();
         var go = Instantiate(viewController.Get<DialogueView>(), viewController.Canvas2D.transform);
         _view = go;
 
-        foreach (var node in nodes)
+        _view.OnCancel += () =>
         {
-            var optionName = GetLocalizedString(node.OptionKey);
-            _view.InitButton(() => 
+            foreach (var e in _currentNode.OnEndEvent)
             {
-                _currentCoroutine = TypeNode(node.NextNode);
-                StartCoroutine(_currentCoroutine);
+                e.Invoke();
             }
-            , optionName);
-        }
+            _currentNode.OnEnd?.Invoke();
+            InitButtons(_currentNode.Options);
+        };
+        _view.OnFinish += () =>
+        {
+            foreach (var e in _currentNode.OnEndEvent)
+            {
+                e.Invoke();
+            }
+            _currentNode.OnEnd?.Invoke();
+            InitButtons(_currentNode.Options);
+        };
+        _view.OnStart += () =>
+        {
+            foreach (var e in _currentNode.OnStartEvent)
+            {
+                e.Invoke();
+            }
+        };
 
         _view.InitButton(EndDialogue, "Exit");
-
-        if (_currentCoroutine != null)
-            StopCoroutine(_currentCoroutine);
-
-        _currentCoroutine = null;
     }
 
     public void SkipTyping()
     {
-        if(_currentCoroutine != null)
+        if (_view.IsWriting)
         {
-            StopCoroutine(_currentCoroutine);
-            _currentCoroutine = null;
-            _view.ResetMaxVisible();
-
-            if (_isTyping)
-            {
-                _currentNode?.OnEnd?.Invoke();
-                _isTyping = false;
-            }
-
-            foreach (var option in _currentNode.Options)
-            {
-                _view.InitButton(() =>
-                {
-                    _currentCoroutine = TypeNode(option.NextNode);
-                    StartCoroutine(_currentCoroutine);
-                }, 
-                GetLocalizedString(option.OptionKey));
-            }
-
+            _view.Stop();
             return;
         }
 
@@ -94,12 +112,24 @@ public class DialogueSystem : MonoBehaviour, IService
             TypeNextNode();
     }
 
-    private IEnumerator TypeNode(DialogueNode startNode)
+    private void InitButtons(List<DialogueOption> options)
+    {
+        foreach (var option in options)
+        {
+            _view.InitButton(() =>
+            {
+                TypeNode(option.NextNode);
+            },
+            option.OptionKey.GetLocalizedStringSafe());
+        }
+    }
+
+    private void TypeNode(DialogueNode startNode)
     {
         if (startNode == null)
         {
             EndDialogue();
-            yield break;
+            return;
         }
 
         _currentNode = startNode;
@@ -110,36 +140,10 @@ public class DialogueSystem : MonoBehaviour, IService
             events.Invoke();
         }
 
-        var text = GetLocalizedString(_currentNode.TextKey);
-        var name = GetLocalizedNameString(_currentNode.NameKey);
+        var text = _currentNode.TextKey.GetLocalizedStringSafe();
+        var name = _currentNode.NameKey.GetLocalizedStringSafe();
 
-        _view.SetData(text, name);
-        _isTyping = true;
-
-        for (int i = 0; i < text.Length; i++)
-        {
-            _view.SetMaxVisible(i);
-            yield return new WaitForSeconds(_typingSpeed);
-        }
-        _isTyping = false;
-
-        foreach (var option in _currentNode.Options)
-        {
-            _view.InitButton(() =>
-            {
-                _currentCoroutine = TypeNode(option.NextNode);
-                StartCoroutine(_currentCoroutine);
-            },
-            GetLocalizedString(option.OptionKey));
-        }
-
-        foreach (var events in _currentNode.OnEndEvent)
-        {
-            events.Invoke();
-        }
-
-        _currentNode.OnEnd?.Invoke();
-        _currentCoroutine = null;
+        _view.SetData(text, name, _currentNode.TextSpeed);
     }
 
     private void EndDialogue()
@@ -154,25 +158,6 @@ public class DialogueSystem : MonoBehaviour, IService
 
     private void TypeNextNode()
     {
-        if(_currentCoroutine != null) StopCoroutine(_currentCoroutine);
-
-        _currentCoroutine = TypeNode(_nextNode);
-        StartCoroutine(_currentCoroutine);
-    }
-
-    private string GetLocalizedNameString(LocalizedString localizedString)
-    {
-        if (localizedString == null || localizedString.IsEmpty) return string.Empty;
-
-        var result = localizedString.GetLocalizedString();
-        return string.IsNullOrEmpty(result) ? "[Not localized]" : result;
-    }
-
-    private string GetLocalizedString(LocalizedString localizedString)
-    {
-        if (localizedString == null || localizedString.IsEmpty) return "[Missing]";
-
-        var result = localizedString.GetLocalizedString();
-        return string.IsNullOrEmpty(result) ? "[Not localized]" : result;
+        TypeNode(_nextNode);
     }
 }

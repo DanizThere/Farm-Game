@@ -5,8 +5,6 @@ using UnityEngine.AI;
 public class SocializeBehaviour : IActivity
 {
     public ActivityType ActivityType => ActivityType.Socialize;
-
-    private const float Talk_Distance = 4f;
     private NPC _target;
     private NPC _owner;
     private float _elapsed;
@@ -36,10 +34,12 @@ public class SocializeBehaviour : IActivity
 
     public bool Tick(NPCSensor sensor, float deltaTime)
     {
+        sensor.IsBusy = false;
+
         if (_target == null) return true;
 
         float distance = Vector3.Distance(sensor.Agent.transform.position, _target.transform.position);
-        if(distance > Talk_Distance)
+        if(distance > sensor.TalkRadius + sensor.Agent.stoppingDistance)
         {
             sensor.Agent.SetDirectionSafe(_target.transform);
             return false;
@@ -47,6 +47,7 @@ public class SocializeBehaviour : IActivity
 
         sensor.Agent.ResetPath();
         _elapsed += deltaTime;
+        sensor.IsBusy = true;
 
         return _elapsed >= _duration;
     }

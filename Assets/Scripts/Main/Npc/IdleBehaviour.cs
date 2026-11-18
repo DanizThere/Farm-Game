@@ -6,7 +6,7 @@ public class IdleBehaviour : IActivity
 
     public void Enter(NPCSensor sensor)
     {
-        
+        sensor.IsBusy = false;
     }
 
     public void Exit(NPCSensor sensor)

@@ -22,6 +22,22 @@ MonoBehaviour:
     m_Localized: This is a bed. It's look simple, but you found that very comfortable
     m_Metadata:
       m_Items: []
+  - m_Id: 30489261279797248
+    m_Localized: This is a debug text. If you see that, you're cheater xD
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30494160457555968
+    m_Localized: If you continue, you will suffer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30494383678414848
+    m_Localized: 'Choose you''re destiny:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30494745361637376
+    m_Localized: Exit
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

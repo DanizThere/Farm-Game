@@ -8,12 +8,16 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(NPCSensor))]
 public class NPC : MonoBehaviour
 {
+    public IActivity CurrentActivity => _currentActivity;
     public Character Character => _character;
     public NPCSensor Sensor => _sensor;
 
     [SerializeField] private NPCSchedule _schedule;
     [SerializeField] private Transform _homeTransform;
     [SerializeField] protected Transform _sleepTransform;
+    [SerializeField] private float _idleDuration = 5f;
+
+    protected AbstractWork _work;
 
     protected TimeManager _timeManager;
     protected Character _character;
@@ -22,6 +26,8 @@ public class NPC : MonoBehaviour
     protected IActivity _currentActivity;
     protected DayStage _lastCheckedStage;
     protected Schedule _currentSchedule;
+
+    protected float _idleTimer;
 
     private void Awake()
     {
@@ -40,16 +46,19 @@ public class NPC : MonoBehaviour
 
     public bool TryInteract()
     {
-        if (_currentActivity == null) return false;
-        if (_currentActivity.ActivityType == ActivityType.Sleep) return false;
+        if (_sensor.IsBusy) return false;
 
         //do something;
+        //maybe should change to talk with player behaviour
 
         return true;
     }
 
     protected virtual void NPCUpdate()
     {
+        _idleTimer += Time.deltaTime;
+        if (_idleTimer < _idleDuration) return;
+
         if (_timeManager.CurrentStage != _lastCheckedStage)
         {
             _lastCheckedStage = _timeManager.CurrentStage;
@@ -61,6 +70,7 @@ public class NPC : MonoBehaviour
         if (_currentActivity.Tick(_sensor, Time.deltaTime))
         {
             TrySwitchActivity(_lastCheckedStage, forced: true);
+            _idleTimer = 0f;
         }
     }
 
@@ -72,6 +82,7 @@ public class NPC : MonoBehaviour
 
     protected virtual void NPCAwake()
     {
+        _idleTimer = Random.Range(0, _idleDuration);
         _character = GetComponent<Character>();
         _sensor = GetComponent<NPCSensor>();
 
@@ -106,6 +117,9 @@ public class NPC : MonoBehaviour
         {
             case ActivityType.Sleep:
                 return new SleepBehaviour(_sleepTransform);
+            case ActivityType.Work:
+                var work = _sensor.GetWorkNearby();
+                return new WorkBehaviour(work);
             case ActivityType.Socialize:
                 var npc = _sensor.GetNPCNearly();
                 return new SocializeBehaviour(this, npc, 2f);

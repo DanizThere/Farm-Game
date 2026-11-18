@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     private bool _wasGrounded;
 
     private bool _isGrounded;
+    private float _floatingTime;
 
 
     public void Initialize(List<HandController> handControllers, PlayerData data)
@@ -86,10 +87,14 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
         _currentSpeed = _isRunning ? _runSpeed : _moveSpeed;
         PlayFootstepSound();
 
-       
+        if (!_isGrounded) _floatingTime += Time.deltaTime;
         if (_isGrounded && !_wasGrounded)
         {
-            _audioSource.PlayOneShot(_landSound);
+            if(_floatingTime > .5f)
+            {
+                _audioSource.PlayOneShot(_landSound);
+                _floatingTime = 0f;
+            }
         }
 
         _wasGrounded = _isGrounded;

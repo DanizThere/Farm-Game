@@ -8,7 +8,8 @@ public class DialogueNode : ScriptableObject
 {
     public string Id;
     public string TargetId = "all";
-    public string EntityType;
+    public EntityType EntityType;
+    public float TextSpeed = .05f;
     public LocalizedString OptionKey;
     public LocalizedString NameKey;
     public LocalizedString TextKey;

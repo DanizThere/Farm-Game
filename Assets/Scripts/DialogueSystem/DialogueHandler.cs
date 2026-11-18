@@ -7,6 +7,7 @@ public class DialogueHandler : SLMonoBehaviour
 {
     [SerializeField] private Transform _lookTarget;
     [SerializeField] private Vector3 _cameraRotateOffset = Vector3.right;
+    [SerializeField] private List<DialogueNode> _nodes = new();
 
     private CameraHandler _cameraHandler;
     private DialogueSystem _dialogueSystem;
@@ -32,6 +33,7 @@ public class DialogueHandler : SLMonoBehaviour
 
     public void StartDialogue(DialogueNode node, Action onEndDialogue = null)
     {
+        _nodes.Insert(0, node);
         if(node != null)
         {
             if(onEndDialogue != null)
@@ -43,6 +45,7 @@ public class DialogueHandler : SLMonoBehaviour
 
     public void StartDialogue(List<DialogueNode> nodes)
     {
+        nodes.AddRange(_nodes);
         if (nodes.Any())
         {
             _isTalking = true;

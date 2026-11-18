@@ -19,32 +19,20 @@ MonoBehaviour:
     m_Key: Bed
     m_Metadata:
       m_Items: []
-  - m_Id: 5217430102159360
-    m_Key: NewGame.1
+  - m_Id: 30489261279797248
+    m_Key: Debug
     m_Metadata:
       m_Items: []
-  - m_Id: 5217552168988672
-    m_Key: NewGame.2
+  - m_Id: 30494160457555968
+    m_Key: Debug2
     m_Metadata:
       m_Items: []
-  - m_Id: 5217712454316032
-    m_Key: NewGame.3
+  - m_Id: 30494383678414848
+    m_Key: DebugChoise
     m_Metadata:
       m_Items: []
-  - m_Id: 5217925994721280
-    m_Key: NewGame.4
-    m_Metadata:
-      m_Items: []
-  - m_Id: 5218087026634752
-    m_Key: NewGame.5
-    m_Metadata:
-      m_Items: []
-  - m_Id: 5218205540888576
-    m_Key: NewGame.6
-    m_Metadata:
-      m_Items: []
-  - m_Id: 5218401666543616
-    m_Key: NewGame.7
+  - m_Id: 30494745361637376
+    m_Key: DebugExit
     m_Metadata:
       m_Items: []
   m_Metadata:
