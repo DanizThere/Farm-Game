@@ -18,14 +18,7 @@ public class CameraHandler : MonoBehaviour, IService
 
     public void LookAt(Vector3 lookPosition)
     {
-        Vector3 direction = lookPosition - Camera.transform.position;
-        //direction.y = 0f;
-
-        if (direction.sqrMagnitude > 0.001f)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            Camera.transform.rotation = targetRotation;
-        }
+        Camera.transform.VectorLookAt(lookPosition);
     }
 
     public Vector3 GetDirection()

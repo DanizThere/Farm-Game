@@ -10,9 +10,9 @@ public class GameDbContext : IService
     public ItemSet<ItemEffortHandler> ItemEffortHandlers = new();
     public ItemSet<ItemObject> KeyItemObjectValue = new();
     public ItemSet<Item> Items = new();
-    public ItemSet<DialogueNode> DialogueNodes = new();
+    public ItemSet<DialogueNodeGroup> DialogueNodes = new();
 
-    public ItemSet<DialogueNode> CurrentNodes = new();
+    public ItemSet<DialogueNodeGroup> CurrentNodes = new();
     public void AddNodes(List<string> nodes)
     {
         foreach(var id in nodes)

@@ -9,32 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df0f00f5fe6eca14eb99fb65fddc2120, type: 3}
-  m_Name: DialogueNode_BedDescription
-  m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
-  Id: Bed_Description_1
-  NameKey:
-    m_TableReference:
-      m_TableCollectionName: GUID:78a0518d6721d4945890f57e88c3272f
-    m_TableEntryReference:
-      m_KeyId: 5429252096
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
-  TextKey:
+  m_Script: {fileID: 11500000, guid: ea241e5d1de79b04f941a59d6717454b, type: 3}
+  m_Name: Ask
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueOption
+  OptionKey:
     m_TableReference:
       m_TableCollectionName: GUID:63fb1e0e8a1fdc04b8408a132b2e913b
     m_TableEntryReference:
-      m_KeyId: 4732997632
+      m_KeyId: 30494745361637376
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   NextNode: {fileID: 0}
-  Options: []
-  OnStartEvent: []
-  OnEndEvent: []
   references:
     version: 2
     RefIds: []

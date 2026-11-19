@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(DialogueHandler))]
 public class NPCSensor : MonoBehaviour
 {
     public bool IsBusy = false;
@@ -16,10 +17,12 @@ public class NPCSensor : MonoBehaviour
     private NPC _npc;
     public NavMeshAgent Agent { get; private set; }
     public Animator Animator { get; private set; }
+    public DialogueHandler DialogueHandler { get; private set; }
 
     public void Initialize(NPC npc)
     {
         _npc = npc;
+        DialogueHandler = GetComponent<DialogueHandler>();
         Agent = GetComponent<NavMeshAgent>();
         Animator = GetComponent<Animator>();
     }

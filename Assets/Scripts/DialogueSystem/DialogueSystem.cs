@@ -8,12 +8,12 @@ using UnityEngine.Localization;
 public class DialogueSystem : MonoBehaviour, IService
 {
     public Action OnEndDialogue = delegate { };
+    private DialogueNodeGroup _currentNodeGroup;
     private DialogueNode _currentNode;
-    private DialogueNode _nextNode;
 
     private DialogueView _view;
-
-    public void StartDialogue(DialogueNode startNode)
+    private bool _isInChoise = false;
+    public void StartDialogue(DialogueNodeGroup startNode)
     {
         if(_view != null)
         {
@@ -22,21 +22,26 @@ public class DialogueSystem : MonoBehaviour, IService
         }
 
         ServiceLocator.Instance.GetService<GameStateMachine>().SetState<UIGameState>();
-        _currentNode = startNode;
+        _currentNodeGroup = startNode;
 
         var viewController = ServiceLocator.Instance.GetService<ViewController>();
         var go = Instantiate(viewController.Get<DialogueView>(), viewController.Canvas2D.transform);
         _view = go;
 
-        _view.OnCancel += () =>
+         _view.OnCancel += () =>
         {
             foreach (var e in _currentNode.OnEndEvent)
             {
                 e.Invoke();
             }
-            _currentNode.OnEnd?.Invoke();
-            InitButtons(_currentNode.Options);
+            if (_currentNode == null) return;
 
+            var index = _currentNodeGroup.Nodes.IndexOf(_currentNode) + 1;
+            if(index >= _currentNodeGroup.Nodes.Count)
+            {
+                InitButtons(_currentNodeGroup.Options);
+                _isInChoise = true;
+            }
         };
         _view.OnFinish += () =>
         {
@@ -44,9 +49,14 @@ public class DialogueSystem : MonoBehaviour, IService
             {
                 e.Invoke();
             }
-            _currentNode.OnEnd?.Invoke();
-            InitButtons(_currentNode.Options);
+            if (_currentNode == null) return;
 
+            var index = _currentNodeGroup.Nodes.IndexOf(_currentNode) + 1;
+            if (index >= _currentNodeGroup.Nodes.Count)
+            {
+                InitButtons(_currentNodeGroup.Options);
+                _isInChoise = true;
+            }
         };
         _view.OnStart += () =>
         {
@@ -56,48 +66,7 @@ public class DialogueSystem : MonoBehaviour, IService
             }
         };
 
-        TypeNode(_currentNode);
-    }
-
-    public void StartDialogue(List<DialogueNode> nodes)
-    {
-        if (_view != null)
-        {
-            Destroy(_view.gameObject);
-            _view = null;
-        }
-        ServiceLocator.Instance.GetService<GameStateMachine>().SetState<UIGameState>();
-        var viewController = ServiceLocator.Instance.GetService<ViewController>();
-        var go = Instantiate(viewController.Get<DialogueView>(), viewController.Canvas2D.transform);
-        _view = go;
-
-        _view.OnCancel += () =>
-        {
-            foreach (var e in _currentNode.OnEndEvent)
-            {
-                e.Invoke();
-            }
-            _currentNode.OnEnd?.Invoke();
-            InitButtons(_currentNode.Options);
-        };
-        _view.OnFinish += () =>
-        {
-            foreach (var e in _currentNode.OnEndEvent)
-            {
-                e.Invoke();
-            }
-            _currentNode.OnEnd?.Invoke();
-            InitButtons(_currentNode.Options);
-        };
-        _view.OnStart += () =>
-        {
-            foreach (var e in _currentNode.OnStartEvent)
-            {
-                e.Invoke();
-            }
-        };
-
-        _view.InitButton(EndDialogue, "Exit");
+        TypeNode();
     }
 
     public void SkipTyping()
@@ -108,8 +77,7 @@ public class DialogueSystem : MonoBehaviour, IService
             return;
         }
 
-        if (!_currentNode.Options.Any())
-            TypeNextNode();
+        TypeNextNode();
     }
 
     private void InitButtons(List<DialogueOption> options)
@@ -118,32 +86,48 @@ public class DialogueSystem : MonoBehaviour, IService
         {
             _view.InitButton(() =>
             {
-                TypeNode(option.NextNode);
+                _currentNode = null;
+                _isInChoise = false;
+                SetGroup(option.NextNode);
             },
             option.OptionKey.GetLocalizedStringSafe());
         }
     }
 
-    private void TypeNode(DialogueNode startNode)
+    private void TypeNode()
     {
-        if (startNode == null)
+        if (_currentNodeGroup == null || !_currentNodeGroup.Nodes.Any())
         {
             EndDialogue();
             return;
         }
 
-        _currentNode = startNode;
-        _nextNode = _currentNode.NextNode;
+        if (_isInChoise) return;
 
-        foreach (var events in _currentNode.OnStartEvent)
+        if(_currentNode == null)
         {
-            events.Invoke();
+            _currentNode = _currentNodeGroup.Nodes[0];
+        }
+        else
+        {
+            var index = _currentNodeGroup.Nodes.IndexOf(_currentNode) + 1;
+            if(index >= _currentNodeGroup.Nodes.Count)
+            {
+                EndDialogue();
+            }
+            _currentNode = _currentNodeGroup.Nodes[index];
         }
 
         var text = _currentNode.TextKey.GetLocalizedStringSafe();
         var name = _currentNode.NameKey.GetLocalizedStringSafe();
 
-        _view.SetData(text, name, _currentNode.TextSpeed);
+        _view.SetData(text, name, _currentNode.TextSpeed, _currentNode.IsSkippable);
+    }
+
+    private void SetGroup(DialogueNodeGroup group)
+    {
+        _currentNodeGroup = group;
+        TypeNode();
     }
 
     private void EndDialogue()
@@ -158,6 +142,6 @@ public class DialogueSystem : MonoBehaviour, IService
 
     private void TypeNextNode()
     {
-        TypeNode(_nextNode);
+        TypeNode();
     }
 }

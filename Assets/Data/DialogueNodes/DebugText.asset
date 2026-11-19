@@ -12,41 +12,77 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df0f00f5fe6eca14eb99fb65fddc2120, type: 3}
   m_Name: DebugText
   m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
-  Id: 
-  TargetId: all
-  EntityType: 
-  TextSpeed: 0.05
-  OptionKey:
-    m_TableReference:
-      m_TableCollectionName: 
-    m_TableEntryReference:
-      m_KeyId: 0
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
-  NameKey:
-    m_TableReference:
-      m_TableCollectionName: GUID:78a0518d6721d4945890f57e88c3272f
-    m_TableEntryReference:
-      m_KeyId: 5429252096
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
-  TextKey:
-    m_TableReference:
-      m_TableCollectionName: GUID:63fb1e0e8a1fdc04b8408a132b2e913b
-    m_TableEntryReference:
-      m_KeyId: 30489261279797248
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
-  NextNode: {fileID: 11400000, guid: 030e55fe734c2d04791568b0610f4329, type: 2}
-  Options: []
-  OnStartEvent: []
-  OnEndEvent: []
+  Id: DebugText
+  EntityType: 3
+  Nodes:
+  - TextSpeed: 0.05
+    IsSkippable: 1
+    NameKey:
+      m_TableReference:
+        m_TableCollectionName: GUID:78a0518d6721d4945890f57e88c3272f
+      m_TableEntryReference:
+        m_KeyId: 5429252096
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    TextKey:
+      m_TableReference:
+        m_TableCollectionName: GUID:63fb1e0e8a1fdc04b8408a132b2e913b
+      m_TableEntryReference:
+        m_KeyId: 30489261279797248
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    OnStartEvent: []
+    OnEndEvent: []
+  - TextSpeed: 0.05
+    IsSkippable: 1
+    NameKey:
+      m_TableReference:
+        m_TableCollectionName: GUID:78a0518d6721d4945890f57e88c3272f
+      m_TableEntryReference:
+        m_KeyId: 5429252096
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    TextKey:
+      m_TableReference:
+        m_TableCollectionName: GUID:63fb1e0e8a1fdc04b8408a132b2e913b
+      m_TableEntryReference:
+        m_KeyId: 30494160457555968
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    OnStartEvent: []
+    OnEndEvent: []
+  - TextSpeed: 0.05
+    IsSkippable: 1
+    NameKey:
+      m_TableReference:
+        m_TableCollectionName: GUID:78a0518d6721d4945890f57e88c3272f
+      m_TableEntryReference:
+        m_KeyId: 5429252096
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    TextKey:
+      m_TableReference:
+        m_TableCollectionName: GUID:63fb1e0e8a1fdc04b8408a132b2e913b
+      m_TableEntryReference:
+        m_KeyId: 30494383678414848
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    OnStartEvent: []
+    OnEndEvent: []
+  Options:
+  - {fileID: 11400000, guid: 6c7599d6db7c5ae44a743d95148293f8, type: 2}
   references:
     version: 2
     RefIds: []

@@ -335,7 +335,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0421\u043A\u0430\u0442\u0438\u043D\u0430\n"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1fba03219a2257e45aa66b2f6425a059, type: 2}
   m_sharedMaterial: {fileID: 5860066933982847959, guid: 1fba03219a2257e45aa66b2f6425a059, type: 2}
@@ -448,7 +448,7 @@ MonoBehaviour:
       m_Calls: []
   keywordDatabase: {fileID: 11400000, guid: ddbbf9c59e9c55949a3be80686d9ea59, type: 2}
   sceneKeywordDatabase: {fileID: 0}
-  database: {fileID: 0}
+  database: {fileID: 11400000, guid: 290ad04254a96934aa269d5b8d258008, type: 2}
   maySkip: 1
   writeOnStart: 0
   writeOnNewText: 1
@@ -465,7 +465,7 @@ MonoBehaviour:
     visibleDelayType: 0
   sceneCommands:
     _serializedList: []
-  useDefaultDatabase: 0
+  useDefaultDatabase: 1
   useDefaultKeywordDatabase: 0
   initDatabase: 1
   eventsEnabled: 0
@@ -490,7 +490,7 @@ MonoBehaviour:
     tmpAnimator: {fileID: 1013356554952989228}
   updateFrom: 0
   animateOnStart: 1
-  animationsOverride: 1
+  animationsOverride: 0
   defaultAnimationsStrings: []
   defaultShowAnimationsStrings:
   - spread

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CheckTyping : MonoBehaviour
 {
-    [SerializeField] private DialogueNode _testNode;
+    [SerializeField] private DialogueNodeGroup _testNode;
     private DialogueSystem _dialogueSystem;
 
     private void Start()

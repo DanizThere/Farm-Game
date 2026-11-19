@@ -28,9 +28,10 @@ public class DialogueView : View
         _dialogueText.OnStartWriter.AddListener(_ => OnStart?.Invoke());
     }
 
-    public void SetData(string text, string name, float timeDelay = .05f)
+    public void SetData(string text, string name, float timeDelay = .05f, bool isSkippable = true)
     {
         _text = text;
+        _dialogueText.SetSkippable(isSkippable);
         _dialogueText.CurrentDelays.SetDelay(timeDelay);
         _dialogueText.SetText(_text);
         _nameText.text = name;
@@ -44,7 +45,9 @@ public class DialogueView : View
 
     public void Stop()
     {
-        _dialogueText.SkipWriter();
+        if (!_dialogueText.MaySkip) return;
+
+        _dialogueText.StopWriter();
         _dialogueText.Show(0, _text.Length);
     }
 

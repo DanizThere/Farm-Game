@@ -5,13 +5,16 @@ using UnityEngine;
 
 public class DialogueHandler : SLMonoBehaviour
 {
-    [SerializeField] private Transform _lookTarget;
-    [SerializeField] private Vector3 _cameraRotateOffset = Vector3.right;
-    [SerializeField] private List<DialogueNode> _nodes = new();
+    public bool IsTalking => _isTalking;
+    [SerializeField] protected Transform _lookTarget;
+    [SerializeField] protected Vector3 _cameraRotateOffset = Vector3.right;
+    [SerializeField] protected List<NodeDictionary> _nodeDictionaryPrefabs = new();
+    [SerializeField] protected List<DialogueOption> _options = new();
 
     private CameraHandler _cameraHandler;
     private DialogueSystem _dialogueSystem;
     private bool _isTalking = false;
+    private List<NodeDictionary> _nodeDictionary = new();
 
     protected override void SLStart()
     {
@@ -20,6 +23,15 @@ public class DialogueHandler : SLMonoBehaviour
         _dialogueSystem = ServiceLocator.Instance.GetService<DialogueSystem>();
 
         _dialogueSystem.OnEndDialogue += () => _isTalking = false;
+        foreach(var node in _nodeDictionaryPrefabs)
+        {
+            var newNode = new NodeDictionary
+            {
+                NodeType = node.NodeType,
+                Node = Instantiate(node.Node)
+            };
+            _nodeDictionary.Add(newNode);
+        }
     }
 
     protected override void SLUpdate()
@@ -31,25 +43,37 @@ public class DialogueHandler : SLMonoBehaviour
         }
     }
 
-    public void StartDialogue(DialogueNode node, Action onEndDialogue = null)
+    public DialogueNodeGroup GetNode(NodeType type)
     {
-        _nodes.Insert(0, node);
-        if(node != null)
-        {
-            if(onEndDialogue != null)
-                _dialogueSystem.OnEndDialogue += onEndDialogue;
-            _dialogueSystem.StartDialogue(node);
-            _isTalking = true;
-        }
+        return _nodeDictionary.FirstOrDefault(x => x.NodeType == type).Node;
     }
 
-    public void StartDialogue(List<DialogueNode> nodes)
+    public void StartDialogue()
     {
-        nodes.AddRange(_nodes);
-        if (nodes.Any())
+        var start = GetNode(NodeType.Start);
+        if (start == null)
         {
-            _isTalking = true;
-            _dialogueSystem.StartDialogue(nodes);
+            print("no start node");
+            return;
         }
+
+        start.Options = _options;
+
+        _dialogueSystem.StartDialogue(start);
     }
+}
+
+[Serializable]
+public class NodeDictionary
+{
+    public NodeType NodeType;
+    public DialogueNodeGroup Node;
+}
+
+public enum NodeType
+{
+    Start,
+    Ask,
+    Shop,
+    Default
 }

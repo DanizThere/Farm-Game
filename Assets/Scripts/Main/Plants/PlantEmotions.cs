@@ -10,7 +10,7 @@ public class PlantEmotions : MonoBehaviour
 {
     [SerializeField] private Transform _startTransform;
     [SerializeField] private List<PlantAttributeEmotion> _attributes = new();
-    [SerializeField] private DialogueNode _checkHealth;
+    [SerializeField] private DialogueNodeGroup _checkHealth;
     [SerializeField] private List<Plant> _plantsRelationships = new();
 
     private List<CurrentPlantAttributeEmotion> _currentAtttributes = new();
@@ -63,22 +63,7 @@ public class PlantEmotions : MonoBehaviour
 
     public void Emote()
     {
-        var message = string.Empty;
-
-        var node = ServiceLocator.Instance.GetService<GameDbContext>().CurrentNodes
-            .Get(x => x.EntityType == _character.EntityType &&
-                (x.TargetId == _plant.PlantId || x.TargetId == "all"));
-        node.Add(_checkHealth);
-
-        if(node != null)
-        {
-            _dialogueHandler.StartDialogue(node);
-            return;
-        }
-        else
-        {
-            message = _character.UpdateMood(ReactionTitle.OnHit);
-        }
+        var message = _character.UpdateMood(ReactionTitle.OnHit);
 
         _commentaryHandler.Print(_startTransform.position, message);
     }

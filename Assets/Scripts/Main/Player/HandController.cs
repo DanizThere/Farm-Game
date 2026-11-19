@@ -186,9 +186,10 @@ public class HandController : MonoBehaviour
 
         if (raycast)
         {
+            if (TryGetNPC(hit)) return;
             if (TryGetItemObject(hit)) return;
-            if(TryGetEffortObject(hit)) return;
-            if(TryGetPhysicObject(hit)) return;
+            if (TryGetEffortObject(hit)) return;
+            if (TryGetPhysicObject(hit)) return;
         }
 
         _isHold = true;
@@ -240,6 +241,16 @@ public class HandController : MonoBehaviour
         }
     }
 
+    private bool TryGetNPC(RaycastHit hit)
+    {
+        if (hit.transform.TryGetComponent<NPC>(out var npc))
+        {
+            npc.StartDialogue();
+            return true;
+        }
+
+        return false;
+    }
 
     private bool TryGetItemObject(RaycastHit hit)
     {

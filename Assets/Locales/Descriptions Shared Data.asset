@@ -35,6 +35,10 @@ MonoBehaviour:
     m_Key: DebugExit
     m_Metadata:
       m_Items: []
+  - m_Id: 30806614559416320
+    m_Key: KindEntry
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

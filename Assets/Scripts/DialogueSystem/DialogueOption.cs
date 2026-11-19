@@ -7,7 +7,7 @@ using UnityEngine.Localization;
 public class DialogueOption : ScriptableObject
 {
     public LocalizedString OptionKey;
-    public DialogueNode NextNode;
+    public DialogueNodeGroup NextNode;
 
     public Func<bool> Condition = null;
 }

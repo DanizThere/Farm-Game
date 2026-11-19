@@ -44,18 +44,17 @@ public class NPC : MonoBehaviour
         NPCUpdate();
     }
 
-    public bool TryInteract()
+    public void StartDialogue()
     {
-        if (_sensor.IsBusy) return false;
-
+        _sensor.DialogueHandler.StartDialogue();
         //do something;
         //maybe should change to talk with player behaviour
-
-        return true;
     }
 
     protected virtual void NPCUpdate()
     {
+        if (_sensor.DialogueHandler.IsTalking) return;
+
         _idleTimer += Time.deltaTime;
         if (_idleTimer < _idleDuration) return;
 

@@ -27,7 +27,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 30494160457555968
-    m_Localized: If you continue, you will suffer
+    m_Localized: If you continue, <!wait=1.5>you will suffer
     m_Metadata:
       m_Items: []
   - m_Id: 30494383678414848
@@ -36,6 +36,11 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 30494745361637376
     m_Localized: Exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30806614559416320
+    m_Localized: Omg hi!!1 <!wait=1.5>No see you <wave><palette>long</palette></wave>
+      time
     m_Metadata:
       m_Items: []
   references:

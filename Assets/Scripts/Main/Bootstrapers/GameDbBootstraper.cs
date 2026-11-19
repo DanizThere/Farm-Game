@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameDbBootstraper : Bootstraper
 {
     private GameDbContext _context = new();
-    [SerializeField] private DialogueNode[] _nodes;
+    [SerializeField] private DialogueNodeGroup[] _nodes;
     [SerializeField] private ItemObject[] _itemObjects;
     [SerializeField] private Item[] _items;
     public override void Inject(ServiceLocator serviceLocator)

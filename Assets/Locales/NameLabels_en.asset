@@ -22,6 +22,10 @@ MonoBehaviour:
     m_Localized: Female protagonist
     m_Metadata:
       m_Items: []
+  - m_Id: 30806897259700224
+    m_Localized: NPC (Debug)
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
