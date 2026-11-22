@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(DialogueHandler))]
 public class NPCSensor : MonoBehaviour
 {
@@ -14,9 +13,10 @@ public class NPCSensor : MonoBehaviour
     [SerializeField] private WorkType _workType;
     [SerializeField] private float _sensorRadius = 30f;
     [SerializeField] private float _talkRadius = 1f;
+    [SerializeField] private Animator _animator;
     private NPC _npc;
     public NavMeshAgent Agent { get; private set; }
-    public Animator Animator { get; private set; }
+    public Animator Animator => _animator;
     public DialogueHandler DialogueHandler { get; private set; }
 
     public void Initialize(NPC npc)
@@ -24,7 +24,6 @@ public class NPCSensor : MonoBehaviour
         _npc = npc;
         DialogueHandler = GetComponent<DialogueHandler>();
         Agent = GetComponent<NavMeshAgent>();
-        Animator = GetComponent<Animator>();
     }
 
     public AbstractWork GetWorkNearby()

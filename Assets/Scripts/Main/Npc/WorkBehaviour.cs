@@ -30,7 +30,9 @@ public class WorkBehaviour : IActivity
         if (_work == null) return true;
 
         float distance = Vector3.Distance(sensor.Agent.transform.position, _work.transform.position);
-        if (distance > sensor.TalkRadius + sensor.Agent.stoppingDistance)
+        var isFar = distance > sensor.TalkRadius + sensor.Agent.stoppingDistance;
+        sensor.Animator.SetBool("IsMoving", isFar);
+        if (isFar)
         {
             sensor.Agent.SetDirectionSafe(_work.transform);
             return false;
