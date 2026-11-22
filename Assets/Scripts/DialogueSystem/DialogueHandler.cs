@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DialogueHandler : SLMonoBehaviour
@@ -30,6 +31,13 @@ public class DialogueHandler : SLMonoBehaviour
                 NodeType = node.NodeType,
                 Node = Instantiate(node.Node)
             };
+
+            if(newNode.NodeType == NodeType.Start)
+            {
+                newNode.Node.Options.AddRange(_options);
+                newNode.Node.Options.Reverse();
+            }
+
             _nodeDictionary.Add(newNode);
         }
     }
@@ -56,8 +64,6 @@ public class DialogueHandler : SLMonoBehaviour
             print("no start node");
             return;
         }
-
-        start.Options = _options;
 
         _dialogueSystem.StartDialogue(start);
     }

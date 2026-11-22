@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPEffects.Components;
 using TMPro;
 using UnityEngine;
@@ -16,7 +17,9 @@ public class DialogueView : View
     [SerializeField] private TMPWriter _dialogueText;
     [SerializeField] private TextMeshProUGUI _nameText;
     [SerializeField] private Transform _buttonPanel;
+    [SerializeField] private Transform _buttonsGrid;
     [SerializeField] private Button _prefab;
+    [SerializeField] private List<DialogueButtonSprite> _sprites = new();
 
     private List<Button> _buttons = new();
     private string _text;
@@ -24,7 +27,7 @@ public class DialogueView : View
     private void Start()
     {
         _dialogueText.OnFinishWriter.AddListener(_ => OnFinish?.Invoke());
-        _dialogueText.OnStopWriter.AddListener(_ => OnCancel?.Invoke());
+        _dialogueText.OnSkipWriter.AddListener((_,_) => OnCancel?.Invoke());
         _dialogueText.OnStartWriter.AddListener(_ => OnStart?.Invoke());
     }
 
@@ -47,17 +50,33 @@ public class DialogueView : View
     {
         if (!_dialogueText.MaySkip) return;
 
-        _dialogueText.StopWriter();
-        _dialogueText.Show(0, _text.Length);
+        _dialogueText.SkipWriter(false);
     }
 
-    public void InitButton(Action onClick, string optionName)
+    public void InitButton(Action onClick, string optionName, DialogueButtonType type = DialogueButtonType.Default)
     {
-        var instance = Instantiate(_prefab, _buttonPanel);
+        var sprite = _sprites.FirstOrDefault(x => x.Type == type);
+
+        if(!_buttonPanel.gameObject.activeSelf)
+        {
+            _buttonPanel.gameObject.SetActive(true);
+        }
+
+        onClick += () => _buttonPanel.gameObject.SetActive(false);
+
+        var instance = Instantiate(_prefab, _buttonsGrid);
+        instance.GetComponent<Image>().sprite = sprite.Sprite;
         instance.GetComponentInChildren<TextMeshProUGUI>().text = optionName;
         instance.onClick.AddListener(onClick.Invoke);
         instance.transform.SetAsLastSibling();
 
         _buttons.Add(instance);
     }
+}
+
+[Serializable]
+public class DialogueButtonSprite
+{
+    public DialogueButtonType Type;
+    public Sprite Sprite;
 }

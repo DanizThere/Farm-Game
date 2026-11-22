@@ -5,7 +5,6 @@ using UnityEngine;
 public class StageUI : View
 {
     [SerializeField] private TimeSettings _timeSettings;
-    [SerializeField] private TextMeshProUGUI _stageText;
     [SerializeField] private StageBlockUI[] _blocks;
     [SerializeField] private RectTransform _clockTransform;
     [SerializeField] private RectTransform _stageTransform;
@@ -26,7 +25,6 @@ public class StageUI : View
 
     private void Update()
     {
-        _stageText.text = $"Stage: {_timeManager.CurrentStage}";
         var position = _timeManager.DayProgress * _width;
 
         var rect = _clockTransform.anchoredPosition;

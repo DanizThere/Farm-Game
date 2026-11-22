@@ -28,21 +28,6 @@ public class DialogueSystem : MonoBehaviour, IService
         var go = Instantiate(viewController.Get<DialogueView>(), viewController.Canvas2D.transform);
         _view = go;
 
-         _view.OnCancel += () =>
-        {
-            foreach (var e in _currentNode.OnEndEvent)
-            {
-                e.Invoke();
-            }
-            if (_currentNode == null) return;
-
-            var index = _currentNodeGroup.Nodes.IndexOf(_currentNode) + 1;
-            if(index >= _currentNodeGroup.Nodes.Count)
-            {
-                InitButtons(_currentNodeGroup.Options);
-                _isInChoise = true;
-            }
-        };
         _view.OnFinish += () =>
         {
             foreach (var e in _currentNode.OnEndEvent)
@@ -90,7 +75,8 @@ public class DialogueSystem : MonoBehaviour, IService
                 _isInChoise = false;
                 SetGroup(option.NextNode);
             },
-            option.OptionKey.GetLocalizedStringSafe());
+            option.OptionKey.GetLocalizedStringSafe(),
+            option.ButtonType);
         }
     }
 

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea241e5d1de79b04f941a59d6717454b, type: 3}
   m_Name: DebugExit
   m_EditorClassIdentifier: Assembly-CSharp::DialogueOption
+  ButtonType: 2
   OptionKey:
     m_TableReference:
       m_TableCollectionName: GUID:63fb1e0e8a1fdc04b8408a132b2e913b
