@@ -1,4 +1,6 @@
+using Assets.Scripts.Extenisions;
 using Newtonsoft.Json;
+using System.Linq;
 using UnityEngine;
 
 public class Showel : ToolItemObject
@@ -43,7 +45,23 @@ public class Showel : ToolItemObject
             if(hit.transform.TryGetComponent<Dirt>(out var dirt))
             {
                 dirt.Dig();
+                return;
             }
+
+            var digplaces = FindObjectsByType<DigablePlace>();
+            if (!digplaces.Any()) return;
+
+            var inArea = digplaces.FirstOrDefault(x => x.CanDig(hit.point));
+            var ceilPoint = hit.point.ToInt();
+
+            var dirtController = FindAnyObjectByType<DirtController>();
+            if (dirtController == null) return;
+
+            dirtController.ShowDirt(ceilPoint.x, ceilPoint.z);
+
+            print(hit.point);
+            print(ceilPoint);
+            print(inArea);
         }
 
     }

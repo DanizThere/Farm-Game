@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5be51871efa6c3e4eae1703925c8f5ac, type: 3}
+  m_Name: Names
+  m_EditorClassIdentifier: Unity.Localization.Editor::UnityEditor.Localization.StringTableCollection
+  m_SharedTableData: {fileID: 11400000, guid: 7ee8049e57bb0c34ea23dd8a37d58084, type: 2}
+  m_Tables:
+  - {fileID: 11400000, guid: eb4d520270ea2eb48ba0c5018db31485, type: 2}
+  - {fileID: 11400000, guid: eb97cb580afa5fa419d7dba34f5555f2, type: 2}
+  m_Extensions:
+  - rid: 218928688976625799
+  m_Group: String Table
+  references:
+    version: 2
+    RefIds:
+    - rid: 218928688976625799
+      type: {class: GoogleSheetsExtension, ns: UnityEditor.Localization.Plugins.Google, asm: Unity.Localization.Editor}
+      data:
+        m_Collection: {fileID: 11400000}
+        m_SheetsServiceProvider: {fileID: 11400000, guid: 8e4f77306d233e54c9253f79c3c097f6, type: 2}
+        m_SpreadsheetId: 1vJai1mNcTHGi9oCutzcmc51Ke_6EC9kR2rOs7whWQos
+        m_SheetId: 585209366
+        m_Columns:
+        - rid: 218928688976625801
+        - rid: 218928688976625802
+        - rid: 218928688976625803
+        m_RemoveMissingPulledKeys: 1
+    - rid: 218928688976625801
+      type: {class: KeyColumn, ns: UnityEditor.Localization.Plugins.Google.Columns, asm: Unity.Localization.Editor}
+      data:
+        m_Column: A
+    - rid: 218928688976625802
+      type: {class: LocaleColumn, ns: UnityEditor.Localization.Plugins.Google.Columns, asm: Unity.Localization.Editor}
+      data:
+        m_Column: B
+        m_LocaleIdentifier:
+          m_Code: ru
+        m_IncludeComments: 0
+    - rid: 218928688976625803
+      type: {class: LocaleColumn, ns: UnityEditor.Localization.Plugins.Google.Columns, asm: Unity.Localization.Editor}
+      data:
+        m_Column: C
+        m_LocaleIdentifier:
+          m_Code: en
+        m_IncludeComments: 0

@@ -4,6 +4,11 @@ using UnityEngine.UIElements;
 
 public static class NavmeshExtension
 {
+    public static bool IsNearby(this NavMeshAgent agent, Vector3 point, float distance = 2f)
+    {
+        return Vector3.Distance(agent.transform.position, point) <= distance;
+    }
+
     public static void SetDirectionSafe(this NavMeshAgent agent, Transform target, float maxDistance = 5f)
     {
         if (target == null) return;

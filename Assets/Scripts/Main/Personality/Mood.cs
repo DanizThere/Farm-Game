@@ -1,39 +1,40 @@
+using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Mood_", menuName = "Character/Mood")]
-public class Mood : ScriptableObject
+[Serializable]
+public class Mood
 {
-    [SerializeField] private string _moodName;
-    [SerializeField] private float _valueToNegativeMood;
-    [SerializeField] private float _valueToPositiveMood;
+    public string MoodName;
+    public float ValueToNegativeMood;
+    public float ValueToPositiveMood;
 
-    [SerializeField] private Mood _negativeMood;
-    [SerializeField] private Mood _positiveMood;
+    public string NegativeMood;
+    public string PositiveMood;
 
-    private float _currentValue;
+    private float CurrentValue;
 
-    public Mood GetMood()
+    public string GetMood()
     {
-        var mood = _currentValue < _valueToNegativeMood ? _negativeMood : _currentValue > _valueToPositiveMood ? _positiveMood : this;
+        var mood = CurrentValue < ValueToNegativeMood ? NegativeMood : CurrentValue > ValueToPositiveMood ? PositiveMood : string.Empty;
         return mood;
     }
 
-    public void UpdateMood(float value, System.Action<Mood> onChange = null)
+    public void UpdateMood(float value, Action<string> onChange = null)
     {
-        _currentValue += value;
-        if(_currentValue > _valueToPositiveMood)
+        CurrentValue += value;
+        if(CurrentValue > ValueToPositiveMood)
         {
-            onChange?.Invoke(_positiveMood);
+            onChange?.Invoke(PositiveMood);
             return;
         }
-        if(_currentValue < _valueToPositiveMood)
+        if(CurrentValue < ValueToPositiveMood)
         {
-            onChange?.Invoke(_negativeMood);
+            onChange?.Invoke(NegativeMood);
         }
     }
 
     public void ResetMood()
     {
-        _currentValue = 0f;
+        CurrentValue = 0f;
     }
 }

@@ -265,7 +265,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0425\u0430\u0431\u0438\u0431"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1fba03219a2257e45aa66b2f6425a059, type: 2}
   m_sharedMaterial: {fileID: 5860066933982847959, guid: 1fba03219a2257e45aa66b2f6425a059, type: 2}
@@ -481,7 +481,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0425\u0430\u0431\u0438\u0431\u0435"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1fba03219a2257e45aa66b2f6425a059, type: 2}
   m_sharedMaterial: {fileID: 5860066933982847959, guid: 1fba03219a2257e45aa66b2f6425a059, type: 2}
@@ -597,7 +597,7 @@ MonoBehaviour:
   database: {fileID: 11400000, guid: 290ad04254a96934aa269d5b8d258008, type: 2}
   maySkip: 1
   writeOnStart: 0
-  writeOnNewText: 1
+  writeOnNewText: 0
   useScaledTime: 1
   delays:
     delay: 0.05

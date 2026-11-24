@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea241e5d1de79b04f941a59d6717454b, type: 3}
   m_Name: Ask
   m_EditorClassIdentifier: Assembly-CSharp::DialogueOption
+  ButtonType: 0
   OptionKey:
     m_TableReference:
-      m_TableCollectionName: GUID:63fb1e0e8a1fdc04b8408a132b2e913b
+      m_TableCollectionName: GUID:568ef1801e9427a40b678e8b33b722f6
     m_TableEntryReference:
-      m_KeyId: 30494745361637376
+      m_KeyId: 1726517526531
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0

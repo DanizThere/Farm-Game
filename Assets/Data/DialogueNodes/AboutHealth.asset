@@ -12,16 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea241e5d1de79b04f941a59d6717454b, type: 3}
   m_Name: AboutHealth
   m_EditorClassIdentifier: Assembly-CSharp::DialogueOption
+  ButtonType: 0
   OptionKey:
     m_TableReference:
-      m_TableCollectionName: GUID:c9641fdadc992c7478d6661a8a04ee42
+      m_TableCollectionName: GUID:568ef1801e9427a40b678e8b33b722f6
     m_TableEntryReference:
-      m_KeyId: 25303638212022272
+      m_KeyId: 1726517526529
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
-  NextNode: {fileID: 0}
+  NextNode: {fileID: 11400000, guid: 6094fbd0d4d3ce74c94eb5ce6ec611db, type: 2}
   references:
     version: 2
     RefIds: []

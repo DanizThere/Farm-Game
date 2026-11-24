@@ -12,16 +12,10 @@ public class DirtController : MonoBehaviour
 
     private List<Dirt> _dirt = new();
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            Generate();
-        }
-    }
-
     public void CreateDirt(int maxWidth, int maxLength)
     {
+        var places = FindObjectsByType<DigablePlace>();
+
         foreach(var dirt in _dirt)
         {
             Destroy(dirt.gameObject);
@@ -32,12 +26,17 @@ public class DirtController : MonoBehaviour
         {
             for(int j = 0; j < maxLength; j++)
             {
+                var inArea = places.FirstOrDefault(x => x.CanDig(new Vector3(i, 0, j)));
+                if (!inArea) continue;
+
                 var dirt = GetRandomDirt();
 
-                var dirtGO = Instantiate(dirt, _parent);
+                var dirtGO = Instantiate(dirt);
                 dirtGO.InitializePosition(i, j);
+                dirtGO.transform.SetParent(_parent);
 
                 _dirt.Add(dirtGO);
+                dirtGO.gameObject.SetActive(false);
             }
         }
     }
@@ -52,6 +51,15 @@ public class DirtController : MonoBehaviour
         }
 
         Destroy(dirt.gameObject);
+    }
+
+    public void ShowDirt(int x, int y)
+    {
+        var slot = GetDirtSlot(x, y);
+        if(slot != null)
+        {
+            slot.gameObject.SetActive(true);
+        }
     }
 
     public Dirt GetDirtSlot(int x, int y)

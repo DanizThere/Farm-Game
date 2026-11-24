@@ -6,13 +6,9 @@ using UnityEngine;
 public class Character : MonoBehaviour, IUser
 {
     public EntityType EntityType;
-    [SerializeField] private Personality _personality;
-    //probaply here should be standard reaction, mood must have unique reaction;
-    [SerializeField] private List<Reaction> _reaction = new();
+    [SerializeField] private CharacterData _data;
+    private Mood _currentMood;
 
-    [SerializeField] private Mood _currentMood;
-
-    private Action<Mood> _onChange = delegate { };
 
     public List<Relationship> Relationships { get; set; } = new();
     public string Id
@@ -64,11 +60,6 @@ public class Character : MonoBehaviour, IUser
         }
     }
 
-    private void Awake()
-    {
-        _onChange += ChangeMood;
-    }
-
 
     private void ChangeMood(Mood mood)
     {
@@ -80,7 +71,7 @@ public class Character : MonoBehaviour, IUser
 
     public Reaction GetReaction(ReactionTitle reactionName)
     {
-        return _reaction.FirstOrDefault(x => x.ReactionName == reactionName);
+        return _data.Reactions.FirstOrDefault(x => x.ReactionName == reactionName);
     }
 
     public string UpdateMood(ReactionTitle reactionName, float value = 0f)
@@ -89,13 +80,13 @@ public class Character : MonoBehaviour, IUser
         var reaction = GetReaction(reactionName);
         if (reaction != null)
         {
-            value = reaction.GetReactionValue(value, _personality);
+            value = reaction.GetReactionValue(value, _data.Personality);
             message = reaction.GetMessage();
         }
         else
-            value *= _personality.Reactivity * _personality.ReactionRate;
+            value *= _data.Personality.Reactivity * _data.Personality.ReactionRate;
 
-        _currentMood.UpdateMood(value, _onChange);
+        _currentMood.UpdateMood(value);
         return message;
     }
 }

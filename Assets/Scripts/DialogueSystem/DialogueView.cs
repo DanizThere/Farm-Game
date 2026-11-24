@@ -22,7 +22,6 @@ public class DialogueView : View
     [SerializeField] private List<DialogueButtonSprite> _sprites = new();
 
     private List<Button> _buttons = new();
-    private string _text;
 
     private void Start()
     {
@@ -33,11 +32,13 @@ public class DialogueView : View
 
     public void SetData(string text, string name, float timeDelay = .05f, bool isSkippable = true)
     {
-        _text = text;
         _dialogueText.SetSkippable(isSkippable);
         _dialogueText.CurrentDelays.SetDelay(timeDelay);
-        _dialogueText.SetText(_text);
+        _dialogueText.SetText(text);
+        _dialogueText.StartWriter();
         _nameText.text = name;
+
+        OnStart?.Invoke();
 
         foreach(var button in _buttons)
         {

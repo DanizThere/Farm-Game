@@ -9,8 +9,8 @@ public class HandController : MonoBehaviour
     public bool CanInteract => !IsTotalBusy && _canInteract;
     public Quaternion DefaultRotation => _defaultRotation;
     public bool IsBusy => _currentItemObject;
-    public bool IsEffortOrObjectBusy => _effortModel || _currentObject;
-    public bool IsTotalBusy => _currentItemObject || _effortModel || _currentObject;
+    public bool IsEffortOrObjectBusy => _currentObject;
+    public bool IsTotalBusy => _currentItemObject || _currentObject;
     public float HandDistance => _handDistance;
 
     public Hand CurrentHandType => _currentHand;
@@ -20,8 +20,6 @@ public class HandController : MonoBehaviour
     [SerializeField] private float _handForce = .3f;
     [SerializeField] private float _handDistance = 5f;
     [SerializeField] private Transform _modelTransform;
-    [SerializeField] private float _angleClamp = 30f;
-    [SerializeField] private Animator _animator;
     [Space]
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _pickupSound;
@@ -29,28 +27,21 @@ public class HandController : MonoBehaviour
     [SerializeField] private AudioClip _hideSound;
     private InUpdateFollower _inUpdateFollower;
     private bool _canInteract;
-    private bool _isHold = false;
 
     private CameraHandler _handler;
     private PhysicObject _currentObject;
-    private Observable<float> _speedScale = new(0);
+    private Player _player;
 
     private ItemObject _currentItemObject;
 
     private Transform _defaultTarget;
     private Transform _currentTarget;
 
-    private EffortModel _effortModel;
-
     private Quaternion _defaultRotation;
-
-    private string slapNameAnim = "slap";
-    private string grabNameAnim = "grab";
-    private string watchNameAnim = "showWatch";
 
     private void FixedUpdate()
     {
-        _currentObject?.Move(_angleClamp);
+        _currentObject?.Move();
     }
 
     public enum Hand
@@ -59,10 +50,9 @@ public class HandController : MonoBehaviour
         Right
     }
 
-    public void Initialize(Transform target, CameraHandler handler, System.Action<float> onGrab)
+    public void Initialize(Transform target, CameraHandler handler, Player player)
     {
-        _speedScale.AddListener(onGrab);
-
+        _player = player;
         _defaultRotation = transform.rotation;
         DefaultModelPosition = _modelTransform.position;
 
@@ -98,7 +88,6 @@ public class HandController : MonoBehaviour
 
         _currentItemObject.gameObject.SetActive(true);
         _currentItemObject.OnPickup(this);
-        //_currentItemObject.GetComponent<Collider>().enabled = false;
         _currentItemObject.transform.SetParent(transform);
         _currentItemObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         
@@ -109,7 +98,6 @@ public class HandController : MonoBehaviour
 
     public void ClearItem()
     {
-        //_currentItemObject = null;
         _audioSource.PlayOneShot(_hideSound);
         GetComponent<HandSlot>().ClearItem();
     }
@@ -134,10 +122,6 @@ public class HandController : MonoBehaviour
     }
     private void OuterUpdate()
     {
-        _effortModel?.Effort();
-
-        _animator.SetBool(grabNameAnim, _isHold && !IsTotalBusy);
-
         _canInteract = Physics.Raycast(_handler.Position, _handler.GetDirection(), out var hit, _handDistance)
             && ((hit.transform.TryGetComponent<ISelectable>(out var sel) && sel.CanSelect()) || hit.transform.TryGetComponent<IInteractable>(out _));
     }
@@ -188,17 +172,12 @@ public class HandController : MonoBehaviour
         {
             if (TryGetNPC(hit)) return;
             if (TryGetItemObject(hit)) return;
-            if (TryGetEffortObject(hit)) return;
             if (TryGetPhysicObject(hit)) return;
         }
-
-        _isHold = true;
     }
 
     private void OnHold()
     {
-        _isHold = false;
-        _speedScale.Value = 1;
         transform.SetParent(null);
 
         if (_currentItemObject)
@@ -216,12 +195,6 @@ public class HandController : MonoBehaviour
 
             return;
         }
-
-        if (_effortModel)
-        {
-            _effortModel.RemoveHand(this);
-            _effortModel = null;
-        }
     }
 
     private void OnRelease()
@@ -231,12 +204,10 @@ public class HandController : MonoBehaviour
 
     private void TrySlap(RaycastHit hit)
     {
-        _animator.SetTrigger(slapNameAnim);
         _audioSource.PlayOneShot(_swingSound);
 
         if (hit.transform.TryGetComponent<ISlappable>(out var slappable))
         {
-            _isHold = false;
             slappable.Slap();
         }
     }
@@ -259,20 +230,6 @@ public class HandController : MonoBehaviour
             _audioSource.PlayOneShot(_pickupSound);
 
             PickupItem(itemObject);
-            _isHold = false;
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool TryGetEffortObject(RaycastHit hit)
-    {
-        if (hit.transform.TryGetComponent<EffortModel>(out _effortModel))
-        {
-            _effortModel.AddHand(this);
-            _isHold = false;
-
             return true;
         }
 
@@ -286,7 +243,6 @@ public class HandController : MonoBehaviour
         if (_currentObject != null && _currentObject.CanGrab())
         {
             _currentObject.Grab(_handForce, _handler, this);
-            _isHold = false;
         }
         else
         {
@@ -295,5 +251,10 @@ public class HandController : MonoBehaviour
         }
 
         return isGrabbing;
+    }
+
+    public void Eat(float saturation, FoodType foodType)
+    {
+        _player.Eat(saturation, foodType);
     }
 }

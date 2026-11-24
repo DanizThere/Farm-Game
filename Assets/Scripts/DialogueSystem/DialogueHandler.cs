@@ -7,6 +7,7 @@ using UnityEngine;
 public class DialogueHandler : SLMonoBehaviour
 {
     public bool IsTalking => _isTalking;
+    [SerializeField] private Speaker _speaker;
     [SerializeField] protected Transform _lookTarget;
     [SerializeField] protected Vector3 _cameraRotateOffset = Vector3.right;
     [SerializeField] protected List<NodeDictionary> _nodeDictionaryPrefabs = new();
@@ -23,7 +24,13 @@ public class DialogueHandler : SLMonoBehaviour
         _cameraHandler = ServiceLocator.Instance.GetService<CameraHandler>();
         _dialogueSystem = ServiceLocator.Instance.GetService<DialogueSystem>();
 
-        _dialogueSystem.OnEndDialogue += () => _isTalking = false;
+        _dialogueSystem.OnStart += _speaker.StartTalking;
+        _dialogueSystem.OnFinish += _speaker.StopTalking;
+
+        _dialogueSystem.OnEndDialogue += () =>
+        {
+            _isTalking = false;
+        };
         foreach(var node in _nodeDictionaryPrefabs)
         {
             var newNode = new NodeDictionary

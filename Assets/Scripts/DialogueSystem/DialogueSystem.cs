@@ -8,6 +8,9 @@ using UnityEngine.Localization;
 public class DialogueSystem : MonoBehaviour, IService
 {
     public Action OnEndDialogue = delegate { };
+    public Action OnFinish = delegate { };
+    public Action OnStart = delegate { };
+
     private DialogueNodeGroup _currentNodeGroup;
     private DialogueNode _currentNode;
 
@@ -37,11 +40,12 @@ public class DialogueSystem : MonoBehaviour, IService
             if (_currentNode == null) return;
 
             var index = _currentNodeGroup.Nodes.IndexOf(_currentNode) + 1;
-            if (index >= _currentNodeGroup.Nodes.Count)
+            if (index >= _currentNodeGroup.Nodes.Count && _currentNodeGroup.Options.Any())
             {
                 InitButtons(_currentNodeGroup.Options);
                 _isInChoise = true;
             }
+            OnFinish?.Invoke();
         };
         _view.OnStart += () =>
         {
@@ -49,6 +53,7 @@ public class DialogueSystem : MonoBehaviour, IService
             {
                 e.Invoke();
             }
+            OnStart?.Invoke();
         };
 
         TypeNode();

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class OutlineInteractor : MonoBehaviour
 {
-    private Renderer _renderer;
+    [SerializeField] private Renderer _renderer;
     private Material _outline;
     private Color _defaultColor;
     private Color _interactColor = Color.white;
@@ -12,8 +12,14 @@ public class OutlineInteractor : MonoBehaviour
 
     private void Awake()
     {
-        _renderer = GetComponent<Renderer>();
-        if (!_renderer) return;
+        if (!_renderer)
+        {
+            _renderer = GetComponent<Renderer>();
+            if (!_renderer)
+            {
+                _renderer = GetComponentInChildren<Renderer>();
+            }
+        }
 
         var requiredShader = Shader.Find("Shader Graphs/Outline");
 

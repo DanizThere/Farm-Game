@@ -18,6 +18,18 @@ namespace Assets.Scripts.Extenisions
             return ser;
         }
 
+        public static Vector3Int ToInt(this Vector3 vector)
+        {
+            var toInt = new Vector3Int
+            {
+                x = Mathf.CeilToInt(vector.x),
+                y = Mathf.CeilToInt(vector.y),
+                z = Mathf.CeilToInt(vector.z),
+            };
+
+            return toInt;
+        }
+
         public static Vector3Serialize ToSerializable(this Vector3 vector)
         {
             var ser = new Vector3Serialize

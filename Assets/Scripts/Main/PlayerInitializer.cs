@@ -41,10 +41,10 @@ public class PlayerInitializer : MonoBehaviour
         var handler = ServiceLocator.Instance.GetService<CameraHandler>();
         handler.SetHolder(camera);
 
-        var viewController = ServiceLocator.Instance.GetService<ViewController>();
+        var player = _player.GetComponent<Player>();
 
-        leftController.Initialize(camera.LeftHandTransform, handler, _player.OnGrab);
-        rightController.Initialize(camera.RightHandTransform, handler, _player.OnGrab);
+        leftController.Initialize(camera.LeftHandTransform, handler, player);
+        rightController.Initialize(camera.RightHandTransform, handler, player);
     }
 
     public void Save(ref PlayerData data, ref Vector3Serialize playerPosition)

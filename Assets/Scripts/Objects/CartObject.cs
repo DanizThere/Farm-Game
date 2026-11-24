@@ -66,7 +66,7 @@ public class CartObject : PhysicObject
         }
     }
 
-    public override void Move(float angleHandClamp = 30)
+    public override void Move()
     {
         if (!_isGrabbed) return;
         if (!_canMove) return;

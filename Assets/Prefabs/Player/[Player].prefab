@@ -352,6 +352,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   _id: c2def26c-4827-42f6-8720-096822b01e71
+  _isTicking: 1
+  _defaultHunger: 100
+  _defaultForce: 100
+  _defaultMoney: 1000
 --- !u!1 &8602033189519112821
 GameObject:
   m_ObjectHideFlags: 0

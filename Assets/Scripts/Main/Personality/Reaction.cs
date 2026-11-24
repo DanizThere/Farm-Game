@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization;
 
-[CreateAssetMenu(fileName = "_reaction", menuName = "Character/Reaction")]
-public class Reaction : ScriptableObject
+[Serializable]
+public class Reaction
 {
-    [SerializeField] List<LocalizedString> _comments = new();
+    public List<LocalizedString> Comments = new();
 
     public ReactionTitle ReactionName;
     public float AdditionalValue;
@@ -21,12 +21,11 @@ public class Reaction : ScriptableObject
 
     public string GetMessage()
     {
-        var message = _comments.Random();
+        var message = Comments.Random();
 
         if (message is null) return string.Empty;
 
-        var localized = message.GetLocalizedString();
-        if(string.IsNullOrEmpty(localized)) return "not localized\\not exists";
+        var localized = message.GetLocalizedStringSafe();
         return localized;
     }
 }

@@ -16,7 +16,7 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
     }
     public string ExtraData => GetExtraData();
 
-    [SerializeField] private string _instanceId;
+    [SerializeField] private string _instanceId = Guid.NewGuid().ToString();
 
     [SerializeField] private string _typeTag;
 
@@ -29,6 +29,9 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
     [SerializeField] protected Item _item;
     [SerializeField] protected AudioSource _audioSource;
     [SerializeField] protected AudioClip _onHitSound;
+
+    [SerializeField] protected Vector3 _handOffset;
+    [SerializeField] protected Quaternion _handRotation;
 
     protected Inventory _inventory;
     protected int _slotIndex;

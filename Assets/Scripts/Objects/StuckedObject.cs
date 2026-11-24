@@ -15,7 +15,7 @@ public class StuckedObject : PhysicObject
         _rb.useGravity = false;
     }
 
-    public override void Move(float angleHandClamp = 30)
+    public override void Move()
     {
         if(_breakProgress < 1f)
         {
@@ -34,7 +34,7 @@ public class StuckedObject : PhysicObject
         }
 
         if(_canMove)
-            base.Move(angleHandClamp);
+            base.Move();
     }
 
     public override void Grab(float force, CameraHandler handler, HandController hand)

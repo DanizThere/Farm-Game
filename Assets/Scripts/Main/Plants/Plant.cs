@@ -29,6 +29,7 @@ public class Plant : NPC
     [SerializeField] private List<PlantStageConfig> _stageConfigs = new();
     [SerializeField] private List<PlantRaiseMultiplier> _dirtBonus = new();
     [SerializeField] private Seed _prefab;
+    [SerializeField] private Fetus _fetus;
 
     [SerializeField] private AudioSource _onSlapSound;
 
@@ -44,6 +45,7 @@ public class Plant : NPC
     private PlantSensor _plantSensor;
     private PlantStageConfig _currentConfig;
     private PlantRaiseMultiplier _currentBonus;
+    private Dirt _dirt;
 
     private float _stageProgress;
     private Coroutine _slapCoroutine;
@@ -70,6 +72,8 @@ public class Plant : NPC
     {
         _timeManager = ServiceLocator.Instance.GetService<TimeManager>();
         _timeManager.OnDayChange += Grow;
+
+        SearchDirt();
 
         _currentScale = Vector3.one * _defaultScale;
 
@@ -102,6 +106,15 @@ public class Plant : NPC
 
         OnDeath += HandleDeath;
         OnExcavation += HandleExcavation;
+    }
+
+    public void SearchDirt()
+    {
+        if (_dirt == null)
+        {
+            var dirt = _sensor.GetTNear<Dirt>().FirstOrDefault(x => x.IsPlaceable);
+            dirt.SetPlant(this);
+        }
     }
 
     public void Kill()
@@ -143,6 +156,11 @@ public class Plant : NPC
         }
 
         _currentBonus = _dirtBonus.FirstOrDefault(x => x.PlantType == plantType);
+    }
+
+    public void SetupDirt(Dirt dirt)
+    {
+        _dirt = dirt;
     }
 
     public void AllowMove()
@@ -262,6 +280,23 @@ public class Plant : NPC
 
         _plantsRagdoll.DisableRagdoll();
         _plantAnimator.EnableAnimator();
+    }
+
+    protected override IActivity SetupActivity(Schedule schedule)
+    {
+        switch (schedule.ActivityType)
+        {
+            case ActivityType.Sleep:
+                return new PlantSleepBehaviour(_dirt.transform ?? _sleepTransform, _fetus);
+            case ActivityType.Work:
+                var work = _sensor.GetWorkNearby();
+                return new WorkBehaviour(work);
+            case ActivityType.Socialize:
+                var npc = _sensor.GetNPCNearly();
+                return new SocializeBehaviour(this, npc, 2f);
+            default:
+                return new IdleBehaviour();
+        }
     }
 }
 

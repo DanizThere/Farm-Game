@@ -53,7 +53,7 @@ public class PhysicObject : MonoBehaviour, ISelectable, ICartLoadable
         }
     }
 
-    public virtual void Move(float angleHandClamp = 30)
+    public virtual void Move()
     {
         if (!_canGrab) return;
         if (!_isGrabbed) return;
