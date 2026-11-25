@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class Dirt : MonoBehaviour
 {
-    public bool IsPlaceable => _canPlace && _currentPlant != null;
+    public bool IsPlaceable => _canPlace && _currentPlant == null;
     public Plant Plant => _currentPlant;
     public Vector2Int DirtPosition => _dirtPosition;
     [SerializeField] private SkinnedMeshRenderer _mesh;
-    [SerializeField] private PlantType _plantType;
+    [SerializeField] private DirtType _plantType;
     [SerializeField] private Transform _plantTransform;
     [SerializeField] private ParticleSystem _digParticles;
     [Space]
@@ -61,7 +61,8 @@ public class Dirt : MonoBehaviour
 
         _currentPlant.SetupDirt(this);
         _currentPlant.transform.SetParent(_plantTransform);
-        _currentPlant.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        _currentPlant.Sensor.Agent.Warp(transform.position);
+        //_currentPlant.transform.(Vector3.zero, Quaternion.identity);
 
         _currentPlant.OnExcavation += ClearPlant;
         _currentPlant.OnDeath += DestroyPlant;
@@ -110,7 +111,7 @@ public class Dirt : MonoBehaviour
     }
 }
 
-public enum PlantType
+public enum DirtType
 {
     Default,
     Chernozems,

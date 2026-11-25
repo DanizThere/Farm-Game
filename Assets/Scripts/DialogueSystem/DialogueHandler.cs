@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -73,6 +74,17 @@ public class DialogueHandler : SLMonoBehaviour
         }
 
         _dialogueSystem.StartDialogue(start);
+    }
+
+    public void RotateToAnother(Vector3 position)
+    {
+        StartCoroutine(RotateToIenumerator(position));
+    }
+
+    private IEnumerator RotateToIenumerator(Vector3 position)
+    {
+        transform.VectorLookAt(position);
+        yield return null;
     }
 }
 

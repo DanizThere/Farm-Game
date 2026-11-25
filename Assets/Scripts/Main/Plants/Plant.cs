@@ -24,10 +24,13 @@ public class Plant : NPC
     public PlantsRagdoll Ragdoll => _plantsRagdoll;
     public PlantEmotions Emotion => _plantEmotions;
     public PlantSensor PlantSensor => _plantSensor;
+    public Dirt Dirt => _dirt;
+
+    [SerializeField] private Transform _modelTransform;
 
     [SerializeField] private List<OnChangeStageEvent> _stageChangeEvents = new();
     [SerializeField] private List<PlantStageConfig> _stageConfigs = new();
-    [SerializeField] private List<PlantRaiseMultiplier> _dirtBonus = new();
+    [SerializeField] private PlantRaiseData _plantRaiseData;
     [SerializeField] private Seed _prefab;
     [SerializeField] private Fetus _fetus;
 
@@ -37,6 +40,7 @@ public class Plant : NPC
 
     [SerializeField] private float _defaultScale = .3f;
     [SerializeField] private bool _isTick;
+    [SerializeField] private PlantStage _requiredStageToBehaviouring = PlantStage.Vegetative;
 
     private PlantHealth _plantHealth;
     private PlantEmotions _plantEmotions;
@@ -55,17 +59,19 @@ public class Plant : NPC
 
     private void Update()
     {
-        transform.localScale = Vector3.Lerp(transform.localScale, _currentScale, Time.deltaTime);
+        _modelTransform.localScale = Vector3.Lerp(_modelTransform.localScale, _currentScale, Time.deltaTime);
 
-        if (!_isTick) return;
         if (!_plantHealth.IsAlive) return;
+
+        if (_currentConfig.Stage >= _requiredStageToBehaviouring)
+        {
+            NPCUpdate();
+        }
+        
+        if (!_isTick) return;
 
         _plantHealth.Tick(Time.deltaTime, _currentConfig);
         _plantEmotions.Tick(Time.deltaTime, _plantHealth);
-
-        if (_currentConfig.Stage <= PlantStage.Vegetative) return;
-
-        NPCUpdate();
     }
 
     protected override void NPCStart()
@@ -76,8 +82,9 @@ public class Plant : NPC
         SearchDirt();
 
         _currentScale = Vector3.one * _defaultScale;
+        _modelTransform.localScale = _currentScale;
 
-        if (_currentConfig.Stage <= PlantStage.Vegetative) return;
+        if (_currentConfig.Stage < PlantStage.Vegetative) return;
         InitializeActivity();
     }
 
@@ -92,7 +99,7 @@ public class Plant : NPC
         _plantsRagdoll = GetComponent<PlantsRagdoll>();
         _plantSensor = GetComponent<PlantSensor>();
 
-        SetBonus(PlantType.Default);
+        SetBonus(DirtType.Default);
 
         _plantsRagdoll.Initialize(this);
         _plantSensor.Initialize(this);
@@ -144,9 +151,9 @@ public class Plant : NPC
         _plantHealth.ModifyImmunity(value);
     }
 
-    public void SetBonus(PlantType plantType)
+    public void SetBonus(DirtType plantType)
     {
-        if (plantType == PlantType.Default)
+        if (plantType == DirtType.Default)
         {
             _currentBonus = new PlantRaiseMultiplier
             {
@@ -155,7 +162,7 @@ public class Plant : NPC
             return;
         }
 
-        _currentBonus = _dirtBonus.FirstOrDefault(x => x.PlantType == plantType);
+        _currentBonus = _plantRaiseData.Multipliers.FirstOrDefault(x => x.PlantType == plantType);
     }
 
     public void SetupDirt(Dirt dirt)
@@ -218,6 +225,8 @@ public class Plant : NPC
 
     private void HandleDeath()
     {
+        _timeManager.OnDayChange -= Grow;
+
         if (_isViolatedDeath)
         {
             _plantSensor.SignalizeOnViolatedDeath();
@@ -254,6 +263,8 @@ public class Plant : NPC
                 instance.transform.position = position;
             }
         }
+
+        StartCoroutine(DecayEnumerator());
     }
 
     private void HandleStageChange()
@@ -282,6 +293,26 @@ public class Plant : NPC
         _plantAnimator.EnableAnimator();
     }
 
+    private IEnumerator DecayEnumerator()
+    {
+        var decayShader = Shader.Find("Shader Graphs/Decay");
+        var renderers = GetComponentsInChildren<Renderer>().Where(x => x.materials.Any(x => x.shader == decayShader));
+        var progress = 0f;
+
+        while(progress < 1f)
+        {
+            progress += Time.deltaTime;
+            foreach(var renderer in renderers)
+            {
+                var material = renderer.materials.FirstOrDefault(x => x.shader == decayShader);
+                material.SetFloat("_DecayProgress", progress);
+                renderer.materials = renderer.materials;
+            }
+
+            yield return null;
+        }
+    }
+
     protected override IActivity SetupActivity(Schedule schedule)
     {
         switch (schedule.ActivityType)
@@ -303,6 +334,6 @@ public class Plant : NPC
 [System.Serializable]
 public class PlantRaiseMultiplier
 {
-    public PlantType PlantType;
+    public DirtType PlantType;
     public float Bonus = 100f;
 }

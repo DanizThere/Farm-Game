@@ -54,6 +54,7 @@ public class GetPlantInfo : SLMonoBehaviour
         if (_plant)
         {
             var textBuilder = new StringBuilder($"{_plant.CurrentConfig.Stage}: {_plant.Progress} progress to 1\n");
+            textBuilder.Append($"{_plant.name}. CurrentActivity: {_plant.CurrentActivity} \nCan interact: {!_plant.Sensor.IsBusy}\nDirt: {_plant.Dirt}");
             textBuilder.Append($"Part: {_ragdollPart}\n\t");
             textBuilder.Append("Attributes:\n\t");
             textBuilder.Append(string.Join("\n\t", _plant.Health.PlantAttributes.Select(x => $"{x.Id}: {x.CurrentValue} value")));

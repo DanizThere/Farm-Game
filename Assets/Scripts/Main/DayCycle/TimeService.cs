@@ -139,11 +139,11 @@ public class TimeService
     }
 }
 
-[Flags]
 public enum DayStage
 {
-    Morning = 1,
-    Day = 2,
-    Evening = 4,
-    Night = 8
+    Default,
+    Morning,
+    Day,
+    Evening,
+    Night
 }

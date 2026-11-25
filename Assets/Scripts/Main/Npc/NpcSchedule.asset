@@ -17,5 +17,5 @@ MonoBehaviour:
     ActivityType: 1
   - StartStage: 2
     ActivityType: 2
-  - StartStage: 12
+  - StartStage: 4
     ActivityType: 3

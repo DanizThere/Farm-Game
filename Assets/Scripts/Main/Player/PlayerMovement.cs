@@ -141,10 +141,18 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
     private void OnRun()
     {
         _isRunning = true;
+        foreach(var hand in _hands)
+        {
+            hand.GetComponentInChildren<ItemBobbing>().isRunning = _isRunning;
+        }
     }
     private void OnWalk()
     {
         _isRunning = false;
+        foreach (var hand in _hands)
+        {
+            hand.GetComponentInChildren<ItemBobbing>().isRunning = _isRunning;
+        }
     }
 
     public void SetTimeScale(float timeScale)
@@ -169,7 +177,10 @@ public class PlayerMovement : MonoBehaviour, IFreezeable, IMovement
 
         _moveBool = (newPosition - _body.position).magnitude > 0f;
         _modelAnimator.SetBool("Move", _moveBool);
-
+        foreach (var hand in _hands)
+        {
+            hand.GetComponentInChildren<ItemBobbing>().EnableBobbing = _moveBool;
+        }
 
         if (anyHold.Any())
         {

@@ -42,12 +42,6 @@ public class Showel : ToolItemObject
     {
         if (Physics.Raycast(_cameraHandler.Position, _cameraHandler.GetDirection(), out var hit, _currentHand.HandDistance))
         {
-            if(hit.transform.TryGetComponent<Dirt>(out var dirt))
-            {
-                dirt.Dig();
-                return;
-            }
-
             var digplaces = FindObjectsByType<DigablePlace>();
             if (!digplaces.Any()) return;
 
@@ -58,10 +52,7 @@ public class Showel : ToolItemObject
             if (dirtController == null) return;
 
             dirtController.ShowDirt(ceilPoint.x, ceilPoint.z);
-
-            print(hit.point);
-            print(ceilPoint);
-            print(inArea);
+            base.Use();
         }
 
     }

@@ -7,10 +7,14 @@ public abstract class ToolItemObject : ItemObject
     public Observable<GameObject> CurrentModel { get; private set; }
     [SerializeField] private GameObject[] _itemModels;
     [SerializeField] protected Animator _animator;
+    [SerializeField] private bool _isDurable = true;
+    private float _durability;
+    private float _maxDurability = 15;
 
     private void Awake()
     {
         CurrentModel = new(_itemModels[0]);
+        _durability = _maxDurability;
     }
 
     protected bool Raycast(out RaycastHit hitResult)
@@ -35,6 +39,18 @@ public abstract class ToolItemObject : ItemObject
         if (TryGetComponent<OutlineInteractor>(out var interactor))
         {
             interactor.Allow();
+        }
+    }
+
+    public override void Use()
+    {
+        if (_isDurable)
+        {
+            _durability--;
+            if(_durability <= 0)
+            {
+                _currentHand?.ClearItem();
+            }
         }
     }
 }

@@ -33,6 +33,8 @@ public class PlantSleepBehaviour : IActivity
                 var rotation = Random.rotation;
 
                 var instance = GameObject.Instantiate(_seed, position, rotation);
+                instance.GetComponent<Rigidbody>().useGravity = false;
+                instance.GetComponent<Rigidbody>().isKinematic = true;
             }
         }
 

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class ItemObject : DefaultSelectable, ISaveableObject
 {
+    public bool IsHolded => _currentHand;
+
     public Vector3Serialize Position => transform.position.ToSerializable();
 
     public QuaternionSerialize Rotation => transform.rotation.ToSerialize();
@@ -53,6 +55,13 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
         return string.Empty;
     }
 
+    public void SetPositionAndRotation(float rotation = 0)
+    {
+        var rot = Quaternion.Euler(0, rotation, 0);
+
+        transform.SetLocalPositionAndRotation(_handOffset, rot);
+    }
+
     public virtual void ShowItem()
     {
         SetTrigger();
@@ -81,6 +90,7 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
     }
     public virtual void OnPickup(HandController handController)
     {
+        if (_currentHand != null) return;
         _currentHand = handController;
 
         SetTrigger();
@@ -100,6 +110,7 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
         foreach(var collider in _colliders)
         {
             collider.isTrigger = true;
+            collider.enabled = false;
         }
     }
 
@@ -108,6 +119,7 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
         foreach (var collider in _colliders)
         {
             collider.isTrigger = false;
+            collider.enabled = true;
         }
     }
 

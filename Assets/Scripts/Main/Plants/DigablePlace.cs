@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class DigablePlace : MonoBehaviour
 {
+    public DirtType DirtType;
     [SerializeField] private float _radius = 10f;
     private void OnDrawGizmosSelected()
     {

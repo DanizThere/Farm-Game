@@ -1,5 +1,62 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &70890594076757907
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4430740590578039711}
+  - component: {fileID: 2950659786381971011}
+  m_Layer: 0
+  m_Name: Slot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4430740590578039711
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70890594076757907}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3954735168347345496}
+  m_Father: {fileID: 1822740825422732962}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2950659786381971011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70890594076757907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9406ebf1e3209a94493413ad28bb5836, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemBobbing
+  isRunning: 0
+  _bobAmountX: 0.02
+  _bobAmountY: 0.03
+  _bobSpeed: 6
+  _runAmountMultiplier: 1.8
+  _runSpeedMultiplier: 1.7
+  _runTransitionSpeed: 6
+  _tiltAmountX: 2
+  _tiltAmountZ: 3
+  _tiltSpeed: 6
+  _enableBobbing: 1
+  _returnSmoothness: 8
 --- !u!1 &2944537880839361171
 GameObject:
   m_ObjectHideFlags: 0
@@ -34,7 +91,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3954735168347345496}
+  - {fileID: 4430740590578039711}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6394361518906854498
@@ -75,6 +132,7 @@ MonoBehaviour:
   _handForce: 0.3
   _handDistance: 5
   _modelTransform: {fileID: 3954735168347345496}
+  _slotTransform: {fileID: 4430740590578039711}
   _audioSource: {fileID: 5216044218217785089}
   _pickupSound: {fileID: 8300000, guid: ecfddf0677bc7b34b8886d6e224f81da, type: 3}
   _swingSound: {fileID: 8300000, guid: 1991dea09ec316744b39551f7645fb4d, type: 3}
@@ -225,10 +283,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3820919218844763707}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1822740825422732962}
+  m_Father: {fileID: 4430740590578039711}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

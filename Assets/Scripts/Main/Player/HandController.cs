@@ -20,6 +20,7 @@ public class HandController : MonoBehaviour
     [SerializeField] private float _handForce = .3f;
     [SerializeField] private float _handDistance = 5f;
     [SerializeField] private Transform _modelTransform;
+    [SerializeField] private Transform _slotTransform;
     [Space]
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _pickupSound;
@@ -46,8 +47,8 @@ public class HandController : MonoBehaviour
 
     public enum Hand
     {
-        Left,
-        Right
+        Left = 0,
+        Right = 1
     }
 
     public void Initialize(Transform target, CameraHandler handler, Player player)
@@ -88,8 +89,8 @@ public class HandController : MonoBehaviour
 
         _currentItemObject.gameObject.SetActive(true);
         _currentItemObject.OnPickup(this);
-        _currentItemObject.transform.SetParent(transform);
-        _currentItemObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        _currentItemObject.transform.SetParent(_slotTransform);
+        _currentItemObject.SetPositionAndRotation(180 * (int)_currentHand);
         
         //TODO: add instanceId to slot;
         if(fromWorld) GetComponent<HandSlot>().SetItem(_currentItemObject.Item, item.InstanceId);
@@ -216,7 +217,7 @@ public class HandController : MonoBehaviour
     {
         if (hit.transform.TryGetComponent<NPC>(out var npc))
         {
-            npc.StartDialogue();
+            npc.StartDialogue(_player.transform.position);
             return true;
         }
 
@@ -227,6 +228,8 @@ public class HandController : MonoBehaviour
     {
         if (hit.transform.TryGetComponent<ItemObject>(out var itemObject))
         {
+            if (itemObject.IsHolded) return false;
+
             _audioSource.PlayOneShot(_pickupSound);
 
             PickupItem(itemObject);

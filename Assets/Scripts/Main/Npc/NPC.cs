@@ -24,7 +24,7 @@ public class NPC : MonoBehaviour
     protected NPCSensor _sensor;
 
     protected IActivity _currentActivity;
-    protected DayStage _lastCheckedStage;
+    protected DayStage _lastCheckedStage = DayStage.Default;
     protected Schedule _currentSchedule;
 
     protected float _idleTimer;
@@ -44,9 +44,10 @@ public class NPC : MonoBehaviour
         NPCUpdate();
     }
 
-    public void StartDialogue()
+    public void StartDialogue(Vector3 position)
     {
         _sensor.DialogueHandler.StartDialogue();
+        _sensor.DialogueHandler.RotateToAnother(position);
         //do something;
         //maybe should change to talk with player behaviour
     }
@@ -91,7 +92,7 @@ public class NPC : MonoBehaviour
     protected void InitializeActivity()
     {
         _lastCheckedStage = _timeManager.CurrentStage;
-        TrySwitchActivity(_lastCheckedStage);
+        TrySwitchActivity(_lastCheckedStage, true);
     }
 
     private void TrySwitchActivity(DayStage stage, bool forced = false)
