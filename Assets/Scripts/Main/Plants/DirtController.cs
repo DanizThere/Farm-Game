@@ -53,13 +53,19 @@ public class DirtController : MonoBehaviour
         Destroy(dirt.gameObject);
     }
 
-    public void ShowDirt(int x, int y)
+    public bool ShowDirt(int x, int y)
     {
         var slot = GetDirtSlot(x, y);
+
         if(slot != null)
         {
+            if (slot.gameObject.activeSelf) return false;
+
             slot.gameObject.SetActive(true);
+            return true;
         }
+
+        return false;
     }
 
     public Dirt GetDirtSlot(int x, int y)

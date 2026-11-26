@@ -11,6 +11,16 @@ public class Showel : ToolItemObject
         base.SLStart();
         _inventory = ServiceLocator.Instance.GetService<InventoryController>().Inventory ??
             throw new System.NullReferenceException($"{nameof(InventoryController)} doesn't exist");
+
+        OnDestroyAction += () =>
+        {
+            var places = FindObjectsByType<DigablePlace>();
+            foreach (var place in places)
+            {
+                place.DisableGrid();
+            }
+
+        };
     }
 
     public override void HideItem()
@@ -21,7 +31,11 @@ public class Showel : ToolItemObject
     public override void OnPickup(HandController handController)
     {
         base.OnPickup(handController);
-        _gameDbContext = ServiceLocator.Instance.GetService<GameDbContext>();
+        var places = FindObjectsByType<DigablePlace>();
+        foreach(var place in places )
+        {
+            place.EnableGrid();
+        }
     }
 
     public override void OnThrow()
@@ -51,8 +65,11 @@ public class Showel : ToolItemObject
             var dirtController = FindAnyObjectByType<DirtController>();
             if (dirtController == null) return;
 
-            dirtController.ShowDirt(ceilPoint.x, ceilPoint.z);
-            base.Use();
+            if(dirtController.ShowDirt(ceilPoint.x, ceilPoint.z))
+            {
+                base.Use();
+                _animator?.SetTrigger("Dig");
+            }
         }
 
     }

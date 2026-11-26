@@ -27,10 +27,6 @@ public abstract class ToolItemObject : ItemObject
     public override void OnPickup(HandController handController)
     {
         base.OnPickup(handController);
-        if(TryGetComponent<OutlineInteractor>(out var interactor))
-        {
-            interactor.Deny();
-        }
     }
 
     public override void OnThrow()

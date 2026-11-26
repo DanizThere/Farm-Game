@@ -22,11 +22,10 @@ namespace Assets.Scripts.Extenisions
         {
             var toInt = new Vector3Int
             {
-                x = Mathf.CeilToInt(vector.x),
-                y = Mathf.CeilToInt(vector.y),
-                z = Mathf.CeilToInt(vector.z),
+                x = Mathf.RoundToInt(vector.x),
+                y = Mathf.RoundToInt(vector.y),
+                z = Mathf.RoundToInt(vector.z),
             };
-
             return toInt;
         }
 

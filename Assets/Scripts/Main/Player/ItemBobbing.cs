@@ -24,14 +24,11 @@ public class ItemBobbing : MonoBehaviour
     private Vector3 _targetPositionOffset;
     private Quaternion _targetRotationOffset = Quaternion.identity;
 
-    private InputHandler _handler;
-
     private float _time;
     private float _runBlend = 0f;
 
     private void Start()
     {
-        _handler = ServiceLocator.Instance.GetService<InputHandler>();
         _initialLocalPosition = transform.localPosition;
         _initialLocalRotation = transform.localRotation;
 

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TimeSettings
   TimeMultiplier: 2000
   StartHour: 6
-  SunriseHour: 3
-  SunStayHour: 12
+  SunriseHour: 5
+  SunStayHour: 15
   EveningHour: 18
   SunsetHour: 22

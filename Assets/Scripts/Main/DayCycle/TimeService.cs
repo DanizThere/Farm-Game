@@ -18,6 +18,7 @@ public class TimeService
     public event Action OnSunset = delegate { };
     public event Action OnHourChange = delegate { };
     public event Action OnDayChange = delegate { };
+    public event Action OnChangeStage = delegate { };
 
     private readonly Observable<DayStage> _isDayTime;
     private readonly Observable<int> _currentHour;
@@ -33,6 +34,7 @@ public class TimeService
         _sunStayTime = TimeSpan.FromHours(_settings.SunStayHour);
         _sunriseTime = TimeSpan.FromHours(_settings.SunriseHour);
         _sunsetTime = TimeSpan.FromHours(_settings.SunsetHour);
+
 
         _isDayTime = new Observable<DayStage>(GetStage());
         _currentHour = new Observable<int>(_currentTime.Hour);
@@ -53,6 +55,7 @@ public class TimeService
                     break;
             }
         };
+        _isDayTime.ValueChanged += _ => OnChangeStage?.Invoke();
         _currentHour.ValueChanged += _ => OnHourChange?.Invoke();
         _currentDay.ValueChanged += _ => OnDayChange?.Invoke();
     }

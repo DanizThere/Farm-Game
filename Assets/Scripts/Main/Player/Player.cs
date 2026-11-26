@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour, IUser
 {
@@ -13,8 +13,14 @@ public class Player : MonoBehaviour, IUser
         set { _id = value; }
     }
 
+    public float Hunger => _hunger;
+    public float Force => _force;
+    public float Money => _money;
+
     [SerializeField] private string _id = Guid.NewGuid().ToString();
 
+    [SerializeField] private AnimationCurve _saturateCurve;
+    [SerializeField] private float _timeMultiplier = .5f;
     [SerializeField] private bool _isTicking = true;
     [SerializeField] private float _defaultHunger;
     [SerializeField] private float _defaultForce;
@@ -33,14 +39,26 @@ public class Player : MonoBehaviour, IUser
         _money = _defaultMoney;
     }
 
+    private void Start()
+    {
+        ServiceLocator.Instance.GetService<TimeManager>().OnChangeStage += () =>
+        {
+            var randValue = Random.Range(0, _foodQuery.Count);
+            for(int i = 0; i < randValue; i++)
+            {
+                _foodQuery.Dequeue();
+            }
+        };
+    }
+
     private void Update()
     {
         if (!_isTicking) return;
 
-        var val = Time.deltaTime;
+        var val = Time.deltaTime * _timeMultiplier;
 
         _hunger = Mathf.Clamp(_hunger - val, 0f, 100f);
-        _force = Mathf.Clamp(_force - val * (100 - _hunger / 100), 0f, 100f);
+        _force = Mathf.Clamp(_force - val * ((100 - _hunger) / 100), 0f, 100f);
     }
 
     public void AppendMoney(float value, bool force = false)
@@ -82,8 +100,10 @@ public class Player : MonoBehaviour, IUser
 
     public void Eat(float saturation, FoodType foodType)
     {
-        var similars = _foodQuery.GetSimilarCount(foodType);
+        var similars = _saturateCurve.Evaluate(_foodQuery.GetSimilarCount(foodType) / 10);
+        _hunger = Mathf.Clamp(_hunger + saturation * similars, 0, 100f);
+
         _foodQuery.Enqueue(foodType);
-        _hunger = Mathf.Clamp(_hunger + saturation / similars, 0, 100f);
+
     }
 }

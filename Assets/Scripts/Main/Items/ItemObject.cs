@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class ItemObject : DefaultSelectable, ISaveableObject
 {
+    public System.Action OnDestroyAction = delegate { };
+
     public bool IsHolded => _currentHand;
 
     public Vector3Serialize Position => transform.position.ToSerializable();
@@ -33,13 +35,18 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
     [SerializeField] protected AudioClip _onHitSound;
 
     [SerializeField] protected Vector3 _handOffset;
-    [SerializeField] protected Quaternion _handRotation;
+    [SerializeField] protected Quaternion _handRotation = Quaternion.identity;
 
     protected Inventory _inventory;
     protected int _slotIndex;
     protected HandController _currentHand;
     protected GameDbContext _gameDbContext;
     protected CameraHandler _cameraHandler;
+
+    private void OnDestroy()
+    {
+        OnDestroyAction?.Invoke();
+    }
 
     protected override void SLStart()
     {
@@ -57,9 +64,7 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
 
     public void SetPositionAndRotation(float rotation = 0)
     {
-        var rot = Quaternion.Euler(0, rotation, 0);
-
-        transform.SetLocalPositionAndRotation(_handOffset, rot);
+        transform.SetLocalPositionAndRotation(_handOffset, _handRotation * Quaternion.Euler(0, rotation, 0));
     }
 
     public virtual void ShowItem()
@@ -96,6 +101,11 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
         SetTrigger();
         _rb.useGravity = false;
         _rb.isKinematic = true;
+
+        if (TryGetComponent<OutlineInteractor>(out var interactor))
+        {
+            interactor.Deny();
+        }
     }
 
     protected virtual void LoadData(SaveObject data)
@@ -130,6 +140,7 @@ public abstract class ItemObject : DefaultSelectable, ISaveableObject
 
     private void OnCollisionEnter(Collision collision)
     {
-        _audioSource.PlayOneShot(_onHitSound);
+        if(transform.position.sqrMagnitude > .5f)
+            _audioSource.PlayOneShot(_onHitSound);  
     }
 }

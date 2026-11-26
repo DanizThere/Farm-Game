@@ -36,11 +36,13 @@ public class Plant : NPC
 
     [SerializeField] private AudioSource _onSlapSound;
 
-    [SerializeField] private AnimationCurve _seedsEvaluation;
-
+    [SerializeField] private PlantStage _startStage = PlantStage.Seed;
+    [SerializeField] private float _mutliplyingChance = .5f; 
     [SerializeField] private float _defaultScale = .3f;
     [SerializeField] private bool _isTick;
     [SerializeField] private PlantStage _requiredStageToBehaviouring = PlantStage.Vegetative;
+    [SerializeField] private Dirt _dirt;
+
 
     private PlantHealth _plantHealth;
     private PlantEmotions _plantEmotions;
@@ -49,7 +51,6 @@ public class Plant : NPC
     private PlantSensor _plantSensor;
     private PlantStageConfig _currentConfig;
     private PlantRaiseMultiplier _currentBonus;
-    private Dirt _dirt;
 
     private float _stageProgress;
     private Coroutine _slapCoroutine;
@@ -106,7 +107,13 @@ public class Plant : NPC
 
         if (_currentConfig == null)
         {
-            _currentConfig = _stageConfigs[0];
+            var startStage = _stageConfigs.FirstOrDefault(x => x.Stage == _startStage);
+            if(startStage == null)
+            {
+                _currentConfig = _stageConfigs[0];
+                return;
+            }
+            _currentConfig = startStage;
         }
 
         _plantHealth.OnDeath += HandleDeath;
@@ -211,7 +218,7 @@ public class Plant : NPC
     {
         _currentScale = Vector3.one;
         var index = _stageConfigs.IndexOf(_currentConfig) + 1;
-        if (index >= _stageConfigs.Count)
+        if (index >= _stageConfigs.Count - 1)
         {
             OnDeath?.Invoke();
         }
@@ -239,29 +246,26 @@ public class Plant : NPC
         _plantsRagdoll.EnableRagdoll();
         _plantAnimator.DisableAnimator();
 
+        var chanceValue = Random.value <= _mutliplyingChance ? 2 : 1;
 
-        var fertility = _plantHealth.PlantAttributes.FirstOrDefault(x => x.Id == "Fertility");
-        var seedsCount = 5;
-
-        if (fertility != null)
-        {
-            seedsCount = Mathf.RoundToInt(_seedsEvaluation.Evaluate(fertility.CurrentValue));
-        }
-
-        for (int i = 0; i < seedsCount; i++)
+        for(int i = 0; i < chanceValue; i++)
         {
             var position = transform.position + Random.insideUnitSphere;
-            if (Physics.CheckSphere(position, 1f))
+            position.y = _dirt.transform.position.y + .1f;
+
+            var instance = Instantiate(_prefab, position, Quaternion.identity);
+
+            var rb = instance.GetComponent<Rigidbody>();
+            rb.useGravity = false;
+            rb.isKinematic = true;
+
+            instance.InstanceId = Guid.NewGuid().ToString();
+            instance.Heritables = new Heritables
             {
-                var instance = Instantiate(_prefab);
-                instance.InstanceId = Guid.NewGuid().ToString();
-                instance.Heritables = new Heritables
-                {
-                    MaxImmunity = _plantHealth.MaxImmunity,
-                    MaxHealth = _plantHealth.MaxHealth,
-                };
-                instance.transform.position = position;
-            }
+                MaxImmunity = _plantHealth.MaxImmunity,
+                MaxHealth = _plantHealth.MaxHealth,
+            };
+            instance.transform.position = position;
         }
 
         StartCoroutine(DecayEnumerator());

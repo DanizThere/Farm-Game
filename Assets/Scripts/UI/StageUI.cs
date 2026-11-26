@@ -25,6 +25,7 @@ public class StageUI : View
 
     private void Update()
     {
+        print(_timeManager.CurrentStage);
         var position = _timeManager.DayProgress * _width;
 
         var rect = _clockTransform.anchoredPosition;
@@ -58,9 +59,9 @@ public class StageUI : View
                 return (_timeSettings.SunStayHour - _timeSettings.SunriseHour) / 24f;
 
             case 2:
-                return (_timeSettings.EveningHour - _timeSettings.SunStayHour) / 24f;
+                return (_timeSettings.SunsetHour - _timeSettings.SunStayHour) / 24f;
         }
 
-        return (24 - _timeSettings.EveningHour) / 24f;
+        return (24 - _timeSettings.SunsetHour) / 24f;
     }
 }

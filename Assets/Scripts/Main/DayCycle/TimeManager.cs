@@ -10,6 +10,12 @@ public class TimeManager : MonoBehaviour, IService, IFreezeable
     public DateTime CurrentTime => _timeService.CurrentTime;
     public DayStage CurrentStage => _timeService.CurrentDayStage;
 
+    public event Action OnChangeStage
+    {
+        add => _timeService.OnChangeStage += value;
+        remove => _timeService.OnChangeStage -= value;
+    }
+
     public event Action OnDay
     {
         add => _timeService.OnDay += value;

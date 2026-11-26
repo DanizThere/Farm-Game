@@ -75,6 +75,42 @@ MonoBehaviour:
     m_Key: Continue
     m_Metadata:
       m_Items: []
+  - m_Id: 1073809133584384
+    m_Key: Money
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1073809481711616
+    m_Key: Hunger
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1073809481711617
+    m_Key: Strength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079122448531456
+    m_Key: Stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079122448531457
+    m_Key: Tasks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079590079873024
+    m_Key: Day
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079590079873025
+    m_Key: Morning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079590079873026
+    m_Key: Evening
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079590079873027
+    m_Key: Night
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

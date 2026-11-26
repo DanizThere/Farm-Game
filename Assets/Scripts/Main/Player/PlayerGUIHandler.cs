@@ -24,11 +24,16 @@ public class PlayerGUIHandler : SLMonoBehaviour
     {
         var viewController = ServiceLocator.Instance.GetService<ViewController>();
         var go = Instantiate(viewController.Get<PlayerGUI>(), viewController.Canvas2D.transform);
+
+        ServiceLocator.Instance.GetService<GameStateMachine>().SetState<UIGameState>();
+
         _gui = go;
     }
 
     public void HideTime()
     {
+        ServiceLocator.Instance.GetService<GameStateMachine>().SetState<OuterWorldGameState>();
+
         Destroy(_gui.gameObject);
     }
 }

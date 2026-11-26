@@ -45,7 +45,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -219,11 +219,14 @@ MonoBehaviour:
   _item: {fileID: 11400000, guid: c1f9b17d31a0ee64cbd668f669e7ef4b, type: 2}
   _audioSource: {fileID: 1752919861438538099}
   _onHitSound: {fileID: 8300000, guid: 934e873dab58ccb4491059e71bc7e6bf, type: 3}
+  _handOffset: {x: 0, y: 0, z: 0}
+  _handRotation: {x: 0, y: 0, z: 0, w: 1}
   Efforts:
   - {fileID: 11400000, guid: c68d53eddb6b70a42b9e7993eb053a26, type: 2}
   _itemModels:
   - {fileID: 368088963328565544}
   _animator: {fileID: 0}
+  _isDurable: 1
 --- !u!65 &8611020976496308267
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -243,8 +246,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.6047472, y: 1.6991469, z: 0.36431754}
-  m_Center: {x: 0.1459185, y: 0.0012492537, z: 0.000028371811}
+  m_Size: {x: 0.43, y: 0.68, z: 0.36431754}
+  m_Center: {x: 0.06, y: 0.0012492537, z: 0.000028371811}
 --- !u!114 &3220662217149827042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,6 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7a74667420ed8649ac1d639990f6c47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OutlineInteractor
+  _renderer: {fileID: 0}
 --- !u!54 &8549931734502682059
 Rigidbody:
   m_ObjectHideFlags: 0

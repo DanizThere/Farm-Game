@@ -78,6 +78,42 @@ MonoBehaviour:
     m_Localized: Continue
     m_Metadata:
       m_Items: []
+  - m_Id: 1073809133584384
+    m_Localized: Money
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1073809481711616
+    m_Localized: Hunger
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1073809481711617
+    m_Localized: Strength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079122448531456
+    m_Localized: Stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079122448531457
+    m_Localized: Tasks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079590079873024
+    m_Localized: Day
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079590079873025
+    m_Localized: Morning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079590079873026
+    m_Localized: Evening
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079590079873027
+    m_Localized: Night
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
